@@ -24,3 +24,7 @@ proguard/
 
 # Log Files
 *.log
+
+# Added because of IntelliJ Funky Files
+.idea/
+*.iml
