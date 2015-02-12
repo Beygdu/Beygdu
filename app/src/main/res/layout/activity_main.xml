@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent"
+	tools:context="is.arnastofnun.beygdu.Main">
+    <TableLayout
+        android:id="@+id/tableLayout1"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10sp">
+		
+		<TextView
+	        android:id="@+id/title"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:text="@string/title"
+	        android:textColor="@color/navy"
+	        android:gravity="center"
+	        android:layout_marginBottom="20sp"
+	        android:layout_marginTop="20sp"
+	        android:textStyle="bold"
+	        android:textSize="40sp" />
+	        
+        <TableRow android:layout_margin="30sp">
+            <EditText
+                android:id="@+id/mainSearch"
+                android:layout_height="60dp"
+  				android:layout_weight="2"
+                android:background="@drawable/inputborder"
+                android:textSize="26sp"
+                android:hint="@string/searchInput"
+                android:inputType="text"
+                android:paddingLeft="20dp" />
+
+            <ImageButton
+                android:id="@+id/commitSearch"
+                android:layout_height="60dp"
+                android:layout_weight="1"
+                android:background="@drawable/button"
+                android:contentDescription="@string/search_desc"
+                android:onClick="btnOnClick"
+                android:src="@drawable/ic_action_search"
+                android:textColor="#000000"
+                android:textSize="20sp" />
+        </TableRow>
+
+        <ImageView
+            android:id="@+id/imageView1"
+            android:layout_width="wrap_content"
+            android:layout_height="330sp"
+            android:background="@drawable/background_b"
+            android:contentDescription="@string/background_desc" />
+
+	     <TextView
+	         android:id="@+id/titleSmall"
+	         android:layout_width="wrap_content"
+	         android:layout_height="wrap_content"
+	         android:text="@string/titleSmall"
+	         android:textColor="@color/navy"
+	         android:textSize="12sp"
+	         android:gravity="center"/>
+
+    </TableLayout>
+</ScrollView>
+
