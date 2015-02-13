@@ -26,5 +26,13 @@ proguard/
 *.log
 
 # Added because of IntelliJ Funky Files
+#######################################
 .idea/
 *.iml
+
+.idea/workspace.xml
+.idea/modules.xml
+.idea/misc.xml
+
+app/app.iml
+#######################################
