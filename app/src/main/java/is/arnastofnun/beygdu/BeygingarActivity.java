@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
@@ -21,8 +22,10 @@ import android.widget.Toast;
 
 import com.example.beygdu.R;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 
+import is.arnastofnun.DB.DBController;
 import is.arnastofnun.parser.Block;
 import is.arnastofnun.parser.WordResult;
 import is.arnastofnun.utils.TableFragment;
@@ -67,6 +70,28 @@ public class BeygingarActivity extends FragmentActivity {
 			blockNames.add(words.getBlocks().get(i).getTitle());
 		}
 		initTables();
+
+/*        //Save to DB
+        DBController dbController = new DBController(this);
+        try {
+            dbController.open();
+            dbController.insert(words);
+            dbController.close();
+        } catch (SQLException e) {
+            System.out.println(e);
+        }*/
+
+        //Read from DB
+        DBController controller = new DBController(this);
+        WordResult tmpResult = null;
+        try {
+            controller.open();
+            tmpResult = controller.fetch("borða");
+            controller.close();
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        System.out.println("WordResult title from db: " + tmpResult.getTitle());
 	}
 	
 	/**

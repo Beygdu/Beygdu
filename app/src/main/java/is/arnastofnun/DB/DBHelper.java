@@ -27,20 +27,38 @@ public class DBHelper extends SQLiteOpenHelper{
     static final int DB_VERSION = 1;
 
     // Creating table query
-    private static final String CREATE_TABLE = "create table " + TABLE_NAME + "(" + _ID
-            + " INTEGER PRIMARY KEY AUTOINCREMENT, " + TODO_SUBJECT + " TEXT NOT NULL, " + TODO_DESC + " TEXT);";
+    private static final String CREATE_TABLE = "create table " + TABLE_NAME + "(" + ID
+            + " INTEGER PRIMARY KEY AUTOINCREMENT, " + WORD + " TEXT NOT NULL, " + DESC + " TEXT);";
 
     public DBHelper(Context context) {
-
+        super(context, DB_NAME, null, DB_VERSION);
     }
 
+    /**
+     *
+     * @param db the db
+     *
+     *           The onCreate() method will be called on first time use of the application.
+     *           Here we will construct SQLite database. This method is called only if the
+     *           database file is not created before.
+     */
     @Override
     public void onCreate(SQLiteDatabase db) {
-
+        db.execSQL(CREATE_TABLE);
     }
 
+
+    /**
+     * @param db the db
+     * @param oldVersion the old version number
+     * @param newVersion the new version number
+     *
+     *          is only called when the database version is changed. Database version
+     *          is an integer value which is specified inside the DBhelper constructor.
+     */
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
+        onCreate(db);
     }
 }
