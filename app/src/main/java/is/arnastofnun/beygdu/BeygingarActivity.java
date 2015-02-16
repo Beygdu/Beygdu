@@ -20,7 +20,7 @@ import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.beygdu.R;
+import is.arnastofnun.beygdu.R;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -71,7 +71,7 @@ public class BeygingarActivity extends FragmentActivity {
 		}
 		initTables();
 
-/*        //Save to DB
+        //Save to DB
         DBController dbController = new DBController(this);
         try {
             dbController.open();
@@ -79,20 +79,9 @@ public class BeygingarActivity extends FragmentActivity {
             dbController.close();
         } catch (SQLException e) {
             System.out.println(e);
-        }*/
-
-        //Read from DB
-        DBController controller = new DBController(this);
-        WordResult tmpResult = null;
-        try {
-            controller.open();
-            tmpResult = controller.fetch("borða");
-            controller.close();
-        } catch (SQLException e) {
-            System.out.println(e);
         }
-        System.out.println("WordResult title from db: " + tmpResult.getTitle());
-	}
+
+}
 	
 	/**
 	 * Constructs a TextView with the title of the word and possibly a TextView with a note about the word, if it exits, 

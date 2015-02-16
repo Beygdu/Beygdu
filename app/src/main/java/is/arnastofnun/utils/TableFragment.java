@@ -12,7 +12,7 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
-import com.example.beygdu.R;
+import is.arnastofnun.beygdu.R;
 
 import is.arnastofnun.parser.Block;
 import is.arnastofnun.parser.SubBlock;

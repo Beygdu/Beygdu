@@ -21,7 +21,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.example.beygdu.R;
+import is.arnastofnun.beygdu.R;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;

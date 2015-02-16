@@ -13,7 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.example.beygdu.R;
+import is.arnastofnun.beygdu.R;
 
 /**
  * @author Snær Seljan

@@ -12,13 +12,22 @@ import android.database.sqlite.SQLiteOpenHelper;
  */
 public class DBHelper extends SQLiteOpenHelper{
 
+    boolean debugDelete = true;
+
     // Table Name
-    public static final String TABLE_NAME = "Cache";
+    public static final String TABLE_WORDRESULT = "wordresult";
+    public static final String TABLE_BLOCK = "block";
+    public static final String TABLE_SUBBLOCK = "subblock";
+    public static final String TABLE_TABLES = "tables";
 
     // Table columns
-    public static final String ID = "id";
-    public static final String WORD = "word";
-    public static final String DESC = "description";
+    public static final String WORDID = "wordid";
+    public static final String TYPE = "type";
+    public static final String TITLE = "title";
+    public static final String NOTE = "note";
+    public static final String COLHEADERS = "colheaders";
+    public static final String ROWHEADERS = "rowheaders";
+    public static final String CONTENT = "content";
 
     // Database Information
     static final String DB_NAME = "BEYGDU.DB";
@@ -26,9 +35,16 @@ public class DBHelper extends SQLiteOpenHelper{
     // database version
     static final int DB_VERSION = 1;
 
-    // Creating table query
-    private static final String CREATE_TABLE = "create table " + TABLE_NAME + "(" + ID
-            + " INTEGER PRIMARY KEY AUTOINCREMENT, " + WORD + " TEXT NOT NULL, " + DESC + " TEXT);";
+    // Creating table queries
+    private static final String CREATE_WORDRESULT_TABLE = "create table " + TABLE_WORDRESULT + "(" + WORDID
+            + " INT PRIMARY KEY AUTOINCREMENT, " + TYPE + " TEXT NOT NULL, " + TITLE+ " TEXT PRIMARY KEY , " + NOTE + " TEXT);";
+    private static final String CREATE_BLOCK_TABLE = "create table " + TABLE_BLOCK + "(" + WORDID
+            + " INT , " + TITLE + " TEXT );";
+    private static final String CREATE_SUBBLOCK_TABLE = "create table " + TABLE_SUBBLOCK + "(" + WORDID
+            + " INT, " + TITLE + " TEXT);";
+    private static final String CREATE_TABLES_TABLE = "create table " + TABLE_TABLES + "(" + WORDID
+            + " INT , " + TITLE + " TEXT , " + COLHEADERS + " TEXT , " + ROWHEADERS + " TEXT , " + CONTENT + " TEXT);";
+
 
     public DBHelper(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
@@ -44,7 +60,17 @@ public class DBHelper extends SQLiteOpenHelper{
      */
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL(CREATE_TABLE);
+        if(debugDelete = true) {
+            db.execSQL("DROP TABLE IF EXISTS " + TABLE_WORDRESULT);
+            db.execSQL("DROP TABLE IF EXISTS " + TABLE_BLOCK);
+            db.execSQL("DROP TABLE IF EXISTS " + TABLE_SUBBLOCK);
+            db.execSQL("DROP TABLE IF EXISTS " + TABLE_TABLES);
+        }
+
+        db.execSQL(CREATE_WORDRESULT_TABLE);
+        db.execSQL(CREATE_BLOCK_TABLE);
+        db.execSQL(CREATE_SUBBLOCK_TABLE);
+        db.execSQL(CREATE_TABLES_TABLE);
     }
 
 
@@ -58,7 +84,10 @@ public class DBHelper extends SQLiteOpenHelper{
      */
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_WORDRESULT);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_BLOCK);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_SUBBLOCK);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_TABLES);
         onCreate(db);
     }
 }
