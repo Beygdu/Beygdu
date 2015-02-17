@@ -15,49 +15,35 @@
     <string name="title_activity_table_test">TableTest</string>
     <string name="title_activity_about">Um beygðu</string>
 
-    
     <!-- Action Bar -->
     <string name="app_name">eygðu</string>
     <string name="about">Um Beygðu</string>
     <string name="action_filter">Sía</string>
     <string name="action_mail">Senda Póst</string>
     <!-- Table activity strings -->
-	    <string name="tableTitle">Nafn á orði</string>
-	    <string name="eintala">Eintala</string>
-	    <string name="fleirtala">Fleirtala</string>
-	    <string name="a_gr">án greinis</string>
-	    <string name="m_gr">með greini</string>
-	    <string name="nf">Nf.</string>
-	    <string name="tf">Þf.</string>
-	    <string name="tgf">Þgf.</string>
-	    <string name="ef">Ef.</string>
-		
-	    <string name="fyrsta_pers">1.pers</string>
-	    <string name="onnur_pers">2.pers</string>
-	    <string name="thridja_pers">3.pers</string>
-	    
-	    <string name="lo_kk">KK</string>
-	    <string name="lo_kvk">KVK</string>
-	    <string name="lo_hk">HK</string>
-    
-    <!-- Dialog -->
-	    <string name="choosedialog">Smelltu á það orð sem þú vilt sjá: </string>
-	    <string name="afram">Áfram</string>
-	    <string name="cancel">Hætta við</string>
-    
-    <!-- json test -->
-	    <string name="title_activity_json">title_activity_json</string>
-	    <string name="jsontest">jsontest</string>
-	    <string name="title_activity_handle_xml">HandleXML</string>
-    
-    
-    
+    <string name="tableTitle">Nafn á orði</string>
+    <string name="eintala">Eintala</string>
+    <string name="fleirtala">Fleirtala</string>
+    <string name="a_gr">án greinis</string>
+    <string name="m_gr">með greini</string>
+    <string name="nf">Nf.</string>
+    <string name="tf">Þf.</string>
+    <string name="tgf">Þgf.</string>
+    <string name="ef">Ef.</string>
+    <string name="fyrsta_pers">1.pers</string>
+    <string name="onnur_pers">2.pers</string>
+    <string name="thridja_pers">3.pers</string>
+    <string name="lo_kk">KK</string>
+    <string name="lo_kvk">KVK</string>
+    <string name="lo_hk">HK</string>
 
-	   <string name="location">Location</string>
-	   <string name="country">Country:</string>
-	   <string name="temperature">Temperature:</string>
-	   <string name="humidity">Humidity:</string>
-	   <string name="pressure">Pressure:</string>
-	   <string name="weather">Weather</string>
+    <!-- Dialog -->
+    <string name="choosedialog">Smelltu á það orð sem þú vilt sjá: </string>
+    <string name="afram">Áfram</string>
+    <string name="cancel">Hætta við</string>
+
+    <!-- Cache -->
+    <string name="title_activity_cache">cache</string>
+
 
 </resources>

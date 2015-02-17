@@ -3,6 +3,7 @@ package is.arnastofnun.DB;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 /**
  * @author Jón Friðrik
@@ -12,13 +13,18 @@ import android.database.sqlite.SQLiteOpenHelper;
  */
 public class DBHelper extends SQLiteOpenHelper{
 
-    boolean debugDelete = true;
+    // Database Information
+    static final String DB_NAME = "BEYGDU.DB";
 
-    // Table Name
+    // database version
+    static final int DB_VERSION = 1;
+
+    // Table Names
     public static final String TABLE_WORDRESULT = "wordresult";
     public static final String TABLE_BLOCK = "block";
     public static final String TABLE_SUBBLOCK = "subblock";
     public static final String TABLE_TABLES = "tables";
+
 
     // Table columns
     public static final String WORDID = "wordid";
@@ -29,21 +35,32 @@ public class DBHelper extends SQLiteOpenHelper{
     public static final String ROWHEADERS = "rowheaders";
     public static final String CONTENT = "content";
 
-    // Database Information
-    static final String DB_NAME = "BEYGDU.DB";
-
-    // database version
-    static final int DB_VERSION = 1;
-
     // Creating table queries
-    private static final String CREATE_WORDRESULT_TABLE = "create table " + TABLE_WORDRESULT + "(" + WORDID
-            + " INT PRIMARY KEY AUTOINCREMENT, " + TYPE + " TEXT NOT NULL, " + TITLE+ " TEXT PRIMARY KEY , " + NOTE + " TEXT);";
-    private static final String CREATE_BLOCK_TABLE = "create table " + TABLE_BLOCK + "(" + WORDID
-            + " INT , " + TITLE + " TEXT );";
-    private static final String CREATE_SUBBLOCK_TABLE = "create table " + TABLE_SUBBLOCK + "(" + WORDID
-            + " INT, " + TITLE + " TEXT);";
-    private static final String CREATE_TABLES_TABLE = "create table " + TABLE_TABLES + "(" + WORDID
-            + " INT , " + TITLE + " TEXT , " + COLHEADERS + " TEXT , " + ROWHEADERS + " TEXT , " + CONTENT + " TEXT);";
+    private static final String CREATE_WORDRESULT_TABLE =
+            "CREATE TABLE " + TABLE_WORDRESULT + " (" +
+                    WORDID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                    TYPE + " TEXT NOT NULL, " +
+                    TITLE + " TEXT NOT NULL, " +
+                    NOTE + " TEXT" +
+                    ");";
+    private static final String CREATE_BLOCK_TABLE =
+            "CREATE TABLE " + TABLE_BLOCK + " (" +
+                    WORDID + " INT , " +
+                    TITLE + " TEXT " +
+                    ");";
+    private static final String CREATE_SUBBLOCK_TABLE =
+            "CREATE TABLE " + TABLE_SUBBLOCK + " (" +
+                    WORDID + " INT, " +
+                    TITLE + " TEXT" +
+                    ");";
+    private static final String CREATE_TABLES_TABLE =
+            "CREATE TABLE " + TABLE_TABLES + " (" +
+                    WORDID + " INT , " +
+                    TITLE + " TEXT , " +
+                    COLHEADERS + " TEXT , " +
+                    ROWHEADERS + " TEXT , " +
+                    CONTENT + " TEXT" +
+                    ");";
 
 
     public DBHelper(Context context) {
@@ -60,13 +77,6 @@ public class DBHelper extends SQLiteOpenHelper{
      */
     @Override
     public void onCreate(SQLiteDatabase db) {
-        if(debugDelete = true) {
-            db.execSQL("DROP TABLE IF EXISTS " + TABLE_WORDRESULT);
-            db.execSQL("DROP TABLE IF EXISTS " + TABLE_BLOCK);
-            db.execSQL("DROP TABLE IF EXISTS " + TABLE_SUBBLOCK);
-            db.execSQL("DROP TABLE IF EXISTS " + TABLE_TABLES);
-        }
-
         db.execSQL(CREATE_WORDRESULT_TABLE);
         db.execSQL(CREATE_BLOCK_TABLE);
         db.execSQL(CREATE_SUBBLOCK_TABLE);

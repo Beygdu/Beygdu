@@ -162,6 +162,11 @@ public class MainActivity extends FragmentActivity {
 			new ParseThread(word).execute();
 		}
 	}
+    public void cacheClick(@SuppressWarnings("unused") View view){
+        Intent intent = new Intent(MainActivity.this, Cache.class);
+        startActivity(intent);
+    }
+
 	
 	/**
 	 * @param word the searchword

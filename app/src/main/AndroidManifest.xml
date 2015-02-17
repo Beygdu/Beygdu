@@ -8,8 +8,16 @@
         android:minSdkVersion="16"
         android:targetSdkVersion="19" />
 
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <android:uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:maxSdkVersion="18" />
+    <android:uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <android:uses-permission
+        android:name="android.permission.READ_EXTERNAL_STORAGE"
+        android:maxSdkVersion="18" />
 
     <application
         android:allowBackup="true"
@@ -17,10 +25,10 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name="is.arnastofnun.beygdu.MainActivity"
-            android:label="@string/app_name"
+            android:name=".MainActivity"
             android:configChanges="orientation"
-            android:screenOrientation="portrait">
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -28,21 +36,28 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="is.arnastofnun.beygdu.BeygingarActivity"
-            android:label="@string/title_activity_beygingar"
+            android:name=".BeygingarActivity"
             android:configChanges="orientation"
-            android:screenOrientation="portrait"
-            android:parentActivityName="is.arnastofnun.beygdu.MainActivity" >
+            android:label="@string/title_activity_beygingar"
+            android:parentActivityName=".MainActivity"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name="is.arnastofnun.beygdu.AboutActivity"
-            android:label="@string/title_activity_about"
-            android:parentActivityName="is.arnastofnun.beygdu.MainActivity"
+            android:name=".AboutActivity"
             android:configChanges="orientation"
+            android:label="@string/title_activity_about"
+            android:parentActivityName=".MainActivity"
             android:screenOrientation="portrait" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="is.arnastofnun.beygdu.MainActivity" />
+        </activity>
+        <activity
+            android:name=".Cache"
+            android:label="@string/title_activity_cache"
+            android:configChanges="orientation"
+            android:parentActivityName=".MainActivity"
+            android:screenOrientation="portrait">
         </activity>
     </application>
 

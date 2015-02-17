@@ -42,44 +42,69 @@ public class DBController {
         dbHelper.close();
     }
 
-    public void insert(WordResult result) {
+    public void createEntry(WordResult result) {
+        insertWordResult(result);
+    }
 
+    private void insertWordResult(WordResult result) {
         //Generate Content for all tables
         ContentValues wordResultContent = new ContentValues();
         wordResultContent.put(DBHelper.TYPE, result.getType());
         wordResultContent.put(DBHelper.TITLE, result.getTitle());
         wordResultContent.put(DBHelper.NOTE, result.getNote());
         dB.insert(DBHelper.TABLE_WORDRESULT, null, wordResultContent);
-
         int id = fetchMaxId();
+        dbHelper.close();
 
-        for (Block b : result.getBlocks()) {
-            ContentValues blockContent = new ContentValues();
-            blockContent.put(DBHelper.WORDID, id);
-            blockContent.put(DBHelper.TITLE, b.getTitle());
-            dB.insert(DBHelper.TABLE_BLOCK, null, blockContent);
-
-            for (SubBlock sb : b.getBlocks()) {
-                ContentValues subBlockContent = new ContentValues();
-                subBlockContent.put(DBHelper.WORDID, id);
-                subBlockContent.put(DBHelper.TITLE, sb.getTitle());
-                dB.insert(DBHelper.TABLE_SUBBLOCK, null, subBlockContent);
-
-                for (Tables table : sb.getTables()) {
-                    ContentValues tableContent = new ContentValues();
-                    tableContent.put(DBHelper.WORDID, id);
-                    tableContent.put(DBHelper.TITLE, table.getTitle());
-                    tableContent.put(DBHelper.COLHEADERS, arrToString(table.getColumnNames()));
-                    tableContent.put(DBHelper.ROWHEADERS, arrToString(table.getRowNames()));
-                    tableContent.put(DBHelper.CONTENT, arrToString(table.getContent().toArray()));
-                    dB.insert(DBHelper.TABLE_TABLES, null, tableContent);
-                }
-            }
+        for(Block block : result.getBlocks()) {
+            insertBlocks(block, id);
         }
     }
 
-    public WordResult fetch(String word) {
+    private void insertBlocks(Block block, int id) {
+        dB = dbHelper.getWritableDatabase();
 
+        ContentValues blockContent = new ContentValues();
+        blockContent.put(DBHelper.WORDID, id);
+        blockContent.put(DBHelper.TITLE, block.getTitle());
+        dB.insert(DBHelper.TABLE_BLOCK, null, blockContent);
+
+        dbHelper.close();
+        for(SubBlock sb : block.getBlocks()) {
+            insertSubBlock(sb, id);
+        }
+    }
+
+    private void insertSubBlock(SubBlock sb, int id) {
+        dB = dbHelper.getWritableDatabase();
+
+        ContentValues subBlockContent = new ContentValues();
+        subBlockContent.put(DBHelper.WORDID, id);
+        subBlockContent.put(DBHelper.TITLE, sb.getTitle());
+        dB.insert(DBHelper.TABLE_SUBBLOCK, null, subBlockContent);
+        dbHelper.close();
+
+        for(Tables table: sb.getTables()){
+            insertTable(table, id);
+        }
+    }
+
+    private void insertTable(Tables table, int id) {
+        dB = dbHelper.getWritableDatabase();
+
+        ContentValues tableContent = new ContentValues();
+        tableContent.put(DBHelper.WORDID, id);
+        tableContent.put(DBHelper.TITLE, table.getTitle());
+        tableContent.put(DBHelper.COLHEADERS, arrToString(table.getColumnNames()));
+        tableContent.put(DBHelper.ROWHEADERS, arrToString(table.getRowNames()));
+        tableContent.put(DBHelper.CONTENT, arrToString(table.getContent().toArray()));
+        dB.insert(DBHelper.TABLE_TABLES, null, tableContent);
+
+        dbHelper.close();
+    }
+
+
+    public WordResult fetch(String word) {
         int wordid = -1;
         Object[] result = new Object[wordResultColumns.length];
 
@@ -107,8 +132,30 @@ public class DBController {
         return tmp;
     }
 
-    private int fetchMaxId() {
+    public ArrayList<String> fetchAllWords() {
+        ArrayList<String> words= new ArrayList<String>();
+        if (!dB.isOpen()) {
+            try {
+                open();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        final String MY_QUERY = "SELECT * FROM " + DBHelper.TABLE_WORDRESULT;
+        Cursor cursor = dB.rawQuery(MY_QUERY, null);
 
+        int iTitle = cursor.getColumnIndex(DBHelper.TITLE);
+
+        for(cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
+            String tmp = cursor.getString(iTitle);
+            words.add(tmp);
+        }
+
+        close();
+        return words;
+    }
+
+    private int fetchMaxId() {
         int id = 0;
         final String MY_QUERY = "SELECT MAX("+ DBHelper.WORDID +") FROM " + DBHelper.TABLE_WORDRESULT;
         Cursor mCursor = dB.rawQuery(MY_QUERY, null);
@@ -122,22 +169,9 @@ public class DBController {
         }
         return id;
     }
-/*        Cursor cursor = dB.query(DBHelper.TABLE_WORDRESULT, columns, null,
-                null, null, null, null);
-
-        if (cursor != null) {
-            cursor.moveToFirst();
-        }
-        //Will only return one int if word is in the table since the title is a primary key of the table,
-        // if not in the table return -1;
-        int tmp = cursor.getInt(cursor.getColumnIndex(DBHelper.WORDID));
-        return tmp;
-    }
-    */
 
     private WordResult generateWordResult(String[] columns) {
-        WordResult newResult = new WordResult(columns[2], columns[1], null, new ArrayList<ArrayList<String>>());
-        return newResult;
+        return null;
     }
 
     private String arrToString(Object[] arr){

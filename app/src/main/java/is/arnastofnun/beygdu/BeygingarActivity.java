@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
@@ -19,8 +18,6 @@ import android.view.MenuItem;
 import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import is.arnastofnun.beygdu.R;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -75,11 +72,12 @@ public class BeygingarActivity extends FragmentActivity {
         DBController dbController = new DBController(this);
         try {
             dbController.open();
-            dbController.insert(words);
-            dbController.close();
+            dbController.createEntry(words);
         } catch (SQLException e) {
             System.out.println(e);
         }
+
+        ArrayList<String> tmp = dbController.fetchAllWords();
 
 }
 	
