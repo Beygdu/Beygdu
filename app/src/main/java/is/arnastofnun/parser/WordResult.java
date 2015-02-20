@@ -37,7 +37,7 @@ public class WordResult implements Serializable {
 		populateBlockList();
 	}
 
-	/**
+    /**
 	 * @return The type of the results
 	 */
 	public String getType() {

@@ -7,6 +7,10 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import is.arnastofnun.parser.Block;
+import is.arnastofnun.parser.SubBlock;
+import is.arnastofnun.parser.Tables;
+
 //Hofundur Arnar Jonsson
 public class WordResult {
 

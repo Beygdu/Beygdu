@@ -3,12 +3,11 @@ package is.arnastofnun.DB;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 
 /**
  * @author Jón Friðrik
  * @since 14.02.15
- * @version 0.1
+ * @version 1.0
  *
  */
 public class DBHelper extends SQLiteOpenHelper{
@@ -17,7 +16,7 @@ public class DBHelper extends SQLiteOpenHelper{
     static final String DB_NAME = "BEYGDU.DB";
 
     // database version
-    static final int DB_VERSION = 1;
+    static final int DB_VERSION = 2;
 
     // Table Names
     public static final String TABLE_WORDRESULT = "wordresult";
@@ -27,7 +26,12 @@ public class DBHelper extends SQLiteOpenHelper{
 
 
     // Table columns
+    // id's
     public static final String WORDID = "wordid";
+    public static final String BLOCKID = "blockid";
+    public static final String SUBBLOCKID = "subblockid";
+    public static final String TABLEID = "tableid";
+
     public static final String TYPE = "type";
     public static final String TITLE = "title";
     public static final String NOTE = "note";
@@ -46,16 +50,19 @@ public class DBHelper extends SQLiteOpenHelper{
     private static final String CREATE_BLOCK_TABLE =
             "CREATE TABLE " + TABLE_BLOCK + " (" +
                     WORDID + " INT , " +
+                    BLOCKID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                     TITLE + " TEXT " +
                     ");";
     private static final String CREATE_SUBBLOCK_TABLE =
             "CREATE TABLE " + TABLE_SUBBLOCK + " (" +
-                    WORDID + " INT, " +
+                    BLOCKID + " INT, " +
+                    SUBBLOCKID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                     TITLE + " TEXT" +
                     ");";
     private static final String CREATE_TABLES_TABLE =
             "CREATE TABLE " + TABLE_TABLES + " (" +
-                    WORDID + " INT , " +
+                    SUBBLOCKID + " INT , " +
+                    TABLEID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                     TITLE + " TEXT , " +
                     COLHEADERS + " TEXT , " +
                     ROWHEADERS + " TEXT , " +
@@ -99,5 +106,21 @@ public class DBHelper extends SQLiteOpenHelper{
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_SUBBLOCK);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_TABLES);
         onCreate(db);
+    }
+
+    /**
+     *
+     * @param db the database
+     *           The db will be cleared.
+     */
+    public void clearTables(SQLiteDatabase db) {
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_WORDRESULT);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_BLOCK);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_SUBBLOCK);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_TABLES);
+        db.execSQL(CREATE_WORDRESULT_TABLE);
+        db.execSQL(CREATE_BLOCK_TABLE);
+        db.execSQL(CREATE_SUBBLOCK_TABLE);
+        db.execSQL(CREATE_TABLES_TABLE);
     }
 }

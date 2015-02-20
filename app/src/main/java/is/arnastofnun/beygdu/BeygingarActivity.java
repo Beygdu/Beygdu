@@ -72,7 +72,7 @@ public class BeygingarActivity extends FragmentActivity {
         DBController dbController = new DBController(this);
         try {
             dbController.open();
-            dbController.createEntry(words);
+            dbController.insert(words);
         } catch (SQLException e) {
             System.out.println(e);
         }
