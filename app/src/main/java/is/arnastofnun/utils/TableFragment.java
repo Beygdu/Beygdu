@@ -114,7 +114,7 @@ public class TableFragment extends Fragment {
         tableRowParams.setMargins(1, 1, 1, 1);
         tableRowParams.weight = colNum;
 //			tableRowParams.height = 100;
-// comment
+// comment test
         int contentIndex = 0;
         for (int row = 0; row < rowNum; row++) {
             TableRow tr = new TableRow(context);
