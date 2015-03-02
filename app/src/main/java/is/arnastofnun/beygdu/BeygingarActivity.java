@@ -55,12 +55,12 @@ public class BeygingarActivity extends FragmentActivity {
 		super.onCreate(savedInstanceState);	
 		setContentView(R.layout.activity_beygingar);
 		getActionBar().setDisplayHomeAsUpEnabled(true);
-		
+
 		//get WordResult from MainActivity.
 		Intent intent = getIntent();
 		words = (WordResult) intent.getSerializableExtra("word");
 		tableLayout = (TableLayout) findViewById(R.id.data_table);
-		
+
 		//fill mSelectedItems with all possible blocks
 		for (int i = 0; i < words.getBlocks().size(); i++) {
 			mSelectedItems.add(i);
@@ -86,20 +86,23 @@ public class BeygingarActivity extends FragmentActivity {
 	 * and puts them into the tableLayout. Then a TableFragment is constructed for each block in the word.
 	 */
 	private void initTables(){
-		//SetTitle
+        //Get font
+        //Typeface tf = Typeface.createFromAsset(getAssets(), "fonts/Roboto-Black.tff");
+        //SetTitle
 		TextView titleDesc = new TextView(this);
 		titleDesc.setText(words.getTitle());
 		titleDesc.setGravity(Gravity.CENTER);
-		titleDesc.setTextSize(40);
-		titleDesc.setHeight(130);
-		titleDesc.setTypeface(Typeface.DEFAULT_BOLD);
+		titleDesc.setTextSize(30);
+		titleDesc.setMinHeight(130);
+        titleDesc.setPadding(0,50,0,50);
+        //titleDesc.setTypeface(tf);
 		tableLayout.addView(titleDesc);
 		
 		//SetNote
 		if(!words.getNote().equals("")) {
 			TextView note = new TextView(this);
 			note.setText(words.getNote());
-			note.setBackgroundResource(R.drawable.noteborder);
+            note.setBackgroundResource(R.drawable.noteborder);
 			tableLayout.addView(note);
 		}
 
@@ -109,8 +112,9 @@ public class BeygingarActivity extends FragmentActivity {
 			if (mSelectedItems.contains(i)) {
 				Block block = words.getBlocks().get(i);
 				TextView blockTitle = new TextView(this);
-				blockTitle.setTextSize(30);
-				blockTitle.setHeight(60);
+				blockTitle.setTextSize(20);
+                blockTitle.setMinHeight(50);
+                blockTitle.setPadding(0,50,0,50);
 				blockTitle.setText(block.getTitle());
 				
 				TableFragment tFragment = new TableFragment(BeygingarActivity.this, tableLayout, block, blockTitle);

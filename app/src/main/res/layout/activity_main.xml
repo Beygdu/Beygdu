@@ -9,7 +9,14 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10sp">
-		
+
+        <TextView
+            android:id="@+id/ghost"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Roboto test"/>
+
+
 		<TextView
 	        android:id="@+id/title"
 	        android:layout_width="wrap_content"
