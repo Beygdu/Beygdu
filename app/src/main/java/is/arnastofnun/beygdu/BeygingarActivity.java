@@ -77,7 +77,6 @@ public class BeygingarActivity extends FragmentActivity {
             System.out.println(e);
         }
 
-        ArrayList<String> tmp = dbController.fetchAllWords();
 
 }
 	

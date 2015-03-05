@@ -37,6 +37,13 @@ public class WordResult implements Serializable {
 		populateBlockList();
 	}
 
+    public WordResult(String type, String title, String note) {
+
+        this.type = type;
+        this.title = title;
+        this.note = note;
+    }
+
     /**
 	 * @return The type of the results
 	 */
@@ -64,6 +71,10 @@ public class WordResult implements Serializable {
 	public ArrayList<Block> getBlocks() {
 		return this.blocks;
 	}
+
+    public void setBlocks(ArrayList<Block> blocks) {
+        this.blocks = blocks;
+    }
 	
 	
 	private String destroyPointer(String a) {

@@ -16,14 +16,13 @@ public class DBHelper extends SQLiteOpenHelper{
     static final String DB_NAME = "BEYGDU.DB";
 
     // database version
-    static final int DB_VERSION = 2;
+    static final int DB_VERSION = 1;
 
     // Table Names
     public static final String TABLE_WORDRESULT = "wordresult";
     public static final String TABLE_BLOCK = "block";
     public static final String TABLE_SUBBLOCK = "subblock";
     public static final String TABLE_TABLES = "tables";
-
 
     // Table columns
     // id's

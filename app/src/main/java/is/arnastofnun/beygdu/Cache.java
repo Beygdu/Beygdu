@@ -1,26 +1,28 @@
 package is.arnastofnun.beygdu;
 
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.widget.SimpleCursorAdapter;
-import android.support.v7.app.ActionBarActivity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Objects;
 
 import is.arnastofnun.DB.DBController;
+import is.arnastofnun.parser.WordResult;
 
 
 public class Cache extends FragmentActivity {
 
     private DBController controller;
     private ListView listView;
+    private static ArrayList<String> words;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +39,7 @@ public class Cache extends FragmentActivity {
             e.printStackTrace();
         }
 
-        ArrayList<String> words = controller.fetchAllWords();
+        words = controller.fetchAllWords();
 
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
                 this,
@@ -45,6 +47,16 @@ public class Cache extends FragmentActivity {
                 words );
 
         listView.setAdapter(arrayAdapter);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                WordResult word = controller.fetch(words.get(position));
+
+                Intent intent = new Intent(Cache.this, BeygingarActivity.class);
+                intent.putExtra("word", word);
+                startActivity(intent);
+            }
+        });
     }
 
 
