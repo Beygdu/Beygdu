@@ -16,7 +16,7 @@
     <string name="title_activity_about">Um beygðu</string>
 
     <!-- Action Bar -->
-    <string name="app_name">eygðu</string>
+    <string name="app_name">Beygðu</string>
     <string name="about">Um Beygðu</string>
     <string name="action_filter">Sía</string>
     <string name="action_mail">Senda Póst</string>
@@ -44,6 +44,8 @@
 
     <!-- Cache -->
     <string name="title_activity_cache">cache</string>
-
+    <string name="title_activity_statistics">StatisticsActivity</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
 
 </resources>

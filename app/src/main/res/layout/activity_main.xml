@@ -56,6 +56,14 @@
                 android:id="@+id/cache"
                 android:onClick="cacheClick"
                 android:layout_column="1" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Statistics"
+                android:id="@+id/statisticsBtn"
+                android:onClick="statisticsClick"
+                android:layout_column="1" />
         </TableRow>
 
         <TextView

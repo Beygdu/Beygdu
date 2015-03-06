@@ -169,6 +169,13 @@ public class MainActivity extends FragmentActivity {
         startActivity(intent);
     }
 
+
+    public void statisticsClick(@SuppressWarnings("unused") View view){
+        Intent intent = new Intent(MainActivity.this, StatisticsActivity.class);
+        startActivity(intent);
+    }
+
+
 	
 	/**
 	 * @param word the searchword
