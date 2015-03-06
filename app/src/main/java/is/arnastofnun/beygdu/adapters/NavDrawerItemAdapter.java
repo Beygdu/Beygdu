@@ -62,7 +62,7 @@ public class NavDrawerItemAdapter extends BaseAdapter{
 
         // Set the Text view with the itemTitle we got
         textView.setText(itemTitle);
-        
+
         return v;
     }
 }
