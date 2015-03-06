@@ -1,4 +1,4 @@
-package is.arnastofnun.beygdu.is.arnastofnun.beygdur.soonToBeAdded;
+package is.arnastofnun.beygdu;
 
 /**
  * @author Daniel Pall Johannsson
