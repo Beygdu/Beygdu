@@ -68,16 +68,9 @@ public class BeygingarActivity extends FragmentActivity {
 		}
 		initTables();
 
-        //Save to DB
+        //Save to DB -- if it does not exist before
         DBController dbController = new DBController(this);
-        try {
-            dbController.open();
-            dbController.insert(words);
-        } catch (SQLException e) {
-            System.out.println(e);
-        }
-
-
+        dbController.insert(words);
 }
 	
 	/**

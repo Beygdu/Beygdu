@@ -33,12 +33,6 @@ public class Cache extends FragmentActivity {
         listView.setEmptyView(findViewById(R.id.empty));
 
         controller = new DBController(this);
-        try {
-            controller.open();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
         words = controller.fetchAllWords();
 
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
