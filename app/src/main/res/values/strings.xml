@@ -45,5 +45,8 @@
     <!-- Cache -->
     <string name="title_activity_cache">cache</string>
 
+    <!-- Navigation Drawer-->
+    <string name="open_drawer">Skúffa opin</string>
+    <string name="close_drawer">Skúffa lokuð</string>
 
 </resources>
