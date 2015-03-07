@@ -111,25 +111,32 @@ public class TableFragment extends Fragment {
         final int colNum = table.getColumnNames().length;
 
         TableRow.LayoutParams tableRowParams = new TableRow.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
-        tableRowParams.setMargins(1, 1, 1, 1);
+        tableRowParams.setMargins(2, 2, 2, 2);
         tableRowParams.weight = colNum;
-//			tableRowParams.height = 100;
 
         int contentIndex = 0;
         for (int row = 0; row < rowNum; row++) {
             TableRow tr = new TableRow(context);
             tr.setLayoutParams(tableRowParams);
-
-            tr.setBackgroundColor(getResources().getColor(R.color.grey));
+            tr.setMinimumHeight(80);
+            tr.setBackgroundColor(getResources().getColor(R.color.black));
             for (int col = 0; col < colNum; col++) {
                 TextView cell = new TextView(context);
                 cell.setTextAppearance(context, R.style.BodyText);
-                cell.setLayoutParams(new TableRow.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, 1f));
+                cell.setLayoutParams(new TableRow.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT, 1f));
                 cell.setGravity(Gravity.CENTER);
-                cell.setMinHeight(300);
+                cell.setMinHeight(80);
                 cell.setTextColor(getResources().getColor(R.color.navy));
-                cell.setBackgroundResource(R.drawable.border);
+                if( (rowNum % 2) == 0) {
+                    cell.setBackgroundResource(R.drawable.border);
+                }
+                else {
+                    cell.setBackgroundResource(R.drawable.button);
+                }
+
+
                 if (row == 0) {
+                    cell.setTextColor(getResources().getColor(R.color.red));
                     if (table.getContent().size() == 1) {
                         cell.setText(table.getContent().get(row));
                     } else {
@@ -137,6 +144,7 @@ public class TableFragment extends Fragment {
                     }
                 } else {
                     if (col == 0) {
+                        cell.setTextColor(getResources().getColor(R.color.grey));
                         cell.setText(table.getRowNames()[row]);
                     } else {
                         cell.setText(table.getContent().get(contentIndex++));

@@ -87,7 +87,7 @@ public class BeygingarActivity extends FragmentActivity {
 	 */
 	private void initTables(){
         //Get font
-        //Typeface tf = Typeface.createFromAsset(getAssets(), "fonts/Roboto-Black.tff");
+        Typeface tf = Typeface.createFromAsset(getAssets(),"fonts/DroidSans.tff");
         //SetTitle
 		TextView titleDesc = new TextView(this);
 		titleDesc.setText(words.getTitle());
@@ -95,7 +95,7 @@ public class BeygingarActivity extends FragmentActivity {
 		titleDesc.setTextSize(30);
 		titleDesc.setMinHeight(130);
         titleDesc.setPadding(0,50,0,50);
-        //titleDesc.setTypeface(tf);
+        titleDesc.setTypeface(tf);
 		tableLayout.addView(titleDesc);
 		
 		//SetNote

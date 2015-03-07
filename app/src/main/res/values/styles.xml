@@ -14,8 +14,10 @@
     <style name="MyActionBar" parent="@android:style/Widget.Holo.Light.ActionBar.Solid.Inverse">
         <item name="android:background">#7a87b9</item>
     </style>
-    
-    
+
+    <style name="fontForNotificationLandingPage">
+         <item name="android:fontFamily">sans-serif-light</item>
+    </style>
 
     
 	<style name="HeaderRow">

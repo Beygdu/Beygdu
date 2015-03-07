@@ -6,4 +6,8 @@
     <color name="grey">#f3f3f3</color>
     <color name="red">#FF0000</color>
     <color name="tableBorderColor">#dddddd</color>
+    <color name="greyer">#e9e9e9</color>
+    <color name="table1">#f4f3f0 </color>
+    <color name="table2">#f7f7f5 </color>
+
 </resources>
