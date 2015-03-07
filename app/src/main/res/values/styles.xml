@@ -15,7 +15,9 @@
         <item name="android:background">#7a87b9</item>
     </style>
     
-    
+    <style name="WordResultTilte">
+        <item name="android:background">@drawable/border</item>
+    </style>
 
     
 	<style name="HeaderRow">

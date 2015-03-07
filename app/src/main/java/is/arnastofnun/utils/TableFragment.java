@@ -86,7 +86,7 @@ public class TableFragment extends Fragment {
                 TextView subBlockTitle = new TextView(context);
                 subBlockTitle.setText(sBlock.getTitle());
                 subBlockTitle.setTextSize(25);
-                subBlockTitle.setHeight(50);
+                subBlockTitle.setMinHeight(50);
                 tableLayout.addView(subBlockTitle);
             }
             //Create the tables and set title
@@ -95,7 +95,7 @@ public class TableFragment extends Fragment {
                 TextView tableTitle = new TextView(context);
                 tableTitle.setText(tables.getTitle());
                 tableTitle.setTextSize(20);
-                tableTitle.setHeight(50);
+                tableTitle.setMinHeight(50);
                 tableLayout.addView(tableTitle);
                 createTable(tables);
             }
@@ -111,7 +111,7 @@ public class TableFragment extends Fragment {
         final int colNum = table.getColumnNames().length;
 
         TableRow.LayoutParams tableRowParams = new TableRow.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
-        tableRowParams.setMargins(1, 1, 1, 1);
+        //tableRowParams.setMargins(1, 1, 1, 1);
         tableRowParams.weight = colNum;
 //			tableRowParams.height = 100;
 
