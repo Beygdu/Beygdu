@@ -44,7 +44,12 @@
 
     <!-- Cache -->
     <string name="title_activity_cache">cache</string>
+
+    <!-- Statistics -->
     <string name="title_activity_statistics">StatisticsActivity</string>
+    <string name="pieChart_Desc">Fjöldi leita eftir orðflokkum</string>
+
+    <!-- Auto-Generated -->
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
 

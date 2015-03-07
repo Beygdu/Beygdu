@@ -26,9 +26,9 @@ public class DBHelper extends SQLiteOpenHelper{
     public static final String TABLE_BLOCK = "block";
     public static final String TABLE_SUBBLOCK = "subblock";
     public static final String TABLE_TABLES = "tables";
+    public static final String TABLE_STATISTICS = "statistics";
 
     // Table columns
-    // id's
     public static final String WORDID = "wordid";
     public static final String BLOCKID = "blockid";
     public static final String SUBBLOCKID = "subblockid";
@@ -41,6 +41,13 @@ public class DBHelper extends SQLiteOpenHelper{
     public static final String COLHEADERS = "colheaders";
     public static final String ROWHEADERS = "rowheaders";
     public static final String CONTENT = "content";
+
+    public static final String STAT_NO = "Nafnord";
+    public static final String STAT_LO = "Lýsingarorð";
+    public static final String STAT_SO = "Sagnorð";
+    public static final String STAT_TO = "Töluorð";
+    public static final String STAT_FN = "Fornöfn";
+
 
     // Creating table queries
     private static final String CREATE_WORDRESULT_TABLE =
@@ -81,6 +88,14 @@ public class DBHelper extends SQLiteOpenHelper{
                     "REFERENCES " + DBHelper.TABLE_SUBBLOCK + "("+ DBHelper.SUBBLOCKID + ") " +
                     "ON DELETE CASCADE " +
                     ");";
+    private static final String CREATE_STATISTICS_TABLE =
+            "CREATE TABLE " + TABLE_STATISTICS + " (" +
+                    STAT_NO + " INTEGER, " +
+                    STAT_SO + " INTEGER, " +
+                    STAT_LO + " INTEGER, " +
+                    STAT_TO + " INTEGER, " +
+                    STAT_FN + " INTEGER " +
+                    ");";
 
 
     public DBHelper(Context context) {
@@ -110,6 +125,7 @@ public class DBHelper extends SQLiteOpenHelper{
         db.execSQL(CREATE_BLOCK_TABLE);
         db.execSQL(CREATE_SUBBLOCK_TABLE);
         db.execSQL(CREATE_TABLES_TABLE);
+        db.execSQL(CREATE_STATISTICS_TABLE);
     }
 
 
@@ -127,22 +143,7 @@ public class DBHelper extends SQLiteOpenHelper{
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_BLOCK);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_SUBBLOCK);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_TABLES);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_STATISTICS);
         onCreate(db);
-    }
-
-    /**
-     *
-     * @param db the database
-     *           The db will be cleared.
-     */
-    public void clearTables(SQLiteDatabase db) {
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_WORDRESULT);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_BLOCK);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_SUBBLOCK);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_TABLES);
-        db.execSQL(CREATE_WORDRESULT_TABLE);
-        db.execSQL(CREATE_BLOCK_TABLE);
-        db.execSQL(CREATE_SUBBLOCK_TABLE);
-        db.execSQL(CREATE_TABLES_TABLE);
     }
 }

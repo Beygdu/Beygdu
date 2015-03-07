@@ -21,7 +21,7 @@ import is.arnastofnun.parser.WordResult;
 /**
  * @author Jón Friðrik
  * @since 14.02.15
- * @version 0.1
+ * @version 1.0
  *
  */
 public class DBController {
@@ -148,56 +148,6 @@ public class DBController {
 
     /**
      *
-     * @param wordTitle the title of the WordResult
-     * @return true if db contains word, else false
-     */
-    private boolean dbContains(String wordTitle){
-        boolean contains = false;
-
-        try {
-            open();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        final String myQuery =
-                "SELECT * FROM wordresult " +
-                "WHERE " + DBHelper.TITLE + " = '"+ wordTitle +"'";
-
-        Cursor cursor = dB.rawQuery(myQuery, null);
-
-        if (cursor != null) {
-            cursor.moveToFirst();
-
-            if(cursor.getCount() > 0){
-                contains = true;
-                updateDate(wordTitle, cursor);
-
-                close();
-                return contains;
-            }
-        }
-
-        close();
-        return contains;
-    }
-
-    private void updateDate(String wordTitle, Cursor cursor) {
-        String type = cursor.getString(1);
-        String title = cursor.getString(2);
-        String note = cursor.getString(3);
-
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(DBHelper.TYPE, type);
-        contentValues.put(DBHelper.TITLE, title);
-        contentValues.put(DBHelper.NOTE, note);
-        contentValues.put(DBHelper.DATE, new Date().getTime());
-
-        dB.update(DBHelper.TABLE_WORDRESULT, contentValues, DBHelper.TITLE + "='" + wordTitle+"'", null);
-    }
-
-
-    /**
-     *
      * @param title the title to be fetched
      * @return the first occurance WordResult for the title in the table
      */
@@ -213,10 +163,10 @@ public class DBController {
         }
         final String myQuery =
                 "SELECT * FROM wordresult " +
-                "JOIN block ON wordresult.wordid = block.wordid " +
-                "JOIN subblock ON block.blockid = subblock.blockid " +
-                "JOIN tables ON subblock.subblockid = tables.subblockid " +
-                "WHERE wordresult.title = '"+ title +"'";
+                        "JOIN block ON wordresult.wordid = block.wordid " +
+                        "JOIN subblock ON block.blockid = subblock.blockid " +
+                        "JOIN tables ON subblock.subblockid = tables.subblockid " +
+                        "WHERE wordresult.title = '"+ title +"'";
 
         Cursor cursor = dB.rawQuery(myQuery, null);
 
@@ -345,6 +295,55 @@ public class DBController {
             System.out.println(e.getMessage());
         }
         return id;
+    }
+
+    /**
+     *
+     * @param wordTitle the title of the WordResult
+     * @return true if db contains word, else false
+     */
+    private boolean dbContains(String wordTitle){
+        boolean contains = false;
+
+        try {
+            open();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        final String myQuery =
+                "SELECT * FROM wordresult " +
+                        "WHERE " + DBHelper.TITLE + " = '"+ wordTitle +"'";
+
+        Cursor cursor = dB.rawQuery(myQuery, null);
+
+        if (cursor != null) {
+            cursor.moveToFirst();
+
+            if(cursor.getCount() > 0){
+                contains = true;
+                updateDate(wordTitle, cursor);
+
+                close();
+                return contains;
+            }
+        }
+
+        close();
+        return contains;
+    }
+
+    private void updateDate(String wordTitle, Cursor cursor) {
+        String type = cursor.getString(1);
+        String title = cursor.getString(2);
+        String note = cursor.getString(3);
+
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(DBHelper.TYPE, type);
+        contentValues.put(DBHelper.TITLE, title);
+        contentValues.put(DBHelper.NOTE, note);
+        contentValues.put(DBHelper.DATE, new Date().getTime());
+
+        dB.update(DBHelper.TABLE_WORDRESULT, contentValues, DBHelper.TITLE + "='" + wordTitle+"'", null);
     }
 
     private void removeOldest(){

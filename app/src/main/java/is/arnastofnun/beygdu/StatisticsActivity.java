@@ -1,11 +1,11 @@
 package is.arnastofnun.beygdu;
 
+import android.graphics.Color;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v4.app.FragmentActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.PieData;
@@ -13,8 +13,14 @@ import com.github.mikephil.charting.data.PieDataSet;
 
 import java.util.ArrayList;
 
+/**
+ * @author Jón Friðrik
+ * @since 05.03.15
+ * @version 0.1
+ *
+ */
 
-public class StatisticsActivity extends ActionBarActivity {
+public class StatisticsActivity extends FragmentActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,6 +28,7 @@ public class StatisticsActivity extends ActionBarActivity {
         setContentView(R.layout.activity_statistics);
 
         PieChart chart = (PieChart) findViewById(R.id.chart);
+        chart.setDescription(getResources().getString(R.string.pieChart_Desc));
 
         ArrayList<String> testNames = new ArrayList<String>();
         testNames.add("NO");
@@ -29,16 +36,20 @@ public class StatisticsActivity extends ActionBarActivity {
         testNames.add(("SO"));
 
         ArrayList<Entry> yVals = new ArrayList<Entry>();
-        Entry entry = new Entry(0, 10);
-        Entry entry2 = new Entry(0, 20);
-        Entry entry3 = new Entry(0, 87);
+        Entry entry = new Entry(10, 0);
+        Entry entry2 = new Entry(34, 1);
+        Entry entry3 = new Entry(89, 2);
 
         yVals.add(entry);
         yVals.add(entry2);
         yVals.add(entry3);
 
         PieDataSet data = new PieDataSet(yVals, "label");
-        chart.setData(new PieData());
+
+        data.setColors(new int[] {Color.RED, Color.BLUE, Color.GREEN});
+
+        chart.setData(new PieData(testNames, data));
+        chart.invalidate();
 
     }
 
