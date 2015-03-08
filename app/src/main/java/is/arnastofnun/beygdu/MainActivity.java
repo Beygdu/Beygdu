@@ -2,6 +2,7 @@ package is.arnastofnun.beygdu;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -50,6 +51,11 @@ import is.arnastofnun.parser.WordResult;
  * 
  */
 public class MainActivity extends NavDrawer {
+
+    /**
+     * Progress dialog to be used in Async Task
+     */
+    ProgressDialog progressDialog;
 
 	/**
 	 * The result from the parser search.
@@ -377,6 +383,14 @@ public class MainActivity extends NavDrawer {
 		@Override
 		protected void onPreExecute() {
 			super.onPreExecute();
+
+            /**
+             * Show a progress dialog while we are getting the data
+             */
+            progressDialog = new ProgressDialog(MainActivity.this);
+            progressDialog.setMessage(getString(R.string.progressdialog));
+            progressDialog.setCancelable(false);
+            progressDialog.show();
 		}
 
 		/**
@@ -402,6 +416,13 @@ public class MainActivity extends NavDrawer {
 		protected void onPostExecute(Void args) {
 			setParserResult(parser.getParserResult());
 			checkWordCount();
+
+            /**
+             * Remove the progress dialog
+             */
+            if(progressDialog.isShowing()){
+                progressDialog.dismiss();
+            }
 		}
 	}
 }
