@@ -175,7 +175,7 @@ public class NavDrawer extends FragmentActivity{
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main, menu);
+//        getMenuInflater().inflate(R.menu.main, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -187,13 +187,16 @@ public class NavDrawer extends FragmentActivity{
             return true;
         }
 
+        /**
+         *
         switch (item.getItemId()){
             case R.id.action_settings:
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
-//        return super.onOptionsItemSelected(item);
+         */
+        return super.onOptionsItemSelected(item);
     }
 
     @Override

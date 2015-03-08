@@ -107,8 +107,8 @@ public class MainActivity extends NavDrawer {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu items for use in the action bar
-		MenuInflater inflater = getMenuInflater();
-		inflater.inflate(R.menu.main, menu);
+//		MenuInflater inflater = getMenuInflater();
+//		inflater.inflate(R.menu.main, menu);
 		return super.onCreateOptionsMenu(menu);
 	}
 
@@ -118,7 +118,9 @@ public class MainActivity extends NavDrawer {
 	 */
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
+        /**
+         *
+        switch (item.getItemId()) {
 		case R.id.action_about:
 			Intent intent1 = new Intent(this, AboutActivity.class);
 			startActivity(intent1);
@@ -126,7 +128,8 @@ public class MainActivity extends NavDrawer {
 		case R.id.action_mail:
 			sendEmail();
 			break;
-		} 
+		}
+         */
 		return super.onOptionsItemSelected(item);
 	}
 	

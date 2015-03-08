@@ -12,9 +12,12 @@
           android:icon="@drawable/ic_action_mail"
           android:title="@string/action_mail"
           android:showAsAction="always|withText"/>
-    
+
+    <!--
 	<item android:id="@+id/action_about"
           android:icon="@drawable/ic_action_about"
           android:title="@string/about"
           android:showAsAction="always|withText"/>
+    -->
+
 </menu>

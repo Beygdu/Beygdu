@@ -6,5 +6,5 @@
     android:layout_height="wrap_content"
     android:textSize="35dp"
     android:textStyle="bold"
-    android:textColor="#ff505dff"
+    android:textColor="@color/white"
      />

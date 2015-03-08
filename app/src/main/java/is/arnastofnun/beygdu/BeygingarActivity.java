@@ -180,21 +180,23 @@ public class BeygingarActivity extends NavDrawer {
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
+
+        switch (item.getItemId()) {
 		case android.R.id.home:
 			NavUtils.navigateUpFromSameTask(this);
 			return true;
 		case R.id.action_filter:
 			filterAction();
 			break;
-		case R.id.action_about:
-			Intent intent1 = new Intent(this, AboutActivity.class);
-			startActivity(intent1);
-			break;
+//		case R.id.action_about:
+//			Intent intent1 = new Intent(this, AboutActivity.class);
+//			startActivity(intent1);
+//			break;
 		case R.id.action_mail:
 			sendEmail();
 			break;
-		} 
+		}
+
 		return super.onOptionsItemSelected(item);
 	}
 
