@@ -1,6 +1,6 @@
 package is.arnastofnun.beygdu;
 
-import android.app.Activity;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -13,7 +13,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
 import android.widget.ListView;
-import android.widget.Toast;
+
 
 /**
  * @author Daniel Pall Johannsson
@@ -41,10 +41,9 @@ public class NavDrawer extends FragmentActivity{
     protected ListView mDrawerList;
 
     /**
-     * List item array for navigation drawer items
-     * TODO: Get Activity names from strings.xml. This is just for a test now
+     * List item array for navigation drawer items. This array will be populated
+     * from a String Array in strings.xml
      */
-//    protected String[] listArray = {"Item 1","Item 2","Item 3"};
     protected String[] navArray;
 
     /**
@@ -85,7 +84,6 @@ public class NavDrawer extends FragmentActivity{
 
         // set up the drawer's list view with items and click listener
         mDrawerList.setAdapter(new ArrayAdapter<String>(this, R.layout.nav_drawer_item,R.id.navDrawerItem,navArray));
-//        mDrawerList.setAdapter(new ArrayAdapter<String>(this, R.layout.nav_drawer_item,R.id.navDrawerItem,listArray));
         mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -165,7 +163,6 @@ public class NavDrawer extends FragmentActivity{
                 startActivity(new Intent(this, AboutActivity.class));
                 break;
         }
-        Toast.makeText(this, "You selected item: " + position, Toast.LENGTH_SHORT).show();
     }
 
     @Override
