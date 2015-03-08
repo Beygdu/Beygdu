@@ -47,7 +47,7 @@ import is.arnastofnun.parser.WordResult;
  * and send an email to the creator of the database
  * 
  */
-public class MainActivity extends FragmentActivity {
+public class MainActivity extends NavDrawer {
 
 	/**
 	 * The result from the parser search.

@@ -3,6 +3,7 @@ package is.arnastofnun.beygdu;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.view.Menu;
@@ -27,7 +28,7 @@ import android.widget.Toast;
  * This activity has a layout that contains a frame layout, which we will inflate the
  * child activity layout into.
  */
-public class NavDrawer extends Activity{
+public class NavDrawer extends FragmentActivity{
 
     /**
      * Frame layout: Used as a parent layout for the child activity
@@ -79,7 +80,7 @@ public class NavDrawer extends Activity{
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
 
         // set up the drawer's list view with items and click listener
-        mDrawerList.setAdapter(new ArrayAdapter<String>(this, R.layout.nav_drawer_item,listArray));
+        mDrawerList.setAdapter(new ArrayAdapter<String>(this, R.layout.nav_drawer_item,R.id.navDrawerItem,listArray));
         mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -162,12 +163,13 @@ public class NavDrawer extends Activity{
     public boolean onPrepareOptionsMenu(Menu menu) {
         // if the drawer is open, hide action items related to the content view
         boolean drawerOpen = mDrawerLayout.isDrawerOpen(mDrawerList);
-        menu.findItem(R.id.action_settings).setVisible(!drawerOpen);
+//        menu.findItem(R.id.action_settings).setVisible(!drawerOpen);
         return super.onPrepareOptionsMenu(menu);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main, menu);
         return super.onCreateOptionsMenu(menu);
     }
 

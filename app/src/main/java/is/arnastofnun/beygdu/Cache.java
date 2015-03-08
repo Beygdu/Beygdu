@@ -18,7 +18,7 @@ import is.arnastofnun.DB.DBController;
 import is.arnastofnun.parser.WordResult;
 
 
-public class Cache extends FragmentActivity {
+public class Cache extends NavDrawer {
 
     private DBController controller;
     private ListView listView;

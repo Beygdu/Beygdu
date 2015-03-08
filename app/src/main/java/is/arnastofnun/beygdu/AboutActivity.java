@@ -20,7 +20,7 @@ import is.arnastofnun.beygdu.R;
  * @since 31.10.14
  * @version $Id:  0.1
  */
-public class AboutActivity extends Activity {
+public class AboutActivity extends NavDrawer {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

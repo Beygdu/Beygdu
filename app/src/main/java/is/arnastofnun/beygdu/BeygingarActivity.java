@@ -35,7 +35,7 @@ import is.arnastofnun.utils.TableFragment;
  *BeygingarActivity contains a LinearLayout with a ScrollView which contains a TableLayout.
  *The tables are then plaved in the TableLayout.
  */
-public class BeygingarActivity extends FragmentActivity {
+public class BeygingarActivity extends NavDrawer {
 
 	/**
 	 * tableLayout is the TableLayout in the activity, the TextViews and TableFragments are added to it
