@@ -9,6 +9,7 @@ import android.graphics.Point;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.DrawableRes;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -16,8 +17,10 @@ import android.support.v4.app.NavUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.ViewGroup;
 import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -55,6 +58,7 @@ public class BeygingarActivity extends FragmentActivity {
     //Fonts
     private Typeface LatoBold;
     private Typeface LatoSemiBold;
+    private Typeface LatoLight;
 
     //Screen width
     private float width;
@@ -79,6 +83,7 @@ public class BeygingarActivity extends FragmentActivity {
         //Set typeface for fonts
         LatoBold = Typeface.createFromAsset(getAssets(), "fonts/Lato-Bold.ttf");
         LatoSemiBold = Typeface.createFromAsset(getAssets(), "fonts/Lato-Semibold.ttf");
+        LatoLight = Typeface.createFromAsset(getAssets(), "fonts/Lato-Light.ttf");
 
 
 		//get WordResult from MainActivity.
@@ -119,20 +124,25 @@ public class BeygingarActivity extends FragmentActivity {
 		//SetTitle
 		TextView titleDesc = new TextView(this);
         titleDesc.setText(words.getTitle());
-
-        if (320 > width && width < 384) { titleDesc.setTextSize(20); }
-        else if(384 > width && width < 600) { titleDesc.setTextSize(24); }
-        else if(width > 600){ titleDesc.setTextSize(30);}
+        if (320 > width && width < 384) {
+            titleDesc.setTextSize(20);
+        }
+        else if(384 > width && width < 600) {
+            titleDesc.setTextSize(24);
+        }
+        else if(width > 600){
+            titleDesc.setTextSize(30);
+        }
 
 		titleDesc.setMinHeight(130);
-		titleDesc.setTypeface(LatoBold);
-        titleDesc.setTextAppearance(this, R.style.WordResultTilte);
-		tableLayout.addView(titleDesc);
+		titleDesc.setTypeface(LatoLight);
+        tableLayout.addView(titleDesc);
 		
 		//SetNote
 		if(!words.getNote().equals("")) {
 			TextView note = new TextView(this);
 			note.setText(words.getNote());
+            note.setTypeface(LatoLight);
 			note.setBackgroundResource(R.drawable.noteborder);
 			tableLayout.addView(note);
 		}
@@ -143,13 +153,21 @@ public class BeygingarActivity extends FragmentActivity {
 			if (mSelectedItems.contains(i)) {
 				Block block = words.getBlocks().get(i);
 				TextView blockTitle = new TextView(this);
-                if (320 > width && width < 384) { blockTitle.setTextSize(16); }
-                else if(384 > width && width < 600) { blockTitle.setTextSize(20); }
-                else if(width > 600){ blockTitle.setTextSize(24);}
+                if (320 > width && width < 384) {
+                    blockTitle.setTextSize(16);
+                }
+                else if(384 > width && width < 600) {
+                    blockTitle.setTextSize(20);
+                }
+                else if(width > 600){
+                    blockTitle.setTextSize(24);
+                }
 				blockTitle.setMinHeight(100);
 				blockTitle.setText(block.getTitle());
-                titleDesc.setTypeface(LatoSemiBold);
-				TableFragment tFragment = new TableFragment(BeygingarActivity.this, tableLayout, block, blockTitle);
+                blockTitle.setTypeface(LatoLight);
+                blockTitle.setGravity(Gravity.CENTER);
+                blockTitle.setTextColor(getResources().getColor(R.color.font_default));
+                TableFragment tFragment = new TableFragment(BeygingarActivity.this, tableLayout, block, blockTitle);
 				getFragmentManager().beginTransaction().add(tableLayout.getId(), tFragment).commit();
 				tables.add(tFragment);				
 			}

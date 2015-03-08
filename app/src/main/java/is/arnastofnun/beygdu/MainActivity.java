@@ -5,6 +5,8 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Resources;
+import android.graphics.Typeface;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -13,12 +15,16 @@ import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TableRow;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import is.arnastofnun.beygdu.R;
@@ -63,14 +69,62 @@ public class MainActivity extends FragmentActivity {
 		this.pR = pR;
 	}
 
+
+    //Fonts
+    private Typeface LatoBold;
+    private Typeface LatoSemiBold;
+    private Typeface LatoLight;
+
+    //Screen width
+    private float width;
+    private float height;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		
 		checkNetworkState();
+        headerText();
 	}
-	
+
+
+    /**
+     * This method changes text size depending on screen sizes
+     * Snær Seljan
+     */
+    public void headerText() {
+        //Set typeface for fonts
+        LatoBold = Typeface.createFromAsset(getAssets(), "fonts/Lato-Bold.ttf");
+        LatoSemiBold = Typeface.createFromAsset(getAssets(), "fonts/Lato-Semibold.ttf");
+        LatoLight = Typeface.createFromAsset(getAssets(), "fonts/Lato-Light.ttf");
+
+        TextView header = (TextView)findViewById(R.id.title);
+        header.setTypeface(LatoLight);
+        if (320 > width && width < 384) {
+            header.setTextSize(30);
+        }
+        else if(384 > width && width < 600) {
+            header.setTextSize(36);
+        }
+        else if(width > 600){
+            header.setTextSize(40);
+        }
+    }
+
+    /**
+     * This method converts device specific pixels to density independent pixels.
+     * @param px A value in px (pixels) unit. Which we need to convert into db
+     * @return A float value to represent dp equivalent to px value
+     * Snær Seljan
+     */
+    public float convertPixelsToDp(float px){
+        Resources resources = this.getResources();
+        DisplayMetrics metrics = resources.getDisplayMetrics();
+        float dp = px / (metrics.densityDpi / 160f);
+        return dp;
+    }
+
+
 	/**
 	 * Checks if the user is connected to a network.
 	 * TODO - Should be implemented so that it shows a dialog if 

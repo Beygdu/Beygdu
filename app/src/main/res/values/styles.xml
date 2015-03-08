@@ -12,14 +12,10 @@
     
     <!-- ActionBar styles -->
     <style name="MyActionBar" parent="@android:style/Widget.Holo.Light.ActionBar.Solid.Inverse">
-        <item name="android:background">#7a87b9</item>
+        <item name="android:background">@color/d_blue</item>
     </style>
     
-    <style name="WordResultTilte">
-        <item name="android:background">@drawable/border</item>
-    </style>
 
-    
 	<style name="HeaderRow">
 		<item name="android:background">#7FAF7F</item>
 		<item name="android:layout_width">wrap_content</item>
