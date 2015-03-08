@@ -88,9 +88,9 @@ public class BeygingarActivity extends FragmentActivity {
 		tableLayout.addView(titleDesc);
 		
 		//SetNote
-		if(!words.getNote().equals("")) {
+		if(!words.getWarning().equals("")) {
 			TextView note = new TextView(this);
-			note.setText(words.getNote());
+			note.setText(words.getWarning());
 			note.setBackgroundResource(R.drawable.noteborder);
 			tableLayout.addView(note);
 		}

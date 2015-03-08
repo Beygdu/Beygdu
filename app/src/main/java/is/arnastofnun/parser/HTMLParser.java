@@ -1,9 +1,11 @@
 package is.arnastofnun.parser;
 
+import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -16,184 +18,120 @@ import java.util.regex.Pattern;
  */
 public class HTMLParser {
 
-  public static ParserResult PR = new ParserResult();
+    String searchString;
+    String[] elements;
 
-  
+    Document doc;
+    Element body;
 
-  /**
- * @param doc A Jsoup HTML document 
- */
-public HTMLParser(Document doc) {
-	  
-	  constructParserResults(doc);
-	  
-  }
+    String asString;
 
-  /**
- * @return Object ParserResult, contains raw results extracted from the HTML document
- */
-public ParserResult getParserResult() {
-	  return this.PR;
-  }
-  
-  
-//
-// Helper Functions
-//
-  private int constructInt(String a) {
-    
-    Pattern pattern = Pattern.compile("\\d+");
-    Matcher matcher = pattern.matcher(a);
-    int start = 0;
-    int end = 0;
-    while( matcher.find() ) {
-      start = matcher.start();
-      end = matcher.end();
-    }
-    
-    int result = 0;
-    try {
-      result = Integer.parseInt(a.substring(start, end));
-    }
-    catch( NumberFormatException e) {
-      result = 0;
-    }
-    
-    return result;
-  }
+    ArrayList<Element> selectedElements;
 
-  private int[] manageMultipleIds(String[] a) {
-    
-    int[] returnValue = new int[a.length];
-    int iterations;
-    for( int i = 0; i < a.length; i++ ) {
-      iterations = constructInt(a[i]);
-      returnValue[i] = iterations;
+    public HTMLParser(String url) {
+
+        this.searchString = url;
+
+        createDocument();
+
     }
-    
-    return returnValue;
-  }  
-  
- 
-  
-//
-// Single results
-//
-  private void constructSingleResult(Document doc) {
-    
-    String title = doc.getElementsByTag("h2").text();
-    
-    PR.setTitle(title);
-    String warning = "";
-    try {
-      Elements bad = doc.getElementsByClass("alert");
-      warning = bad.text();
+
+    public HTMLParser(String url, String[] elements) {
+
+        this.searchString = url;
+
+        this.elements = elements;
+
+        createDocument();
+
     }
-    catch( NullPointerException e ) {
-      // Do nothing
+
+    /////
+    // Public Methods
+    /////
+
+    public Document getDocument() {
+        return this.doc;
     }
-    
-    PR.setNode(warning);
-    
-    Element body = doc.body();
-    
-    ArrayList<ArrayList<String>> blockres = new ArrayList<ArrayList<String>>();
-    
-    int outCounter = 0;
-    
-    ArrayList<String> oneBlock = new ArrayList<String>();
-    
-    for( Element e : body.getAllElements() ) {
-      
-      if( e.tag().toString() == "h3" ) {
-	if( outCounter != 0 ) {
-	  blockres.add(oneBlock);
-	  //testPrinting(oneBlock);
-	  oneBlock = new ArrayList<String>();
-	  outCounter = 0;
-	}
-	oneBlock.add("h3 " + e.text());
-	outCounter++;
-      
-      }
-      
-      if( e.tag().toString() == "h4" ) {
-	
-	oneBlock.add("h4 " + e.text());
-      
-      }
-      
-      if( e.tag().toString() == "th" ) {
-	
-	oneBlock.add("th " + e.text());
-      
-      }
-      
-      if( e.tag().toString() == "tr" ) {
-	
-	oneBlock.add("tr " + e.text());
-      
-      }
-      
+
+    public String asString() {
+
+        if(this.asString == null) {
+
+            this.asString = this.doc.toString();
+        }
+
+        return this.asString;
+
     }
-    blockres.add(oneBlock);
-    //System.out.println(blockres.size());
-    PR.setResults(blockres);
-    
-    
-  }  
-  
-  
-  
-//
-// Multiple results
-//
-  private void constructMultipleResults(Document doc) {
-    
-    String[] ids = new String[doc.select("li").size()];
-    String[] desc = new String[doc.select("li").size()];
-    
-    int count = 0;
-    
-    for( Element e : doc.select("li") ) {
-      desc[count] = e.text();
-      
-      ids[count] = e.getElementsByTag("a").attr("onClick").toString();
-      
-      count++;
+
+    public boolean containsClass(String nodeName) {
+
+        Elements elements = this.body.getAllElements();
+        for( Element element : elements ) {
+            if( element.hasClass(nodeName) ) {
+                return true;
+            }
+        }
+
+        return false;
     }
-    
-    PR.setDesc(desc);
-    
-    PR.setIds(manageMultipleIds(ids));
-    
-    
-    
-  }  
-  
-  
-  
-//
-// constructParserResults
-//
-  private void constructParserResults(Document doc) {
-    Element body = doc.body();
-    if( body.text().contains("Orðið") && body.text().contains("fannst ekki") && body.text().contains("Ef þú telur að orðið sé fullgilt") ) {
-      PR.setType("Word not found");
+
+    public String getSpecificTextElement(String tag) {
+        return this.doc.getElementsByTag(tag).text();
     }
-    else {
-      
-      if( body.text().contains("Smelltu á það orð sem þú vilt sjá:") ) {
-	PR.setType("Multiple results");
-	constructMultipleResults(doc);
-      }
-      
-      else {
-	PR.setType("Single result");
-	constructSingleResult(doc);
-      }
+
+    public ArrayList<Element> getSelectedElements() {
+
+        if( this.elements == null ) {
+            return null;
+        }
+
+        if( this.selectedElements == null ) {
+            this.selectedElements = new ArrayList<Element>();
+
+            for( Element element : this.body.getAllElements() ) {
+                if( containsElement(element.tagName()) ) {
+                    this.selectedElements.add(element);
+                }
+            }
+        }
+
+        return selectedElements;
+
     }
-  }  
+
+    /////
+    // Private Methods
+    /////
+
+    private boolean containsElement(String tag) {
+
+        for( String string : this.elements ) {
+
+            if( tag.equals(string) ) {
+                return true;
+            }
+
+        }
+
+        return false;
+
+    }
+
+    private void createDocument() {
+
+        try {
+            Document newDoc = Jsoup.connect(this.searchString).get();
+            this.doc = newDoc;
+            this.body = this.doc.body();
+        }
+        catch( IOException e ) {
+            this.doc = null;
+            this.body = null;
+        }
+
+    }
 }
   
 

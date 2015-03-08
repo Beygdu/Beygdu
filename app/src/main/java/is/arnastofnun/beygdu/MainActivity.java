@@ -35,6 +35,7 @@ import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import is.arnastofnun.parser.BinParser;
 import is.arnastofnun.parser.HTMLParser;
 import is.arnastofnun.parser.ParserResult;
 import is.arnastofnun.parser.WordResult;
@@ -53,14 +54,18 @@ public class MainActivity extends FragmentActivity {
 
 	/**
 	 * The result from the parser search.
+     * ---Depricated
 	 */
-	public ParserResult pR = new ParserResult();
+	//public ParserResult pR = new ParserResult();
 
-	/**
-	 * @param pR the parser results.
-	 */
-	public void setParserResult(ParserResult pR) {
-		this.pR = pR;
+    /**
+     * The WordResult Document, containing all data on searched word
+     */
+    public WordResult wR;
+
+
+	public void setWordResult(WordResult wordResult) {
+		this.wR = wordResult;
 	}
 
 	@Override
@@ -154,14 +159,14 @@ public class MainActivity extends FragmentActivity {
 			if (islegalInput(word)) {
 				word = replaceSpaces(word);
 				word = convertToUTF8(word);
-				new ParseThread(word).execute();
+				new ParseThread(word, 1).execute();
 			} else {
 				Toast.makeText(this, "Einingis hægt að leita að einu orði í einu", Toast.LENGTH_SHORT).show();
 			}
 		} else {
 			//New Thread to get word
 			word = convertToUTF8(word);
-			new ParseThread(word).execute();
+			new ParseThread(word, 1).execute();
 		}
 	}
     public void cacheClick(@SuppressWarnings("unused") View view){
@@ -219,15 +224,14 @@ public class MainActivity extends FragmentActivity {
 	 * Or no result.
 	 */
 	private void checkWordCount() {
-		String pr = pR.getType();
-		if (pr.equals("Multiple results")) {
+		String pr = wR.getDescription();
+		if (pr.equals("MultiHit")) {
 			FragmentManager fM = getSupportFragmentManager();
 			DialogFragment newFragment = new WordChooserDialogFragment();
 			newFragment.show(fM, "wordChooserFragment");
-		} else if (pr.equals("Single result")) {
-			WordResult word = pR.getWordResult();
-			createNewActivity(word);
-		} else if (pr.equals("Word not found")) {
+		} else if (pr.equals("SingleHit")) {
+			createNewActivity(wR);
+		} else if (pr.equals("Miss")) {
 			Toast.makeText(this, "Engin leitarniðurstaða", Toast.LENGTH_SHORT).show();
 		}
 	}
@@ -273,9 +277,9 @@ public class MainActivity extends FragmentActivity {
 		 * cast the ArrayList to a CharSequence.
 		 */
 		private void toCharArr() {
-			charArr = new CharSequence[pR.getDesc().length];
-			for (int i = 0; i < pR.getDesc().length; i++){
-				charArr[i] = pR.getDesc()[i];
+			charArr = new CharSequence[wR.getMultiHitDescriptions().length];
+			for (int i = 0; i < wR.getMultiHitDescriptions().length; i++){
+				charArr[i] = wR.getMultiHitDescriptions()[i];
 			}
 		}
 
@@ -291,7 +295,7 @@ public class MainActivity extends FragmentActivity {
 				 */
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
-					selectedItem = pR.getIds()[which]+"";
+					selectedItem = wR.getMultiHitIds()[which]+"";
 				}
 			});
 
@@ -303,7 +307,7 @@ public class MainActivity extends FragmentActivity {
 				public void onClick(DialogInterface dialog, int id) {
 					if( selectedItem != null) {
 						int wordId = Integer.parseInt(selectedItem);
-						new ParseThread(wordId).execute();
+						new ParseThread(wordId, 1).execute();
 					}
 				}
 			});
@@ -331,8 +335,9 @@ public class MainActivity extends FragmentActivity {
 		 * parser - the parser which is constructed to retrieve the results
 		 * url - the url which the parser uses. 
 		 */
-		private HTMLParser parser;
+		private BinParser parser;
 		private String url;
+        private int urlId = 0;
 
 		/**
 		 * 
@@ -340,17 +345,15 @@ public class MainActivity extends FragmentActivity {
 		 * the searchWord string has been converted to UTF-8
 		 * (Má leita af hvaða orðmynd.)
 		 */
-		public ParseThread(String searchWord) {
-			String baseURL = "http://dev.phpbin.ja.is/ajax_leit.php/?q=";
-			url = baseURL + searchWord + "&ordmyndir=on";
+		public ParseThread(String searchWord, int step) {
+			this.url = searchWord;
 		}
 
 		/**
 		 * @param searchId - the id (int) which will be concated into the url
 		 */
-		public ParseThread(int searchId) {
-			String baseURL = "http://dev.phpbin.ja.is/ajax_leit.php/?id=";
-			url = baseURL + searchId + "&ordmyndir=on";
+		public ParseThread(int searchId, int step) {
+			this.urlId = searchId;
 		}
 
 		@Override
@@ -363,14 +366,21 @@ public class MainActivity extends FragmentActivity {
 		 */
 		@Override
 		protected Void doInBackground(Void... args) {
-			Document doc;
-			try {
-				doc = Jsoup.connect(url).get();
-				parser = new HTMLParser(doc);
-			} catch (IOException e) {
-				Toast.makeText(MainActivity.this,
-						"Tenging rofnaði, vinsamlega reynið aftur.", Toast.LENGTH_LONG).show();
-			}
+			//Document doc;
+			//try {
+			//	doc = Jsoup.connect(url).get();
+			//	parser = new HTMLParser(doc);
+			//} catch (IOException e) {
+			//	Toast.makeText(MainActivity.this,
+			//			"Tenging rofnaði, vinsamlega reynið aftur.", Toast.LENGTH_LONG).show();
+			//}
+            if( this.urlId == 0 ) {
+                this.parser = new BinParser(this.url, 1, new String[]{"h2", "h3", "h4", "th", "tr"});
+            }
+            else {
+                this.parser = new BinParser(this.urlId, 1, new String[]{"h2", "h3", "h4", "th", "tr"});
+            }
+
 			return null;
 		}
 		/**
@@ -379,7 +389,7 @@ public class MainActivity extends FragmentActivity {
 		 */
 		@Override
 		protected void onPostExecute(Void args) {
-			setParserResult(parser.getParserResult());
+			setWordResult(parser.getWordResult());
 			checkWordCount();
 		}
 	}
