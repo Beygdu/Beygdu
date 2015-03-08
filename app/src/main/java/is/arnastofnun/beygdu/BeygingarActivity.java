@@ -52,9 +52,30 @@ public class BeygingarActivity extends NavDrawer {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);	
-		setContentView(R.layout.activity_beygingar);
-		getActionBar().setDisplayHomeAsUpEnabled(true);
+		super.onCreate(savedInstanceState);
+
+
+        /**
+         * Not setting the content view here since we are
+         * inflating it in the NavDrawer (see below)
+         */
+        // setContentView(R.layout.activity_beygingar);
+
+        /**
+         * Inflate the layout into the NavDrawer layout
+         * where `frameLayout` is a FrameLayout in the layout for the
+         * NavDrawer (see file nav_base_layout)
+         */
+        getLayoutInflater().inflate(R.layout.activity_beygingar, frameLayout);
+
+        /**
+         * Setting what item is checked
+         */
+        mDrawerList.setItemChecked(position,true);
+
+
+
+        getActionBar().setDisplayHomeAsUpEnabled(true);
 		
 		//get WordResult from MainActivity.
 		Intent intent = getIntent();
@@ -77,8 +98,31 @@ public class BeygingarActivity extends NavDrawer {
             System.out.println(e);
         }
 
-
+        // Set the title in the actionbar
+//        setTitle(words.getTitle());
+        setTitle(firstWordInString(words.getTitle()));
 }
+
+    /**
+     * Accepts a String of word(s) and returns the first word in that string.
+     * Looks for an empty space (" ") to see where the word ends.
+     * @param title String of words
+     * @return String that is the first word in a String
+     */
+    private String firstWordInString(String title){
+        String firstWord = null;
+
+        // Get the first word
+        if(title.contains(" ")){
+            firstWord = title.substring(0, title.indexOf(" "));
+        }
+
+        // Capitalize the first letter of the word
+        if(firstWord != null){
+            firstWord = firstWord.substring(0,1).toUpperCase() + firstWord.substring(1);
+        }
+        return firstWord;
+    }
 	
 	/**
 	 * Constructs a TextView with the title of the word and possibly a TextView with a note about the word, if it exits, 

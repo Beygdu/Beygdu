@@ -49,4 +49,11 @@
     <string name="open_drawer">Skúffa opin</string>
     <string name="close_drawer">Skúffa lokuð</string>
 
+        <!-- Items in Navigation Drawer -->
+        <string-array name="navdrawer_items">
+            <item>Beygðu</item>
+            <item>Fyrri leitir</item>
+            <item>Um Beygðu</item>
+        </string-array>
+
 </resources>

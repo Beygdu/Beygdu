@@ -44,7 +44,8 @@ public class NavDrawer extends FragmentActivity{
      * List item array for navigation drawer items
      * TODO: Get Activity names from strings.xml. This is just for a test now
      */
-    protected String[] listArray = {"Item 1","Item 2","Item 3"};
+//    protected String[] listArray = {"Item 1","Item 2","Item 3"};
+    protected String[] navArray;
 
     /**
      * Static variable for selected item position in the navigation drawer.
@@ -79,8 +80,12 @@ public class NavDrawer extends FragmentActivity{
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
 
+        // get the drawer items string
+        navArray = getResources().getStringArray(R.array.navdrawer_items);
+
         // set up the drawer's list view with items and click listener
-        mDrawerList.setAdapter(new ArrayAdapter<String>(this, R.layout.nav_drawer_item,R.id.navDrawerItem,listArray));
+        mDrawerList.setAdapter(new ArrayAdapter<String>(this, R.layout.nav_drawer_item,R.id.navDrawerItem,navArray));
+//        mDrawerList.setAdapter(new ArrayAdapter<String>(this, R.layout.nav_drawer_item,R.id.navDrawerItem,listArray));
         mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -111,7 +116,8 @@ public class NavDrawer extends FragmentActivity{
 
             @Override
             public void onDrawerClosed(View drawerView) {
-                getActionBar().setTitle(listArray[position]);
+//                getActionBar().setTitle(listArray[position]);
+                getActionBar().setTitle(navArray[position]);
                 invalidateOptionsMenu();
                 super.onDrawerClosed(drawerView);
             }
@@ -153,6 +159,9 @@ public class NavDrawer extends FragmentActivity{
                 startActivity(new Intent(this, MainActivity.class));
                 break;
             case 1:
+                startActivity(new Intent(this, Cache.class));
+                break;
+            case 2:
                 startActivity(new Intent(this, AboutActivity.class));
                 break;
         }
@@ -192,11 +201,13 @@ public class NavDrawer extends FragmentActivity{
 
     @Override
     public void onBackPressed() {
+        /*
         if(mDrawerLayout.isDrawerOpen(mDrawerList)){
             mDrawerLayout.closeDrawer(mDrawerList);
         } else {
             mDrawerLayout.openDrawer(mDrawerList);
         }
-//        super.onBackPressed();
+        */
+        super.onBackPressed();
     }
 }

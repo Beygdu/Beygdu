@@ -64,8 +64,26 @@ public class MainActivity extends NavDrawer {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_main);
-		
+
+        /**
+         * Not setting the content view here since we are
+         * inflating it in the NavDrawer (see below)
+         */
+        // setContentView(R.layout.activity_main);
+
+		/**
+        * Inflate the layout into the NavDrawer layout
+        * where `frameLayout` is a FrameLayout in the layout for the
+        * NavDrawer (see file nav_base_layout)
+        */
+        getLayoutInflater().inflate(R.layout.activity_main, frameLayout);
+
+        /**
+         * Setting the title and what item is checked
+         */
+        mDrawerList.setItemChecked(position,true);
+        //setTitle(listArray[position]);
+
 		checkNetworkState();
 	}
 	
