@@ -89,17 +89,11 @@ public class BeygingarActivity extends NavDrawer {
 		}
 		initTables();
 
-        //Save to DB
+        //Save to DB -- if it does not exist before
         DBController dbController = new DBController(this);
-        try {
-            dbController.open();
-            dbController.insert(words);
-        } catch (SQLException e) {
-            System.out.println(e);
-        }
+        dbController.insert(words);
 
         // Set the title in the actionbar
-//        setTitle(words.getTitle());
         setTitle(firstWordInString(words.getTitle()));
 }
 

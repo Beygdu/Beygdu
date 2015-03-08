@@ -18,6 +18,9 @@ public class DBHelper extends SQLiteOpenHelper{
     // database version
     static final int DB_VERSION = 1;
 
+    // database max size
+    static final int MAX_SIZE = 10;
+
     // Table Names
     public static final String TABLE_WORDRESULT = "wordresult";
     public static final String TABLE_BLOCK = "block";
@@ -31,6 +34,7 @@ public class DBHelper extends SQLiteOpenHelper{
     public static final String SUBBLOCKID = "subblockid";
     public static final String TABLEID = "tableid";
 
+    public static final String DATE = "date";
     public static final String TYPE = "type";
     public static final String TITLE = "title";
     public static final String NOTE = "note";
@@ -44,19 +48,26 @@ public class DBHelper extends SQLiteOpenHelper{
                     WORDID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                     TYPE + " TEXT NOT NULL, " +
                     TITLE + " TEXT NOT NULL, " +
-                    NOTE + " TEXT" +
+                    NOTE + " TEXT, " +
+                    DATE + " DATE" +
                     ");";
     private static final String CREATE_BLOCK_TABLE =
             "CREATE TABLE " + TABLE_BLOCK + " (" +
                     WORDID + " INT , " +
                     BLOCKID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                    TITLE + " TEXT " +
+                    TITLE + " TEXT, " +
+                    "FOREIGN KEY(" + DBHelper.WORDID + ") " +
+                    "REFERENCES " + DBHelper.TABLE_WORDRESULT + "("+ DBHelper.WORDID + ") " +
+                    "ON DELETE CASCADE " +
                     ");";
     private static final String CREATE_SUBBLOCK_TABLE =
             "CREATE TABLE " + TABLE_SUBBLOCK + " (" +
                     BLOCKID + " INT, " +
                     SUBBLOCKID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                    TITLE + " TEXT" +
+                    TITLE + " TEXT, " +
+                    "FOREIGN KEY(" + DBHelper.BLOCKID + ")" +
+                    "REFERENCES " + DBHelper.TABLE_BLOCK + "("+ DBHelper.BLOCKID + ") " +
+                    "ON DELETE CASCADE " +
                     ");";
     private static final String CREATE_TABLES_TABLE =
             "CREATE TABLE " + TABLE_TABLES + " (" +
@@ -65,12 +76,24 @@ public class DBHelper extends SQLiteOpenHelper{
                     TITLE + " TEXT , " +
                     COLHEADERS + " TEXT , " +
                     ROWHEADERS + " TEXT , " +
-                    CONTENT + " TEXT" +
+                    CONTENT + " TEXT, " +
+                    "FOREIGN KEY(" + DBHelper.SUBBLOCKID + ")" +
+                    "REFERENCES " + DBHelper.TABLE_SUBBLOCK + "("+ DBHelper.SUBBLOCKID + ") " +
+                    "ON DELETE CASCADE " +
                     ");";
 
 
     public DBHelper(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
+    }
+
+    @Override
+    public void onOpen(SQLiteDatabase db) {
+        super.onOpen(db);
+        if (!db.isReadOnly()) {
+            // Enable foreign key constraints
+            db.execSQL("PRAGMA foreign_keys=ON;");
+        }
     }
 
     /**

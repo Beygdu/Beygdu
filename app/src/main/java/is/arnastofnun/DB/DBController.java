@@ -6,8 +6,12 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
+import java.util.TimeZone;
 
 import is.arnastofnun.parser.Block;
 import is.arnastofnun.parser.SubBlock;
@@ -26,7 +30,7 @@ public class DBController {
     private SQLiteDatabase dB = null;
     private DBHelper dbHelper = null;
 
-    String[] wordResultColumns = new String[] {DBHelper.WORDID, DBHelper.TYPE, DBHelper.TITLE, DBHelper.NOTE };
+    String[] wordResultColumns = new String[] {DBHelper.WORDID, DBHelper.TYPE, DBHelper.TITLE, DBHelper.NOTE, DBHelper.NOTE };
     String[] blockColumns = new String[] {DBHelper.WORDID, DBHelper.BLOCKID, DBHelper.TITLE};
     String[] subBlockColumns = new String[] {DBHelper.BLOCKID, DBHelper.SUBBLOCKID, DBHelper.TITLE};
     String[] tableColumns = new String[] {DBHelper.SUBBLOCKID, DBHelper.TABLEID, DBHelper.TITLE, DBHelper.COLHEADERS, DBHelper.ROWHEADERS, DBHelper.CONTENT };
@@ -36,26 +40,56 @@ public class DBController {
         this.context = context;
     }
 
-    public DBController open() throws SQLException {
+    private DBController open() throws SQLException {
         dbHelper = new DBHelper(context);
         dB = dbHelper.getWritableDatabase();
         return this;
     }
 
-    public void close() {
+    private void close() {
         dbHelper.close();
     }
 
     public void insert(WordResult result) {
-        insertWordResult(result);
+        if(!dbContains(result.getTitle())) {
+            int rows = getWordResultSize();
+            if(rows >=  DBHelper.MAX_SIZE)  {
+                removeOldest();
+            }
+            insertWordResult(result);
+        }
+    }
+
+    private int getWordResultSize() {
+        try {
+            open();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        final String myQuery =
+                "SELECT COUNT(*) FROM wordresult";
+
+        Cursor cursor = dB.rawQuery(myQuery, null);
+
+        if (cursor != null) {
+            cursor.moveToFirst();
+        }
+        close();
+        return cursor.getInt(0);
     }
 
     private void insertWordResult(WordResult result) {
+        try {
+            open();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         //Generate Content for all tables
         ContentValues wordResultContent = new ContentValues();
         wordResultContent.put(DBHelper.TYPE, result.getType());
         wordResultContent.put(DBHelper.TITLE, result.getTitle());
         wordResultContent.put(DBHelper.NOTE, result.getNote());
+        wordResultContent.put(DBHelper.DATE, new Date().getTime());
         dB.insert(DBHelper.TABLE_WORDRESULT, null, wordResultContent);
 
         int wordResultID = fetchMaxId(DBHelper.WORDID, DBHelper.TABLE_WORDRESULT);
@@ -64,6 +98,7 @@ public class DBController {
         for(Block block : result.getBlocks()) {
             insertBlocks(block, wordResultID);
         }
+        close();
     }
 
     private void insertBlocks(Block block, int wordResultId) {
@@ -118,7 +153,46 @@ public class DBController {
      */
     private boolean dbContains(String wordTitle){
         boolean contains = false;
+
+        try {
+            open();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        final String myQuery =
+                "SELECT * FROM wordresult " +
+                "WHERE " + DBHelper.TITLE + " = '"+ wordTitle +"'";
+
+        Cursor cursor = dB.rawQuery(myQuery, null);
+
+        if (cursor != null) {
+            cursor.moveToFirst();
+
+            if(cursor.getCount() > 0){
+                contains = true;
+                updateDate(wordTitle, cursor);
+
+                close();
+                return contains;
+            }
+        }
+
+        close();
         return contains;
+    }
+
+    private void updateDate(String wordTitle, Cursor cursor) {
+        String type = cursor.getString(1);
+        String title = cursor.getString(2);
+        String note = cursor.getString(3);
+
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(DBHelper.TYPE, type);
+        contentValues.put(DBHelper.TITLE, title);
+        contentValues.put(DBHelper.NOTE, note);
+        contentValues.put(DBHelper.DATE, new Date().getTime());
+
+        dB.update(DBHelper.TABLE_WORDRESULT, contentValues, DBHelper.TITLE + "='" + wordTitle+"'", null);
     }
 
 
@@ -153,6 +227,8 @@ public class DBController {
         newWordResult = new WordResult(cursor.getString(1), cursor.getString(2), cursor.getString(3));
         newWordResult.setBlocks(fetchBlocks(cursor));
 
+
+        updateDate(title, cursor);
         close();
         return newWordResult;
     }
@@ -162,9 +238,9 @@ public class DBController {
         int blockID = -1;
         for (int i = 0; i < cursor.getCount(); i++) {
             cursor.moveToPosition(i);
-            if (blockID != cursor.getInt(5)) {
-                blockID = cursor.getInt(5);
-                blocks.add(new Block(cursor.getString(6), fetchSubBlocks(cursor, cursor.getInt(5))));
+            if (blockID != cursor.getInt(6)) {
+                blockID = cursor.getInt(6);
+                blocks.add(new Block(cursor.getString(7), fetchSubBlocks(cursor, cursor.getInt(6))));
             }
         }
         return blocks;
@@ -175,9 +251,9 @@ public class DBController {
         int subBlockID = -1;
         for (int i = 0; i < cursor.getCount(); i++) {
             cursor.moveToPosition(i);
-            if(cursor.getInt(8) != subBlockID && cursor.getInt(7) == blockID){
-                subBlockID = cursor.getInt(8);
-                subBlocks.add(new SubBlock(cursor.getString(9), fetchTables(cursor, cursor.getInt(8))));
+            if(cursor.getInt(9) != subBlockID && cursor.getInt(8) == blockID){
+                subBlockID = cursor.getInt(9);
+                subBlocks.add(new SubBlock(cursor.getString(10), fetchTables(cursor, cursor.getInt(9))));
             }
         }
         return subBlocks;
@@ -188,10 +264,10 @@ public class DBController {
         int tableID = -1;
         for (int i = 0; i < cursor.getCount(); i++) {
             cursor.moveToPosition(i);
-            if(cursor.getInt(11) != tableID && cursor.getInt(10) == subBlockID) {
-                tableID = cursor.getInt(11);
-                tables.add(new Tables(cursor.getString(12), stringToArr(cursor.getString(13)),
-                        stringToArr(cursor.getString(14)), new ArrayList<String>(Arrays.asList(stringToArr(cursor.getString(15))))));
+            if(cursor.getInt(12) != tableID && cursor.getInt(11) == subBlockID) {
+                tableID = cursor.getInt(12);
+                tables.add(new Tables(cursor.getString(13), stringToArr(cursor.getString(14)),
+                        stringToArr(cursor.getString(15)), new ArrayList<String>(Arrays.asList(stringToArr(cursor.getString(16))))));
             }
         }
         return tables;
@@ -199,14 +275,15 @@ public class DBController {
 
     public ArrayList<String> fetchAllWords() {
         ArrayList<String> words= new ArrayList<String>();
-        if (!dB.isOpen()) {
-            try {
-                open();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+        try {
+            open();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
-        final String myQuery = "SELECT * FROM " + DBHelper.TABLE_WORDRESULT;
+        final String myQuery = "SELECT * FROM " +
+                DBHelper.TABLE_WORDRESULT +
+                " ORDER BY " + DBHelper.DATE + " DESC";
+
         Cursor cursor = dB.rawQuery(myQuery, null);
 
         int iTitle = cursor.getColumnIndex(DBHelper.TITLE);
@@ -253,6 +330,32 @@ public class DBController {
             System.out.println(e.getMessage());
         }
         return id;
+    }
+
+    private int fetchMinId(String column, String table) {
+        int id = 0;
+        final String MY_QUERY = "SELECT MIN("+ column +") FROM " + table;
+        Cursor mCursor = dB.rawQuery(MY_QUERY, null);
+        try {
+            if (mCursor.getCount() > 0) {
+                mCursor.moveToFirst();
+                id = mCursor.getInt(0);
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return id;
+    }
+
+    private void removeOldest(){
+        try {
+            open();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        int wordID = fetchMinId(DBHelper.WORDID, DBHelper.TABLE_WORDRESULT);
+        dB.delete(DBHelper.TABLE_WORDRESULT, DBHelper.WORDID + "=" + wordID, null);
+        close();
     }
 
     private String arrToString(Object[] arr){
