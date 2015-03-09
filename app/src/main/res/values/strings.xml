@@ -49,6 +49,7 @@
     <!-- Navigation Drawer-->
     <string name="open_drawer">Skúffa opin</string>
     <string name="close_drawer">Skúffa lokuð</string>
+    <string name="cache_button_text">Fyrri leitir</string>
 
 
     <!-- Items in Navigation Drawer -->

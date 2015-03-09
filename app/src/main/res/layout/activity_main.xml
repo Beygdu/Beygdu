@@ -68,7 +68,7 @@
     <Button
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="Cache"
+        android:text="@string/cache_button_text"
         android:id="@+id/cache"
         android:onClick="cacheClick"
         android:layout_alignParentBottom="true"
