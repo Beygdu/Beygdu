@@ -71,6 +71,7 @@ public class BeygingarActivity extends FragmentActivity {
         //Save to DB -- if it does not exist before
         DBController dbController = new DBController(this);
         dbController.insert(words);
+        dbController.insertStats(words.getTitle());
 }
 	
 	/**

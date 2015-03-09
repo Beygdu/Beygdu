@@ -42,11 +42,12 @@ public class DBHelper extends SQLiteOpenHelper{
     public static final String ROWHEADERS = "rowheaders";
     public static final String CONTENT = "content";
 
-    public static final String STAT_NO = "Nafnord";
+    public static final String STAT_NO = "Nafnorð";
     public static final String STAT_LO = "Lýsingarorð";
     public static final String STAT_SO = "Sagnorð";
     public static final String STAT_TO = "Töluorð";
     public static final String STAT_FN = "Fornöfn";
+    public static final String STAT_OTHER = "Annað"; //tmp before implementing table which can add new columns to db
 
 
     // Creating table queries
@@ -94,9 +95,9 @@ public class DBHelper extends SQLiteOpenHelper{
                     STAT_SO + " INTEGER, " +
                     STAT_LO + " INTEGER, " +
                     STAT_TO + " INTEGER, " +
-                    STAT_FN + " INTEGER " +
+                    STAT_FN + " INTEGER, " +
+                    STAT_OTHER + " INTEGER " +
                     ");";
-
 
     public DBHelper(Context context) {
         super(context, DB_NAME, null, DB_VERSION);

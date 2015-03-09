@@ -53,6 +53,14 @@ public class StatisticsActivity extends FragmentActivity {
 
     }
 
+    private PieDataSet createDataSet() {
+        PieDataSet data = null;// = new PieDataSet(yVals, "label");
+
+        //TODO: Connect to DB and fetch Statistics
+
+        return data;
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
