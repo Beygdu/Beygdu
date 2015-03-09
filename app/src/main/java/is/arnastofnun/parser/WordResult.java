@@ -1,6 +1,9 @@
 package is.arnastofnun.parser;
 
 
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
@@ -13,609 +16,840 @@ import java.util.regex.Pattern;
  */
 public class WordResult implements Serializable {
 
-	private String type;
-	private String title;
-	private String note;
-	
-	private ArrayList<Block> blocks = new ArrayList<Block>();
-	
-	private ArrayList<ArrayList<String>> dump;
-	
-	/**
-	 * @param type The type of the result
-	 * @param title The title of the result
-	 * @param note A note describing specific results
-	 * @param dump A crude list of lists containing raw results
-	 */
-	public WordResult(String type, String title, String note, ArrayList<ArrayList<String>> dump) {
-		
-		this.type = type;
-		this.title = title;
-		this.note = note;
-		this.dump = dump;
-		
-		populateBlockList();
-	}
+    private String searchWord;
+    private String description;
 
-    public WordResult(String type, String title, String note) {
+    private String[] multiHitDescriptions;
+    private int[] multiHitIds;
 
-        this.type = type;
-        this.title = title;
-        this.note = note;
+    private String title;
+    private String warning;
+
+
+
+
+
+    private ArrayList<Block> result = new ArrayList<Block>();
+
+    public WordResult() {
+
     }
 
-    /**
-	 * @return The type of the results
-	 */
-	public String getType() {
-		return this.type;
-	}
+    /////
+    // Get/Set Methods
+    /////
 
-	/**
-	 * @return The Title of the result
-	 */
-	public String getTitle() {
-		return this.title;
-	}
+    public void setDescription(String dscrp) {
+        this.description = dscrp;
+    }
 
-	/**
-	 * @return The note describing specific results
-	 */
-	public String getNote() {
-		return this.note;
-	}
-	
-	/**
-	 * @return A list of Blocks which contain refined results
-	 */
-	public ArrayList<Block> getBlocks() {
-		return this.blocks;
-	}
+    public String getDescription() {
+        return this.description;
+    }
+
+    public void setSearchWord(String sWord) {
+        this.searchWord = sWord;
+    }
+
+    public String getSearchWord() {
+        return this.searchWord;
+    }
+
+
+
+    public String[] getMultiHitDescriptions() {
+        return this.multiHitDescriptions;
+    }
+
+    public int[] getMultiHitIds() {
+        return this.multiHitIds;
+    }
+
+    public String getTitle() {
+        return this.title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getWarning() {
+        return this.warning;
+    }
+
+    public void setWarning(String warning) {
+        this.warning = warning;
+    }
+
+    public ArrayList<Block> getBlocks() {
+        return this.result;
+    }
 
     public void setBlocks(ArrayList<Block> blocks) {
-        this.blocks = blocks;
+        this.result = blocks;
     }
-	
-	
-	private String destroyPointer(String a) {
-		return a.substring(a.indexOf(" ")+1, a.length());
-	}
-	
-	private String destroyDoublePointer(String a) {
-		return destroyPointer(destroyPointer(a));
-	}
-	
-	private ArrayList<String> reverseList(ArrayList<String> a) {
-		ArrayList<String> backwardsList = new ArrayList<String>();
-		
-		for( int i = a.size()-1; i > -1; i-- ) {
-			backwardsList.add(a.get(i));
-		}
-		
-		return backwardsList;
-		
-	}
-	
-	private ArrayList<String> constructArguments(String a, ArrayList<Integer> starts) {
-		ArrayList<String> returnList = new ArrayList<String>();
-		
-		for( int i = starts.size()-1; i > -1; i-- ) {
-			returnList.add(a.substring(starts.get(i)+2, a.length()));
-			a = a.substring(0, starts.get(i)+1);
-		}
-		returnList.add(a);
-		
-		return reverseList(returnList);
-	}
-	
-	private ArrayList<String> constructResultsFromRows(String a, int caseId) {
-		
-		ArrayList<String> returnList = new ArrayList<String>();
-		
-		if( caseId == 1 ) {
-			Pattern pattern = Pattern.compile("[^/]\\s[^/]");
-			Matcher matcher = pattern.matcher(a);
-			
-			ArrayList<Integer> starts = new ArrayList<Integer>();
-			
-			while( matcher.find() ) {
-				starts.add(matcher.start());
-			}
-			
-			returnList = constructArguments(a, starts);
-		}
-		
-		return returnList;
-	}
-	
-	private boolean isIllegalSoRaw(String a) {
-		return (a.contains("tr") && (a.contains("Nútíð") || a.contains("Þátíð"))) ||
-				a.contains("Et. Ft.") || a.contains(". pers") || (a.length() <= 3) ||
-				(a.contains("th") && (a.contains("Germynd") || a.contains("Miðmynd"))) ||
-				(a.contains("tr") && (a.contains("Eintala") || a.contains("Fleirtala"))) ||
-				a.contains("Karlkyn Kvenkyn Hvorugkyn") || a.contains("pers");
-	}
-	
-	private String constructSoTitle(String a) {
-		String returnString = "";
-		if(a.contains("th")) {
-			returnString = destroyPointer(a);
-		}
-		return returnString;
-	}
-	
-	/**
-	 * @category Construction of column titles for the verb Tables
-	 */
-	private String[] constructSoColumnNames(String a, String b) {
-		String[] errorArray = { "" };
-		
-		if( a.contains("Persónuleg notkun - Germynd") || a.contains("Persónuleg notkun - Miðmynd") || 
-				a.contains("Ópersónuleg notkun - Germynd") ||
-				a.contains("Ópersónuleg notkun - Miðmynd") ) {
-			if( b.contains("Nafnháttur") ) {
-				return errorArray;
-			}
-			else {
-				String[] temp = { "", "Et.", "Ft." };
-				return temp;
-			}
-		}
-		else if( a.contains("Boðháttur") || a.contains("Sagnbót") ) {
-			String[] temp = { "", "Germynd", "Miðmynd" };
-			return temp;
-		}
-		else if( a.contains("Lýsingarháttur nútíðar") ) {
-			return errorArray;
-		}
-		else if( a.contains("Lýsingarháttur þátíðar") ) {
-			String[] temp = { "", "Karlkyn", "Kvenkyn", "Hvorugkyn" };
-			return temp;
-		}
-		return errorArray;
-	}
-	
-	/**
-	 * @category Construction of row titles for the verb Tables
-	 */
-	private String[] constructSoRowNames(String a, String b) {
-		String[] errorArray = { "" };
-		
-		if( a.contains("(Gervifrumlag)") ) {
-			String[] temp = { "", "3. pers." };
-			return temp;			
-		}
-		else if( a.contains("Persónuleg notkun - Germynd") || a.contains("Persónuleg notkun - Miðmynd") || 
-				(a.contains("Ópersónuleg notkun - Germynd") && !a.contains("(Gervifrumlag)")) ||
-				a.contains("Ópersónuleg notkun - Miðmynd") ) {
-			if( b.contains("Nafnháttur") ) {
-				return errorArray;
-			}
-			else {
-				String[] temp = { "", "1. pers.", "2. pers.", "3. pers." };
-				return temp;
-			}
-		}
-		else if( a.contains("Sagnbót") ) {
-			return errorArray;
-		}
-		else if( a.contains("Boðháttur")  ) {
-			String[] temp = { "", "Stýfður", "Et.", "Ft." };
-			return temp;
-		}
-		else if( a.contains("Lýsingarháttur nútíðar") ) {
-			return errorArray;
-		}
-		else if( a.contains("Lýsingarháttur þátíðar") ) {
-			String[] temp = { "", "Nf.", "Þf.", "Þgf.", "Ef." };
-			return temp;
-		}
-		
-		return errorArray;
-	}
-	
-	private String checkSoNeededTitle(String a, String bTitle) {
-		
-		if( bTitle.contains("Boðháttur") || bTitle.contains("Sagnbót") || bTitle.contains("nútíðar") ) {
-			return "";
-		}
-		
-		return a;
-	}
-	
-	/**
-	 * @category Construction of Tables for verbs
-	 */
-	private Tables constructSoTables(ArrayList<String> a, String bTitle, String sbTitle) {
-		
-		String nTitle = checkSoNeededTitle(constructSoTitle(a.get(0)), bTitle);
-		
-		ArrayList<String> content = new ArrayList<String>();
-		
-		String[] columnNames = constructSoColumnNames(bTitle, sbTitle);
-		String[] rowNames = constructSoRowNames(bTitle, sbTitle);
-		
-		
-		
-		ArrayList<String> temp;
-		
-		for( String s : a ) {
-			if( s.contains("th") || s.contains("Germynd Miðmynd") ) {
-				// Do nothing
-			}
-			else if( s.contains(".") ) {
-				temp = constructResultsFromRows(destroyDoublePointer(s), 1);
-				
-				for( String t : temp ) {
-					content.add(t);
-				}
-			}
-			else if( s.contains("Stýfður") ) {
-				content.add(destroyDoublePointer(s));
-				content.add("--");
-			}
-			else {
-				content.add(destroyPointer(s));
-			}
-		}
-		
-		return new Tables(nTitle, columnNames, rowNames, content);
-	}
-	
-	/**
-	 * @category Constructions of SubBlocks for verbs
-	 */
-	private SubBlock constructSoSubBlock(ArrayList<String> a, String bTitle) {
-		
-		String nTitle = checkSoNeededTitle(destroyPointer(a.get(0)), bTitle);
-		
-		ArrayList<Tables> tables = new ArrayList<Tables>();
-		
-		ArrayList<ArrayList<String>> rawTables = new ArrayList<ArrayList<String>>();
-		ArrayList<String> temp = new ArrayList<String>();
-		
-		int count = 0;
-		for( String s : a ) {
-			
-			if( s.contains("h4") ) {
-				// Do nothing
-			}
-			else if( (s.contains("Germynd Miðmynd") || s.contains("th")) && count > 0 ) {
-				rawTables.add(temp);
-				temp = new ArrayList<String>();
-				count = 0;
-				
-				temp.add(s);
-				count++;
-			}
-			else {
-				temp.add(s);
-				count++;
-			}
-			
-		}
-		rawTables.add(temp);
-		
-		for( ArrayList<String> s : rawTables ) {
-			
-			Tables nT = constructSoTables(s, bTitle, nTitle);
-			tables.add(nT);
-			
-		}
-		
-		return new SubBlock(nTitle, tables);
-	}
-	
-	/**
-	 * @param a ArrayList of raw results
-	 * @category Constructions of Blocks for verbs
-	 */
-	private void constructSoBlock(ArrayList<String> a) {
-		
-		String nTitle = destroyPointer(a.get(0));
-		ArrayList<SubBlock> sB = new ArrayList<SubBlock>();
-		
-		ArrayList<ArrayList<String>> rawSubBlock = new ArrayList<ArrayList<String>>();
-		ArrayList<String> temp = new ArrayList<String>();
-		
-		int count = 0;
-		for( String s : a ) {
-			
-			if( !isIllegalSoRaw(s) ) {
-				if( s.contains("h3") ) {
-					// Do nothing
-				}
-				else if( s.contains("h4") && count >0 ) {
-					rawSubBlock.add(temp);
-					temp = new ArrayList<String>();
-					count = 0;
-					
-					temp.add(s);
-					count++;
-				}
-				else {
-					temp.add(s);
-					count++;
-				}
-			}
-		}
-		rawSubBlock.add(temp);
-		
-		for( ArrayList<String> s : rawSubBlock ) {
-			
-			SubBlock nSB = constructSoSubBlock(s, nTitle);
-			sB.add(nSB);
-		}
-		
-		this.blocks.add(new Block(nTitle, sB));
-		
-	}
-	
-	/**
-	 * @category Construction of Blocks for verbs
-	 */
-	private void populateSoBlocks() {
-		for( ArrayList<String> aList : dump ) {
-			
-			constructSoBlock(aList);
-			
-		}
-	}
-	
-	
-	private String constructLoTitle(String a) {
-		String returnString = "";
-		if( !this.title.contains("Töluorð") ) {
-			return destroyPointer(a);
-		}		
-		return returnString;
-	}
-	
-	private boolean isIllegalLoRaw(String a) {
-		return (a.contains("tr") && (a.contains("Eintala") || a.contains("Fleirtala"))) ||
-				(a.contains("Karlkyn") && a.contains("Kvenkyn") && a.contains("Hvorugkyn"));
-	}
-	
-	/**
-	 * @param a ArrayList of raw results
-	 * @category Construction of Tables for adjectives
-	 */
-	private Tables constructLoTables(ArrayList<String> a) {
-		
-		String nTitle = destroyPointer(a.get(0));
-		ArrayList<String> content = new ArrayList<String>();
-		String[] columnNames = { "", "Karlkyn", "Kvennkyn", "HvorugKyn" };
-		String[] rowNames = { "", "Nf.", "Þf.", "Þgf.", "Ef." };
-		
-		ArrayList<String> temp = new ArrayList<String>();
-		
-		for( String s : a ) {
-			if( s.contains(".") ) {
-				temp = constructResultsFromRows(destroyDoublePointer(s), 1);
-				
-				for( String t : temp ) {
-					content.add(t);
-				}
-			}			
-		}
-		
-		return new Tables(nTitle, columnNames, rowNames, content);
-	}
-	
-	/**
-	 * @param a ArrayList of raw results
-	 * @category Construction of SubBlocks for adjective
-	 */
-	private SubBlock constructLoSubBlock(ArrayList<String> a) {
-		
-		String nTitle = constructLoTitle(a.get(0));
-		ArrayList<Tables> tables = new ArrayList<Tables>();
-		
-		ArrayList<ArrayList<String>> rawTables = new ArrayList<ArrayList<String>>();
-		ArrayList<String> temp = new ArrayList<String>();
-		
-		int count = 0;
-		for( String s : a ) {
-			if( s.contains("h4") ) {
-				// Do nothing
-			}
-			else if( s.contains("th") && count >0 ) {
-				rawTables.add(temp);
-				temp = new ArrayList<String>();
-				count = 0;
-				
-				temp.add(s);
-				count++;
-			}
-			else {
-				temp.add(s);
-				count++;
-			}
-		}
-		rawTables.add(temp);
-		
-		for( ArrayList<String> s : rawTables ) {
-			
-			Tables nT = constructLoTables(s);
-			tables.add(nT);
-			
-		}
-		
-		return new SubBlock(nTitle, tables);
-	}
-	
-	/**
-	 * @param a ArrayList of raw results
-	 * @category Construction of Blocks for adjectives
-	 */
-	private void constructLoBlock(ArrayList<String> a) {
-		
-		String nTitle = constructLoTitle(a.get(0));
-		ArrayList<SubBlock> sB = new ArrayList<SubBlock>();
-		
-		ArrayList<ArrayList<String>> rawSubBlocks = new ArrayList<ArrayList<String>>();
-		ArrayList<String> temp = new ArrayList<String>();
-		
-		int count = 0;
-		for( String s : a ) {
-			
-			if( !isIllegalLoRaw(s) ) {
-				
-				if( s.contains("h3") ) {
-					// Do nothing
-				}
-				else if( s.contains("h4") && count > 0 ) {
-					rawSubBlocks.add(temp);
-					temp = new ArrayList<String>();
-					count = 0;
-					
-					temp.add(s);
-					count++;
-					
-				}
-				else {
-					temp.add(s);
-					count++;
-				}
-				
-			}
-			
-		}
-		rawSubBlocks.add(temp);
-		
-		for( ArrayList<String> s : rawSubBlocks ) {
-			
-			SubBlock nSB = constructLoSubBlock(s);
-			sB.add(nSB);
-		}
-		
-		this.blocks.add(new Block(nTitle, sB));
-	}
-	
-	/**
-	 * @category Constructions of Blocks for adjectives
-	 */
-	private void populateLoBlocks() {
-		for( ArrayList<String> aList : dump ) {
-			
-			constructLoBlock(aList);
-			
-		}		
-	}
-	
-	
-	private boolean isLegalRawNo(String a) {
-		return (a.contains("tr") && (a.contains("Eintala") || a.contains("Fleirtala"))) ||
-				(a.length() <= 3) || (a.contains("án greinis með greini"));
-	}
-	
-	/**
-	 * @param a ArrayList of raw results
-	 * @category Construction of Tables for nouns
-	 */
-	private Tables constructNoTables(ArrayList<String> a) {
-		
-		String nTitle = destroyPointer(a.get(0));
-		String[] columnNames = { "", "án greinis", "með greini" };
-		String[] rowNames = { "", "Nf.", "Þf.", "Þgf.", "Ef." };
-		ArrayList<String> content = new ArrayList<String>();
-		
-		ArrayList<String> temp = new ArrayList<String>();
-		
-		for( String s : a ) {
-			if( s.contains(".") ) {
-				temp = constructResultsFromRows(destroyDoublePointer(s), 1);
-				
-				for( String t : temp ) {
-					content.add(t);
-				}
-			}
-		}
-		
-		return new Tables(nTitle, columnNames, rowNames, content);
-	}
-	
-	/**
-	 * @param a ArrayList of raw results
-	 * @category Construction of SubBlocks for nouns
-	 */
-	private void constructNoBlock(ArrayList<String> a) {
-		
-		String nTitle = "";
-		ArrayList<SubBlock> sB = new ArrayList<SubBlock>();
-		
-		ArrayList<ArrayList<String>> rawData = new ArrayList<ArrayList<String>>();
-		ArrayList<String> temp = new ArrayList<String>();
-		int count = 0;
-		for( String s : a ) {
-			
-			if( !isLegalRawNo(s) ) {
-				
-				if( s.contains("th") && count > 0 ) {
-					rawData.add(temp);
-					temp = new ArrayList<String>();
-					count = 0;
-					
-					temp.add(s);
-					count++;
-				}
-				else {
-					temp.add(s);
-					count++;
-				}
-				
-			}
-			
-		}
-		rawData.add(temp);
-		
-		ArrayList<Tables> tables = new ArrayList<Tables>();
-		
-		for( ArrayList<String> s : rawData ) {
-			
-			Tables oT = constructNoTables(s);
-			tables.add(oT);
-			
-		}
-		
-		SubBlock oSB = new SubBlock(nTitle, tables);
-		
-		sB.add(oSB);
-		
-		this.blocks.add(new Block(nTitle, sB));
-	}
-	
-	/**
-	 * @category Constructions of Blocks for nouns
-	 */
-	private void populateNoBlocks() {
-		
-		for( ArrayList<String> aList : dump ) {
-			
-			constructNoBlock(aList);
-			
-		}
-	}
-	
-	/**
-	 * Constructs Blocks, SubBlocks and Tables for the search results from HTMLParser, depending on
-	 * the type of the results
-	 */
-	private void populateBlockList() {
-	    
-		if(this.title.contains("Sagnorð")) {
-	        populateSoBlocks();
-	    }
-	      
-	    else if(this.title.contains("Lýsingarorð") || this.title.contains("Töluorð")) {
-	        populateLoBlocks();
-	    }
-	      
-	    else if(this.title.contains("Atviksorð")){
-	        // TODO : make it work?
-	    } 
-	    else {
-	    	populateNoBlocks();
-	    }
-	}
+
+
+    /////
+    // Public Methods
+    /////
+
+    public void constructWordResult(HTMLParser parser, String[] elements) {
+
+        if( this.description.equals("MultiHit") ) {
+            constructMultiHitResults(parser);
+        }
+        else if( this.description.equals("SingleHit") ) {
+            constructSingleHitResult(parser, elements);
+        }
+        else {
+            //Do Nothing
+        }
+
+    }
+
+    /////
+    // Private Methods
+    /////
+    private int constructInt(String a) {
+
+        Pattern pattern = Pattern.compile("\\d+");
+        Matcher matcher = pattern.matcher(a);
+        int start = 0;
+        int end = 0;
+        while( matcher.find() ) {
+            start = matcher.start();
+            end = matcher.end();
+        }
+
+        int result = 0;
+        try {
+            result = Integer.parseInt(a.substring(start, end));
+        }
+        catch( NumberFormatException e) {
+            result = 0;
+        }
+
+        return result;
+    }
+
+    private int[] manageMultipleIds(String[] a) {
+
+        int[] returnValue = new int[a.length];
+        int iterations;
+        for( int i = 0; i < a.length; i++ ) {
+            iterations = constructInt(a[i]);
+            returnValue[i] = iterations;
+        }
+
+        return returnValue;
+    }
+
+    private void constructMultiHitResults(HTMLParser parser) {
+
+        Document doc = parser.getDocument();
+
+        this.multiHitDescriptions = new String[doc.select("li").size()];
+        String[] tempId = new String[doc.select("li").size()];
+
+        int count = 0;
+
+        for( Element e : doc.select("li") ) {
+            this.multiHitDescriptions[count] = e.text();
+
+            tempId[count] = e.getElementsByTag("a").attr("onClick").toString();
+
+            count++;
+        }
+
+        this.multiHitIds = manageMultipleIds(tempId);
+    }
+
+    private String destroyPointers(String str) {
+        String temp = str.substring(str.indexOf(" ")+1, str.length());
+        temp = temp.substring(temp.indexOf(" ")+1, temp.length());
+        return temp;
+    }
+
+    private String destroyPointer(String str) {
+        return str.substring(str.indexOf(" ")+1, str.length());
+    }
+
+    public String arrayToString(String[] array) {
+
+        StringBuilder builder = new StringBuilder();
+
+        for (String string : array) {
+            builder.append(string);
+        }
+        return builder.toString();
+
+    }
+    /*
+    public ArrayList<String> constructTableResults(String str) {
+
+      str = destroyPointers(str.substring(str.indexOf(" "), str.length()));
+
+      if( str.contains(".") ) {
+        str = destroyPointer(str);
+      }
+
+      ArrayList<String> returnList = new ArrayList<String>();
+
+      if(str.contains("/")) {
+        String[] split = str.split("");
+        for(int i = 1; i < split.length-1; i++) {
+      if( !split[i-1].equals("/") && split[i].equals(" ") && !split[i+1].equals("/") ) {
+        split[i] = "1234";
+      }
+        }
+        String[] temp = new String[split.length-1];
+        for( int i = 0; i < temp.length; i++ ) {
+      temp[i] = split[i+1];
+        }
+        String st = arrayToString(temp);
+        String[] tempT = st.split("1234");
+        for( int i = 0; i < tempT.length; i++ ) {
+      returnList.add(tempT[i]);
+
+        }
+
+      }
+      else {
+        String[] split = str.split("\\s+");
+        for( int i = 0; i < split.length; i++ ) {
+      returnList.add(split[i]);
+        }
+      }
+
+      return returnList;
+
+    }
+    */
+    private boolean isNotVerb(String str) {
+
+        String[] starters = { "ég", "við", "þú", "þið", "hann", "hún", "það", "þeir", "þær", "þau" };
+
+        for( String string : starters ) {
+
+            if( str.contains(string) ) {
+                return true;
+            }
+
+        }
+
+        return false;
+    }
+
+    private ArrayList<String> constructTableResults(String str) {
+
+        ArrayList<String> firstIteration = new ArrayList<String>();
+        ArrayList<String> secondIteration = new ArrayList<String>();
+
+        if( this.title.contains("Sagnorð") ) {
+            if( str.contains("Stýfður") ) {
+                secondIteration.add(str.substring(str.indexOf(" "), str.length()));
+                secondIteration.add("--");
+            }
+            else if( str.contains(".") ) {
+                str = destroyPointer(str);
+                if( str.contains("/") ) {
+                    String[] split = str.split("");
+                    for(int i = 1; i < split.length-1; i++) {
+                        if( !split[i-1].equals("/") && split[i].equals(" ") && !split[i+1].equals("/") ) {
+                            split[i] = "1234";
+                        }
+                    }
+                    String[] temp = new String[split.length-1];
+                    for( int i = 0; i < temp.length; i++ ) {
+                        temp[i] = split[i+1];
+                    }
+                    String st = arrayToString(temp);
+                    String[] tempT = st.split("1234");
+                    for( int i = 0; i < tempT.length; i++ ) {
+                        firstIteration.add(tempT[i]);
+                    }
+
+                    for( String string : firstIteration ) {
+
+                        if( string.contains(".") && !string.contains("/") ) {
+                            String[] spliti = str.split(" ");
+                            for( String rts : spliti ) {
+                                secondIteration.add(rts);
+                            }
+                        }
+                        else {
+                            if( isNotVerb(str) ) {
+                                for( String rts : firstIteration ) {
+                                    secondIteration.add(rts);
+                                }
+                            }
+                            else {
+                                String[] spl = str.split(" ");
+                                for( String rtts : spl ) {
+                                    secondIteration.add(rtts);
+                                }
+                            }
+                        }
+
+                    }
+
+                }
+                else {
+                    String[] split = str.split(" ");
+                    for( String rts : split ) {
+                        secondIteration.add(rts);
+                    }
+                }
+            }
+            else {
+                secondIteration.add(str);
+            }
+        }
+
+        else {
+            if( str.contains(".") ) {
+                str = str.substring(str.indexOf(" "), str.length());
+            }
+
+            if( str.contains("/") ) {
+                String[] split = str.split("");
+                for(int i = 1; i < split.length-1; i++) {
+                    if( !split[i-1].equals("/") && split[i].equals(" ") && !split[i+1].equals("/") ) {
+                        split[i] = "1234";
+                    }
+                }
+                String[] temp = new String[split.length-1];
+                for( int i = 0; i < temp.length; i++ ) {
+                    temp[i] = split[i+1];
+                }
+                String st = arrayToString(temp);
+                String[] tempT = st.split("1234");
+                for( int i = 0; i < tempT.length; i++ ) {
+                    firstIteration.add(tempT[i]);
+                }
+
+                for( String rts : firstIteration ) {
+
+                    if( rts.contains(" ") && !rts.contains("/") ) {
+                        String[] splitii = str.split(" ");
+                        for( String rtss : splitii ) {
+                            secondIteration.add(rtss);
+                        }
+                    }
+                    else {
+                        for( String rtsss : firstIteration ) {
+                            secondIteration.add(rtsss);
+                        }
+                    }
+
+                }
+
+            }
+            else {
+                String[] split = str.split(" ");
+                for( String rts : split ) {
+                    secondIteration.add(rts);
+                }
+            }
+        }
+
+        ArrayList<String> tempList = secondIteration;
+        secondIteration = new ArrayList<String>();
+
+        for( String resultString : tempList ) {
+            if( resultString.length() > 0 ) {
+                secondIteration.add(resultString);
+            }
+        }
+
+
+
+        return secondIteration;
+    }
+
+    private String[] getTableColumns(String blockTitle, String subBlockTitle, String tableTitle) {
+
+        if( this.title.contains("Persónu") ) {
+            return new String[] { "", "Eintala", "Fleirtala" };
+        }
+        if( this.title.contains("Töluorð") ) {
+            return new String[] { "", "Karlkyn", "Kvenkyn", "Hvorugkyn" };
+        }
+        if( this.title.contains("Afturbeygt") ) {
+            return new String[] { "", "" };
+        }
+        if( this.title.contains("Lýsingarorð") ) {
+            return new String[] { "", "Karlkyn", "Kvenkyn", "Hvorugkyn" };
+        }
+        if( this.title.contains("nafnorð") ) {
+            return new String[] { "", "án greinis", "með greini" };
+        }
+        if( this.title.contains("Atviksorð") ) {
+            return new String[] { "", "Frumstig", "Miðstig", "Efsta stig" };
+        }
+        if( this.title.contains("Sagnorð") ) {
+            if( blockTitle.contains("Persónuleg notkun - Germynd") || blockTitle.contains("Persónuleg notkun - Miðmynd")  ) {
+                if( subBlockTitle.contains("Nafnháttur") ) {
+                    return new String[] { "" };
+                }
+                else {
+                    return new String[] { "", "Eintala", "Fleirtala" };
+                }
+            }
+            if( blockTitle.contains("Boðháttur") ) {
+                return new String[] { "", "Germynd", "Miðmynd" };
+            }
+            if( blockTitle.contains("Lýsingarháttur nútíðar") ) {
+                return new String[] { "" };
+            }
+            if( blockTitle.contains("Sagnbót")) {
+                return new String[] { "", "Germynd", "Miðmynd" };
+            }
+            if( blockTitle.contains("Ópersónuleg notkun - Germynd (Gervifrumlag)")) {
+                return new String[] { "", "Eintala", "Fleirtala" };
+            }
+            if( blockTitle.contains("Lýsingarháttur þátíðar") ) {
+                return new String[] { "", "Karlkyn", "Kvenkyn", "Hvorugkyn" };
+            }
+            if( blockTitle.contains("Ópersónuleg notkun - Miðmynd (Frumlag í þágufalli)") ) {
+                return new String[] { "", "Eintala", "Fleirtala" };
+            }
+
+        }
+        if( this.title.contains("Greinir") ) {
+            return new String[] { "", "Karlkyn", "Kvenkyn", "Hvorugkyn" };
+        }
+        if( this.title.contains("Fornafn") ) {
+            return new String[] { "", "Karlkyn", "Kvenkyn", "Hvorugkyn" };
+        }
+
+        return new String[] {  "" };
+    }
+
+    private String[] getTableRows(String blockTitle, String subBlockTitle, String tableTitle) {
+
+        if( this.title.contains("Töluorð") || this.title.contains("Afturbeygt") ||
+                this.title.contains("Persónu") || this.title.contains("nafnorð") ||
+                this.title.contains("Lýsingarorð") ) {
+            return new String[] { "", "Nf.", "Þf.", "Þgf.", "Ef." };
+        }
+        else if( this.title.contains("Sagnorð") ) {
+            if( blockTitle.contains("Persónuleg notkun - Germynd") || blockTitle.contains("Persónuleg notkun - Miðmynd") ) {
+                if( subBlockTitle.contains("Nafnháttur") ) {
+                    return new String[] { "", "" };
+                }
+                else {
+                    return new String[] { "", "1. pers.", "2. pers.", "3. pers." };
+                }
+            }
+            if( blockTitle.contains("Boðháttur") ) {
+                return new String[] { "", "Stýfður", "Eintala", "Fleirtala" };
+            }
+            if( blockTitle.contains("Lýsingarháttur nútíðar") ) {
+                return new String[] { "", "" };
+            }
+            if( blockTitle.contains("Sagnbót")) {
+                return new String[] { "", "" };
+            }
+            if( blockTitle.contains("Ópersónuleg notkun - Germynd (Gervifrumlag)")) {
+                return new String[] { "", "3. pers." };
+            }
+            if( blockTitle.contains("Lýsingarháttur þátíðar") ) {
+                return new String[] { "", "Nf.", "Þf.", "Þgf.", "Ef." };
+            }
+            if( blockTitle.contains("Ópersónuleg notkun - Miðmynd (Frumlag í þágufalli)") ) {
+                return new String[] { "", "1. pers.", "2. pers.", "3. pers." };
+            }
+
+        }
+        else if( this.title.contains("Greinir") ) {
+            return new String[] { "", "Nf.", "Þf.", "Þgf.", "Ef." };
+        }
+        else if( this.title.contains("Fornafn") ) {
+            return new String[] { "", "Nf.", "Þf.", "Þgf.", "Ef." };
+        }
+        else if( this.title.contains("Atviksorð") ) {
+            return new String[] { "", "" };
+        }
+
+        return new String[] { "", "" };
+    }
+
+    private void constructExceptionBlock(ArrayList<String> rawData) {
+
+        ArrayList<String> rawFirstTable = new ArrayList<String>();
+        ArrayList<String> rawSecondTable = new ArrayList<String>();
+
+        String[] exceptionSet = { "Nf", "Þf", "Þgf", "Ef" };
+
+        for( String str : rawData ) {
+
+            if( str.contains(".") ) {
+                str = destroyPointers(str);
+
+                if(str.contains("Nf.")) {
+                    String[] splitString = str.split(exceptionSet[0]);
+                    rawFirstTable.add(splitString[1]);
+                    rawSecondTable.add(splitString[2]);
+                }
+                if(str.contains("Þf.")) {
+                    String[] splitString = str.split(exceptionSet[1]);
+                    rawFirstTable.add(splitString[1]);
+                    rawSecondTable.add(splitString[2]);
+                }
+                if(str.contains("Þgf.")) {
+                    String[] splitString = str.split(exceptionSet[2]);
+                    rawFirstTable.add(splitString[1]);
+                    rawSecondTable.add(splitString[2]);
+                }
+                if(str.contains("Ef.")) {
+                    String[] splitString = str.split(exceptionSet[3]);
+                    rawFirstTable.add(splitString[1]);
+                    rawSecondTable.add(splitString[2]);
+                }
+
+            }
+
+        }
+
+
+        ArrayList<String> firstTableContent = new ArrayList<String>();
+        ArrayList<String> secondTableContent = new ArrayList<String>();
+
+        for( String str : rawFirstTable ) {
+            ArrayList<String> tempRes = constructTableResults(str);
+
+            for( String string : tempRes ) {
+                firstTableContent.add(string);
+            }
+        }
+
+        for( String str : rawSecondTable ) {
+            ArrayList<String> tempRes = constructTableResults(str);
+
+            for( String string : tempRes ) {
+                secondTableContent.add(string);
+            }
+        }
+
+        Tables firstTable = new Tables("Eintala", new String[] { "", "Karlkyn", "Kvenkyn", "Hvorugkyn" }, new String[] { "Nf.", "Þf.", "Þgf.", "Ef." }, firstTableContent);
+        Tables secondTable = new Tables("Fleirtala", new String[] { "", "Karlkyn", "Kvenkyn", "Hvorugkyn" }, new String[] { "Nf.", "Þf.", "Þgf.", "Ef." }, secondTableContent);
+
+        ArrayList<Tables> tables = new ArrayList<Tables>();
+        tables.add(firstTable);
+        tables.add(secondTable);
+
+        SubBlock subBlock = new SubBlock("", tables);
+
+        ArrayList<SubBlock> sB = new ArrayList<SubBlock>();
+        sB.add(subBlock);
+
+        Block newBlock = new Block("", sB);
+
+
+        this.result.add(newBlock);
+
+    }
+
+
+    private Tables constructTables(ArrayList<String> rawTables, String[] elements, String blockTitle, String subBlockTitle) {
+
+
+
+        String tableTitle = "";
+        if( rawTables.get(0).contains(elements[3]) ) {
+            tableTitle = destroyPointers(rawTables.get(0));
+        }
+
+        String[] tableRow = getTableRows(blockTitle, subBlockTitle, tableTitle);
+
+        String[] tableColumns = getTableColumns(blockTitle, subBlockTitle, tableTitle);
+
+        ArrayList<String> tableResults = new ArrayList<String>();
+
+        for( String str : rawTables ) {
+            if( str.contains(elements[4]) ) {
+
+                str = destroyPointers(str);
+
+                ArrayList<String> tempArrayList = constructTableResults(str);
+
+                for( int i = 0; i < tempArrayList.size(); i++ ) {
+                    tableResults.add(tempArrayList.get(i));
+                }
+
+
+            }
+
+
+        }
+
+
+        return new Tables(tableTitle, tableColumns, tableRow, tableResults);
+    }
+
+    private SubBlock constructSubBlock(ArrayList<String> rawSubBlock, String[] elements, String blockTitle) {
+
+        String subBlockTitle = "";
+        if( rawSubBlock.get(0).contains(elements[2]) ) {
+            subBlockTitle = destroyPointers(rawSubBlock.get(0));
+        }
+
+        ArrayList<ArrayList<String>> allTables = new ArrayList<ArrayList<String>>();
+        ArrayList<String> oneTable = new ArrayList<String>();
+        int counter = 0;
+
+        for( String str : rawSubBlock ) {
+
+            if( str.contains(elements[3]) ) {
+                if( counter == 0 ) {
+                    oneTable.add(str);
+                    counter++;
+                }
+                else {
+                    allTables.add(oneTable);
+                    oneTable = new ArrayList<String>();
+                    oneTable.add(str);
+                    counter = 1;
+                }
+            }
+
+            if( str.contains(elements[4]) ) {
+                oneTable.add(str);
+                counter++;
+            }
+
+        }
+
+        allTables.add(oneTable);
+
+        ArrayList<Tables> tables = new ArrayList<Tables>();
+
+        for( ArrayList<String> aList : allTables ) {
+
+            Tables newTable = constructTables(aList, elements, blockTitle, subBlockTitle);
+            tables.add(newTable);
+
+        }
+
+        return new SubBlock(subBlockTitle, tables);
+
+
+    }
+
+    private Block constructBlock(ArrayList<String> rawBlock, String[] elements) {
+
+        String blockTitle = "";
+
+        if( rawBlock.get(0).contains(elements[1]) ) {
+            blockTitle = destroyPointers(rawBlock.get(0));
+        }
+
+
+        ArrayList<ArrayList<String>> allSubBlocks = new ArrayList<ArrayList<String>>();
+        ArrayList<String> oneSubBlock = new ArrayList<String>();
+        int counter = 0;
+
+        for( String str : rawBlock ) {
+
+            if( str.contains(elements[2]) ) {
+                if( counter == 0 ) {
+                    oneSubBlock.add(str);
+                    counter++;
+                }
+                else {
+                    allSubBlocks.add(oneSubBlock);
+                    oneSubBlock = new ArrayList<String>();
+                    oneSubBlock.add(str);
+                    counter = 1;
+                }
+            }
+
+            if( str.contains(elements[3]) ) {
+                oneSubBlock.add(str);
+                counter++;
+            }
+
+            if( str.contains(elements[4]) ) {
+                oneSubBlock.add(str);
+                counter++;
+            }
+
+        }
+
+        allSubBlocks.add(oneSubBlock);
+
+        ArrayList<SubBlock> sB = new ArrayList<SubBlock>();
+
+        for( ArrayList<String> aList : allSubBlocks ) {
+
+            SubBlock newSubBlock = constructSubBlock(aList, elements, blockTitle);
+            sB.add(newSubBlock);
+
+        }
+
+        return new Block(blockTitle, sB);
+
+    }
+
+    private void constructBlocks(ArrayList<String> rawData, String[] elements) {
+
+        ArrayList<ArrayList<String>> allBlocks = new ArrayList<ArrayList<String>>();
+
+        ArrayList<String> oneBlock = new ArrayList<String>();
+
+        int counter = 0;
+
+        for( String str : rawData ) {
+
+            if( str.contains(elements[1]) ) {
+                if( counter == 0 ) {
+                    oneBlock.add(str);
+                    counter++;
+                }
+                else {
+                    allBlocks.add(oneBlock);
+                    oneBlock = new ArrayList<String>();
+                    oneBlock.add(str);
+                    counter = 1;
+                }
+            }
+
+            if( str.contains(elements[2]) ) {
+                oneBlock.add(str);
+                counter++;
+            }
+
+            if( str.contains(elements[3]) ) {
+                oneBlock.add(str);
+                counter++;
+            }
+
+            if( str.contains(elements[4]) ) {
+                oneBlock.add(str);
+                counter++;
+            }
+
+        }
+
+        allBlocks.add(oneBlock);
+
+        for( ArrayList<String> aList : allBlocks ) {
+
+            Block newBlock = constructBlock(aList, elements);
+            this.result.add(newBlock);
+
+        }
+
+    }
+
+    private String[] getRuleSet() {
+
+        if( this.title.contains("Sagnorð") ) {
+            return new String[] { "th - Germynd", "th - Miðmynd", "tr - Germynd", "tr - Miðmynd", "tr - Nútíð", "tr - Þátíð", "tr - Et. Ft.",
+                    "tr - 1. pers", "tr - 2. pers", "tr - 3. pers", "tr - 1.pers", "tr - 2.pers", "tr - 3.pers",
+                    "tr - Karlkyn", "tr - Eintala", "tr - Fleirtala" };
+        }
+        else if( this.title.contains("Lýsingarorð") ) {
+            return new String[] { "h2", "h3", "h4", "th", "tr - Nf.", "tr - Þf.", "tr - Þgf.", "tr - Ef." };
+        }
+        else if( this.title.contains("nafnorð") ) {
+            return new String[] { "h2", "th", "tr - Nf.", "tr - Þf.", "tr - Þgf.", "tr - Ef." };
+        }
+        else if( this.title.contains("Atviksorð") ) {
+            return new String[] { "tr - Frumstig", "th - Frumstig", "th - Miðstig", "th - Efsta stig" };
+        }
+        else if( this.title.contains("Töluorð") ) {
+            return new String[] { "h2", "th", "tr - Nf.", "tr - Þf.", "tr - Þgf.", "tr - Ef." };
+        }
+        else if( this.title.contains("Persónu") ) {
+            return new String[] { "h2", "tr - Nf.", "tr - Þf.", "tr - Þgf.", "tr - Ef." };
+        }
+        else if( this.title.contains("Afturbeygt") ) {
+            return new String[] { "h2", "th", "tr - Nf.", "tr - Þf.", "tr - Þgf.", "tr - Ef." };
+        }
+        else if( this.title.contains("Fornafn") ) {
+            return new String[] { "h2", "tr - Nf.", "tr - Þf.", "tr - Þgf.", "tr - Ef." };
+        }
+        else if( this.title.contains("Greinir") ) {
+            return new String[] { "h2", "tr - Nf.", "tr - Þf.", "tr - Þgf.", "tr - Ef." };
+        }
+
+        return null;
+    }
+
+    private boolean isValidResultString(String str, String[] ruleSets) {
+
+        for( int i = 0; i < ruleSets.length; i++ ) {
+            if( str.contains(ruleSets[i]) ) {
+                return true;
+            }
+        }
+        return false;
+
+    }
+
+    private void constructSingleHitResult(HTMLParser parser, String[] elements) {
+
+        Document doc = parser.getDocument();
+
+        this.title = doc.getElementsByTag(elements[0]).text();
+
+        try {
+            this.warning = doc.getElementsByClass("alert").text();
+        }
+        catch( NullPointerException e ) {
+            //Do nothing
+        }
+
+
+        ArrayList<Element> selectedElements = parser.getSelectedElements();
+
+        ArrayList<String> rawData = new ArrayList<String>();
+
+
+        for( Element element : selectedElements ) {
+
+            if( element.hasText() ) {
+                rawData.add(element.tag().toString() + " - " + element.text());
+            }
+
+        }
+
+        String[] ruleSets = getRuleSet();
+
+        ArrayList<String> data = new ArrayList<String>();
+
+        if( this.title.contains("Sagnorð") || this.title.contains("Atviksorð") ) {
+
+            for( String str : rawData ) {
+
+                if( !isValidResultString(str, ruleSets) ) {
+                    data.add(str);
+                }
+
+            }
+
+        }
+        else {
+
+            for( String str : rawData ) {
+
+                if( isValidResultString(str, ruleSets) ) {
+                    data.add(str);
+                }
+
+            }
+        }
+
+        if( (this.title.contains("Fornafn") && (!this.title.contains("Persónu") || !this.title.contains("Afturbeygt") )) || this.title.contains("Greinir") ) {
+            constructExceptionBlock(data);
+            return;
+        }
+
+        constructBlocks(data, elements);
+
+
+    }
 }
