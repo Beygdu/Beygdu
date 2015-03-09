@@ -17,6 +17,25 @@
         android:textColor="@color/black"
         android:textSize="40sp" />
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/darker_gray"
+        android:layout_below="@id/aboutTitle"
+
+    />
+
+    <ScrollView
+        android:id="@+id/aboutScrollView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scrollbarStyle="outsideInset"
+        android:scrollbars="vertical"
+        android:paddingTop="50dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        >
+
 	<TextView
 	    android:id="@+id/aboutText"
 	    android:layout_width="wrap_content"
@@ -27,5 +46,7 @@
 	    android:text="@string/aboutText"
 	    android:textColor="@color/black"
 	    android:textSize="20sp" />
+
+    </ScrollView>
 
 </RelativeLayout>
