@@ -154,7 +154,8 @@ public void setResults(ArrayList<ArrayList<String>> a) {
  */
 public WordResult getWordResult() {
   
-  return new WordResult(this.type, this.title, this.note, this.results);
+  //return new WordResult(this.type, this.title, this.note, this.results);
+    return null;
   
   }
 
