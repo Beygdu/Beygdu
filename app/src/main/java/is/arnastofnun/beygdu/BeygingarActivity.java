@@ -4,22 +4,27 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Resources;
+import android.graphics.Point;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.DrawableRes;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.NavUtils;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Display;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.ViewGroup;
 import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 
 import is.arnastofnun.DB.DBController;
@@ -35,7 +40,7 @@ import is.arnastofnun.utils.TableFragment;
  *BeygingarActivity contains a LinearLayout with a ScrollView which contains a TableLayout.
  *The tables are then plaved in the TableLayout.
  */
-public class BeygingarActivity extends FragmentActivity {
+public class BeygingarActivity extends NavDrawer {
 
 	/**
 	 * tableLayout is the TableLayout in the activity, the TextViews and TableFragments are added to it
@@ -50,12 +55,53 @@ public class BeygingarActivity extends FragmentActivity {
 	private ArrayList<Integer> mSelectedItems = new ArrayList<Integer>();
 	private WordResult words;
 
+    //Fonts
+    private Typeface LatoBold;
+    private Typeface LatoSemiBold;
+    private Typeface LatoLight;
+
+    //Screen width
+    private float width;
+    private float height;
+
+
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);	
-		setContentView(R.layout.activity_beygingar);
-		getActionBar().setDisplayHomeAsUpEnabled(true);
-		
+		super.onCreate(savedInstanceState);
+
+        /**
+         * Not setting the content view here since we are
+         * inflating it in the NavDrawer (see below)
+         */
+        // setContentView(R.layout.activity_beygingar);
+
+        /**
+         * Inflate the layout into the NavDrawer layout
+         * where `frameLayout` is a FrameLayout in the layout for the
+         * NavDrawer (see file nav_base_layout)
+         */
+        getLayoutInflater().inflate(R.layout.activity_beygingar, frameLayout);
+
+        /**
+         * Setting what item is checked
+         */
+        mDrawerList.setItemChecked(position,true);
+
+        getActionBar().setDisplayHomeAsUpEnabled(true);
+
+        // Get screen sizes
+        Display display = getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        width = convertPixelsToDp(size.x);
+        height = convertPixelsToDp(size.y);
+
+        //Set typeface for fonts
+        LatoBold = Typeface.createFromAsset(getAssets(), "fonts/Lato-Bold.ttf");
+        LatoSemiBold = Typeface.createFromAsset(getAssets(), "fonts/Lato-Semibold.ttf");
+        LatoLight = Typeface.createFromAsset(getAssets(), "fonts/Lato-Light.ttf");
+
 		//get WordResult from MainActivity.
 		Intent intent = getIntent();
 		words = (WordResult) intent.getSerializableExtra("word");
@@ -71,7 +117,46 @@ public class BeygingarActivity extends FragmentActivity {
         //Save to DB -- if it does not exist before
         DBController dbController = new DBController(this);
         dbController.insert(words);
+
+        // Set the title in the actionbar
+        setTitle(firstWordInString(words.getTitle()));
 }
+
+    /**
+     * Accepts a String of word(s) and returns the first word in that string.
+     * Looks for an empty space (" ") to see where the word ends.
+     * @param title String of words
+     * @return String that is the first word in a String
+     */
+    private String firstWordInString(String title){
+        String firstWord = null;
+
+        // Get the first word
+        if(title.contains(" ")){
+            firstWord = title.substring(0, title.indexOf(" "));
+        }
+
+        // Capitalize the first letter of the word
+        if(firstWord != null){
+            firstWord = firstWord.substring(0,1).toUpperCase() + firstWord.substring(1);
+        }
+        return firstWord;
+    }
+
+
+    /**
+     * This method converts device specific pixels to density independent pixels.
+     * @param px A value in px (pixels) unit. Which we need to convert into db
+     * @return A float value to represent dp equivalent to px value
+     */
+    public float convertPixelsToDp(float px){
+        Resources resources = this.getResources();
+        DisplayMetrics metrics = resources.getDisplayMetrics();
+        float dp = px / (metrics.densityDpi / 160f);
+        return dp;
+    }
+
+
 	
 	/**
 	 * Constructs a TextView with the title of the word and possibly a TextView with a note about the word, if it exits, 
@@ -80,17 +165,26 @@ public class BeygingarActivity extends FragmentActivity {
 	private void initTables(){
 		//SetTitle
 		TextView titleDesc = new TextView(this);
-		titleDesc.setText(words.getTitle());
-		titleDesc.setGravity(Gravity.CENTER);
-		titleDesc.setTextSize(40);
-		titleDesc.setHeight(130);
-		titleDesc.setTypeface(Typeface.DEFAULT_BOLD);
-		tableLayout.addView(titleDesc);
+        titleDesc.setText(words.getTitle());
+        if (320 > width && width < 384) {
+            titleDesc.setTextSize(20);
+        }
+        else if(384 > width && width < 600) {
+            titleDesc.setTextSize(24);
+        }
+        else if(width > 600){
+            titleDesc.setTextSize(30);
+        }
+
+		titleDesc.setMinHeight(130);
+		titleDesc.setTypeface(LatoLight);
+        tableLayout.addView(titleDesc);
 		
 		//SetNote
 		if(!words.getNote().equals("")) {
 			TextView note = new TextView(this);
 			note.setText(words.getNote());
+            note.setTypeface(LatoLight);
 			note.setBackgroundResource(R.drawable.noteborder);
 			tableLayout.addView(note);
 		}
@@ -101,11 +195,21 @@ public class BeygingarActivity extends FragmentActivity {
 			if (mSelectedItems.contains(i)) {
 				Block block = words.getBlocks().get(i);
 				TextView blockTitle = new TextView(this);
-				blockTitle.setTextSize(30);
-				blockTitle.setHeight(60);
+                if (320 > width && width < 384) {
+                    blockTitle.setTextSize(16);
+                }
+                else if(384 > width && width < 600) {
+                    blockTitle.setTextSize(20);
+                }
+                else if(width > 600){
+                    blockTitle.setTextSize(24);
+                }
+				blockTitle.setMinHeight(100);
 				blockTitle.setText(block.getTitle());
-				
-				TableFragment tFragment = new TableFragment(BeygingarActivity.this, tableLayout, block, blockTitle);
+                blockTitle.setTypeface(LatoLight);
+                blockTitle.setGravity(Gravity.CENTER);
+                blockTitle.setTextColor(getResources().getColor(R.color.font_default));
+                TableFragment tFragment = new TableFragment(BeygingarActivity.this, tableLayout, block, blockTitle);
 				getFragmentManager().beginTransaction().add(tableLayout.getId(), tFragment).commit();
 				tables.add(tFragment);				
 			}
@@ -135,21 +239,23 @@ public class BeygingarActivity extends FragmentActivity {
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
+
+        switch (item.getItemId()) {
 		case android.R.id.home:
 			NavUtils.navigateUpFromSameTask(this);
 			return true;
 		case R.id.action_filter:
 			filterAction();
 			break;
-		case R.id.action_about:
-			Intent intent1 = new Intent(this, AboutActivity.class);
-			startActivity(intent1);
-			break;
+//		case R.id.action_about:
+//			Intent intent1 = new Intent(this, AboutActivity.class);
+//			startActivity(intent1);
+//			break;
 		case R.id.action_mail:
 			sendEmail();
 			break;
-		} 
+		}
+
 		return super.onOptionsItemSelected(item);
 	}
 

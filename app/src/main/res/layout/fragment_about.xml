@@ -6,7 +6,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:background="@color/grey"
+    android:background="@color/white"
     tools:context="is.arnastofnun.beygdu.AboutActivity$PlaceholderFragment" >
 
     <TextView
@@ -16,6 +16,25 @@
         android:text="@string/aboutTitle"
         android:textColor="@color/black"
         android:textSize="40sp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/darker_gray"
+        android:layout_below="@id/aboutTitle"
+
+    />
+
+    <ScrollView
+        android:id="@+id/aboutScrollView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scrollbarStyle="outsideInset"
+        android:scrollbars="vertical"
+        android:paddingTop="50dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        >
 
 	<TextView
 	    android:id="@+id/aboutText"
@@ -27,5 +46,7 @@
 	    android:text="@string/aboutText"
 	    android:textColor="@color/black"
 	    android:textSize="20sp" />
+
+    </ScrollView>
 
 </RelativeLayout>

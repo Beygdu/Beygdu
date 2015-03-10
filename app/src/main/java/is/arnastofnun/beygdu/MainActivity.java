@@ -2,9 +2,12 @@ package is.arnastofnun.beygdu;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Resources;
+import android.graphics.Typeface;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -13,12 +16,16 @@ import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TableRow;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import is.arnastofnun.beygdu.R;
@@ -45,11 +52,16 @@ import is.arnastofnun.parser.WordResult;
  * @version 1.0
  * 
  * The initial activity of the program. Has a Text input og a button for initializing the search.
- * Also has an actionbar where the user can open other activies such as AboutActivity
+ * Also has an actionbar where the user can open other activities such as AboutActivity
  * and send an email to the creator of the database
  * 
  */
-public class MainActivity extends FragmentActivity {
+public class MainActivity extends NavDrawer {
+
+    /**
+     * Progress dialog to be used in Async Task
+     */
+    ProgressDialog progressDialog;
 
 	/**
 	 * The result from the parser search.
@@ -63,14 +75,81 @@ public class MainActivity extends FragmentActivity {
 		this.pR = pR;
 	}
 
+
+    //Fonts
+    private Typeface LatoBold;
+    private Typeface LatoSemiBold;
+    private Typeface LatoLight;
+
+    //Screen width
+    private float width;
+    private float height;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_main);
-		
+
+        /**
+         * Not setting the content view here since we are
+         * inflating it in the NavDrawer (see below)
+         */
+        // setContentView(R.layout.activity_main);
+
+		/**
+        * Inflate the layout into the NavDrawer layout
+        * where `frameLayout` is a FrameLayout in the layout for the
+        * NavDrawer (see file nav_base_layout)
+        */
+        getLayoutInflater().inflate(R.layout.activity_main, frameLayout);
+
+        /**
+         * Setting the title and what item is checked
+         */
+        mDrawerList.setItemChecked(position,true);
+        //setTitle(listArray[position]);
+
 		checkNetworkState();
+        headerText();
 	}
-	
+
+
+    /**
+     * This method changes text size depending on screen sizes
+     * Snær Seljan
+     */
+    public void headerText() {
+        //Set typeface for fonts
+        LatoBold = Typeface.createFromAsset(getAssets(), "fonts/Lato-Bold.ttf");
+        LatoSemiBold = Typeface.createFromAsset(getAssets(), "fonts/Lato-Semibold.ttf");
+        LatoLight = Typeface.createFromAsset(getAssets(), "fonts/Lato-Light.ttf");
+
+        TextView header = (TextView)findViewById(R.id.title);
+        header.setTypeface(LatoLight);
+        if (320 > width && width < 384) {
+            header.setTextSize(30);
+        }
+        else if(384 > width && width < 600) {
+            header.setTextSize(36);
+        }
+        else if(width > 600){
+            header.setTextSize(40);
+        }
+    }
+
+    /**
+     * This method converts device specific pixels to density independent pixels.
+     * @param px A value in px (pixels) unit. Which we need to convert into db
+     * @return A float value to represent dp equivalent to px value
+     * Snær Seljan
+     */
+    public float convertPixelsToDp(float px){
+        Resources resources = this.getResources();
+        DisplayMetrics metrics = resources.getDisplayMetrics();
+        float dp = px / (metrics.densityDpi / 160f);
+        return dp;
+    }
+
+
 	/**
 	 * Checks if the user is connected to a network.
 	 * TODO - Should be implemented so that it shows a dialog if 
@@ -89,8 +168,8 @@ public class MainActivity extends FragmentActivity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu items for use in the action bar
-		MenuInflater inflater = getMenuInflater();
-		inflater.inflate(R.menu.main, menu);
+//		MenuInflater inflater = getMenuInflater();
+//		inflater.inflate(R.menu.main, menu);
 		return super.onCreateOptionsMenu(menu);
 	}
 
@@ -100,7 +179,9 @@ public class MainActivity extends FragmentActivity {
 	 */
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
+        /**
+         *
+        switch (item.getItemId()) {
 		case R.id.action_about:
 			Intent intent1 = new Intent(this, AboutActivity.class);
 			startActivity(intent1);
@@ -108,7 +189,8 @@ public class MainActivity extends FragmentActivity {
 		case R.id.action_mail:
 			sendEmail();
 			break;
-		} 
+		}
+         */
 		return super.onOptionsItemSelected(item);
 	}
 	
@@ -356,6 +438,14 @@ public class MainActivity extends FragmentActivity {
 		@Override
 		protected void onPreExecute() {
 			super.onPreExecute();
+
+            /**
+             * Show a progress dialog while we are getting the data
+             */
+            progressDialog = new ProgressDialog(MainActivity.this);
+            progressDialog.setMessage(getString(R.string.progressdialog));
+            progressDialog.setCancelable(false);
+            progressDialog.show();
 		}
 
 		/**
@@ -381,6 +471,13 @@ public class MainActivity extends FragmentActivity {
 		protected void onPostExecute(Void args) {
 			setParserResult(parser.getParserResult());
 			checkWordCount();
+
+            /**
+             * Remove the progress dialog
+             */
+            if(progressDialog.isShowing()){
+                progressDialog.dismiss();
+            }
 		}
 	}
 }

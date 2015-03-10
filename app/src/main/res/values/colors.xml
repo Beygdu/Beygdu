@@ -1,9 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="navy">#7a87b9</color>
+
+
+    <color name="grey">#f3f3f3</color>
+    <color name="red">#dc423a</color>
+    <color name="tableBorderColor">#dddddd</color>
+    <!-- Default colors -->
+    <!-- BLUE -->
+    <color name="d_blue">#3395de</color>
+    <color name="d_blue_light">#c9e8ff</color>
+    <color name="d_blue_border">#addcff</color>
+    <color name="d_blue_text">#257fd9</color>
+
+
+    <color name="background_main">#e4e4e4</color>
+
     <color name="white">#FFFFFF</color>
     <color name="black">#000000</color>
-    <color name="grey">#f3f3f3</color>
-    <color name="red">#FF0000</color>
-    <color name="tableBorderColor">#dddddd</color>
+
+    <color name="d_Grey">#585858</color>
+    <color name="d_GreenDark">#118C4E</color>
+    <color name="d_GreenLight">#C1E1A6</color>
+    <color name="d_Orange">#feaa3f</color>
+
+
+    <!-- Font colors -->
+    <color name="font_default">#4e5e6a</color>
+    <color name="font_light">#858585</color>
+
+
+    <!-- Table colors -->
+    <color name="tableBackground">#f5f7f9</color>
+    <color name="tableBorder">#d7d9db</color>
+
+
+
 </resources>
