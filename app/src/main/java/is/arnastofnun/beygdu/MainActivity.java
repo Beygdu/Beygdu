@@ -28,6 +28,8 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import is.arnastofnun.SkrambiWebTool.PostRequestHandler;
+import is.arnastofnun.SkrambiWebTool.SkrambiWT;
 import is.arnastofnun.beygdu.R;
 
 import org.jsoup.Jsoup;
@@ -315,6 +317,7 @@ public class MainActivity extends NavDrawer {
 			createNewActivity(wR);
 		} else if (pr.equals("Miss")) {
 			Toast.makeText(this, "Engin leitarniðurstaða", Toast.LENGTH_SHORT).show();
+            //new SkrambiBT(this.wR.getSearchWord()).execute();
 		}
 	}
 
@@ -490,4 +493,64 @@ public class MainActivity extends NavDrawer {
             }
 		}
 	}
+
+    public void onPostFinish(String output) {
+        if(!output.contains("suggest")) {
+            Toast.makeText(this, "Engin leitarniðurstaða", Toast.LENGTH_SHORT).show();
+        }
+        else {
+            output = output.substring(2, output.length());
+            int start = output.indexOf("[");
+            int stop = output.indexOf("]");
+            output = output.substring(start+1, stop);
+            String[] suggestions = output.split(" ");
+            String temp = "";
+            for(int i = 0; i < suggestions.length; i++) {
+                suggestions[i].replaceAll("\"", "");
+                temp += suggestions[i] + " ";
+            }
+            Toast.makeText(this, temp, Toast.LENGTH_SHORT).show();
+        }
+
+    }
+
+    public class SkrambiBT extends AsyncTask<Void, Void, Void> {
+
+
+
+        private String word;
+        private String URL;
+
+        private String responseString;
+
+
+        public SkrambiBT(String word) {
+
+            this.URL = "http://skrambi.arnastofnun.is/checkDocument";
+            this.word = word;
+
+        }
+
+        @Override
+        protected  void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected Void doInBackground(Void... args) {
+            PostRequestHandler pHandler = new PostRequestHandler(this.URL, this.word,
+                    "text/plain", "en-US", false, true, true);
+            this.responseString = pHandler.sendRequest();
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void args) {
+            String returnString = this.responseString;
+            onPostFinish(returnString);
+        }
+
+
+    }
+
 }
