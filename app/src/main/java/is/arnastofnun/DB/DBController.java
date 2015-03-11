@@ -86,9 +86,9 @@ public class DBController {
         }
         //Generate Content for all tables
         ContentValues wordResultContent = new ContentValues();
-        wordResultContent.put(DBHelper.TYPE, result.getType());
+        wordResultContent.put(DBHelper.TYPE, result.getDescription());
         wordResultContent.put(DBHelper.TITLE, result.getTitle());
-        wordResultContent.put(DBHelper.NOTE, result.getNote());
+        wordResultContent.put(DBHelper.NOTE, result.getWarning());
         wordResultContent.put(DBHelper.DATE, new Date().getTime());
         dB.insert(DBHelper.TABLE_WORDRESULT, null, wordResultContent);
 
@@ -223,8 +223,11 @@ public class DBController {
         if (cursor != null) {
             cursor.moveToFirst();
         }
-
-        newWordResult = new WordResult(cursor.getString(1), cursor.getString(2), cursor.getString(3));
+        newWordResult = new WordResult();
+        newWordResult.setDescription(cursor.getString(1));
+        newWordResult.setTitle(cursor.getString(2));
+        newWordResult.setWarning(cursor.getString(3));
+        //newWordResult = new WordResult(cursor.getString(1), cursor.getString(2), cursor.getString(3));
         newWordResult.setBlocks(fetchBlocks(cursor));
 
 
