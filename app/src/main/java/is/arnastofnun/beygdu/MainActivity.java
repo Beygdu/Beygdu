@@ -39,6 +39,7 @@ import java.net.URLEncoder;
 import java.sql.SQLData;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.concurrent.ExecutionException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -235,7 +236,13 @@ public class MainActivity extends NavDrawer {
 			if (islegalInput(word)) {
 				word = replaceSpaces(word);
 				word = convertToUTF8(word);
-				new ParseThread(word).execute();
+                try {
+                    this.wR = new BinThread(getApplicationContext()).execute(word, Integer.toString(1)).get();
+                    checkWordCount();
+                }
+                catch( Exception e) {
+                    Toast.makeText(this, "Ekki nadist ad tengjast vid gagnagrunn", Toast.LENGTH_LONG).show();
+                }
 			} else {
 				Toast.makeText(this, "Einingis hægt að leita að einu orði í einu", Toast.LENGTH_SHORT).show();
 			}
