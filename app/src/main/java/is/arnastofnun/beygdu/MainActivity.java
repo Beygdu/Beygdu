@@ -230,27 +230,33 @@ public class MainActivity extends NavDrawer {
 		EditText editText = (EditText) findViewById(R.id.mainSearch);
 		String word = editText.getText().toString();
 		
-		if(word.isEmpty()){
+		if(word.isEmpty())  {
 			Toast.makeText(this, "Vinsamlegasta sláið inn orð í reitinn hér að ofan", Toast.LENGTH_SHORT).show();
-		} else if(word.contains(" ")){
-			if (islegalInput(word)) {
-				word = replaceSpaces(word);
-				word = convertToUTF8(word);
-                try {
-                    this.wR = new BinThread(getApplicationContext()).execute(word, Integer.toString(1)).get();
-                    checkWordCount();
-                }
-                catch( Exception e) {
-                    Toast.makeText(this, "Ekki nadist ad tengjast vid gagnagrunn", Toast.LENGTH_LONG).show();
-                }
-			} else {
-				Toast.makeText(this, "Einingis hægt að leita að einu orði í einu", Toast.LENGTH_SHORT).show();
-			}
-		} else {
-			//New Thread to get word
-			word = convertToUTF8(word);
-			new ParseThread(word).execute();
 		}
+        else if(islegalInput(word)) {
+            if(word.contains(" ")) {
+                word = replaceSpaces(word);
+            }
+            word = convertToUTF8(word);
+            BinHelper bHelper = new BinHelper(getApplicationContext());
+            try {
+                setWordResult(bHelper.sendThread(word, 1));
+            }
+            catch( Exception e ) {
+                this.wR = null;
+            }
+            if(this.wR != null) {
+                checkWordCount();
+            }
+            else {
+                Toast.makeText(getApplicationContext(), "Villa i btnclicked", Toast.LENGTH_SHORT).show();
+            }
+        }
+        else {
+            Toast.makeText(getApplicationContext(), "Einingis hægt að leita að einu orði í einu", Toast.LENGTH_SHORT).show();
+        }
+
+
 	}
     public void cacheClick(@SuppressWarnings("unused") View view){
         Intent intent = new Intent(MainActivity.this, Cache.class);
@@ -277,7 +283,8 @@ public class MainActivity extends NavDrawer {
 	 * @param a the string
 	 * @return the string without spacecharactes (" ")
 	 */
-	private boolean islegalInput(String a) { 
+	private boolean islegalInput(String a) {
+        /*
 	    if (a.equals("")) {
 	    	return false;
 	    } else {
@@ -293,7 +300,8 @@ public class MainActivity extends NavDrawer {
 		      return true;
 		    } 
 		    return false;
-	    }
+	    }*/
+        return true;
 	  }
 	
 	private String replaceSpaces(String a) {
@@ -307,7 +315,7 @@ public class MainActivity extends NavDrawer {
 	 * Or no result.
 	 */
 	private void checkWordCount() {
-		String pr = wR.getDescription();
+		String pr = this.wR.getDescription();
 		if (pr.equals("MultiHit")) {
 			FragmentManager fM = getSupportFragmentManager();
 			DialogFragment newFragment = new WordChooserDialogFragment();
@@ -330,6 +338,27 @@ public class MainActivity extends NavDrawer {
 		intent.putExtra("word", word);
 		startActivity(intent);
 	}
+
+    private void manageDialogFragmentOutput(String word) {
+        if(islegalInput(word)) {
+            if(word.contains(" ")) {
+                word = replaceSpaces(word);
+            }
+            word = convertToUTF8(word);
+            BinHelper bHelper = new BinHelper(getApplicationContext());
+            this.wR = bHelper.sendThread(word, 0);
+            if(this.wR != null) {
+                checkWordCount();
+            }
+            else {
+                Log.w("app", "wR is null");
+                Toast.makeText(getApplicationContext(), "Villa i manageDialogFragmentOutput", Toast.LENGTH_SHORT).show();
+            }
+        }
+        else {
+            Toast.makeText(getApplicationContext(), "Engin leit fannst", Toast.LENGTH_SHORT).show();
+        }
+    }
 
 	/**
 	 * @author Jón Friðrik
@@ -390,8 +419,9 @@ public class MainActivity extends NavDrawer {
 				 */
 				public void onClick(DialogInterface dialog, int id) {
 					if( selectedItem != null) {
-						int wordId = Integer.parseInt(selectedItem);
-						new ParseThread(wordId).execute();
+
+                        manageDialogFragmentOutput(selectedItem);
+
 					}
 				}
 			});
@@ -407,82 +437,5 @@ public class MainActivity extends NavDrawer {
 		}	
 	}
 
-	/**
-	 * 
-	 * @author Arnar, Jón Friðrik
-	 * @since 23.10.14
-	 * @version 1.0
-	 * 
-	 */
-	private class ParseThread extends AsyncTask<Void, Void, Void> {
-		/**
-		 * parser - the parser which is constructed to retrieve the results
-		 * url - the url which the parser uses. 
-		 */
-		private BinParser parser;
-		private String url;
-        private int id;
 
-		/**
-		 * 
-		 * @param searchWord -the string which is concated into the url
-		 * the searchWord string has been converted to UTF-8
-		 * (Má leita af hvaða orðmynd.)
-		 */
-		public ParseThread(String searchWord) {
-			this.url = searchWord;
-		}
-
-		/**
-		 * @param searchId - the id (int) which will be concated into the url
-		 */
-		public ParseThread(int searchId) {
-			this.url = null;
-            this.id = searchId;
-		}
-
-		@Override
-		protected void onPreExecute() {
-			super.onPreExecute();
-
-            /**
-             * Show a progress dialog while we are getting the data
-             */
-            progressDialog = new ProgressDialog(MainActivity.this);
-            progressDialog.setMessage(getString(R.string.progressdialog));
-            progressDialog.setCancelable(false);
-            progressDialog.show();
-		}
-
-		/**
-		 * the function which is after the thread has been constructed
-		 */
-		@Override
-		protected Void doInBackground(Void... args) {
-
-            if(this.url != null) {
-                this.parser = new BinParser(this.url, 1, new String[]{"h2", "h3", "h4", "th", "tr"});
-            }
-            else {
-                this.parser = new BinParser(this.id, new String[]{"h2", "h3", "h4", "th", "tr"});
-            }
-			return null;
-		}
-		/**
-		 * the function which is called when the diInBackground function is finished
-		 * ParserResults are set in MainActivity.
-		 */
-		@Override
-		protected void onPostExecute(Void args) {
-			setWordResult(parser.getWordResult());
-			checkWordCount();
-
-            /**
-             * Remove the progress dialog
-             */
-            if(progressDialog.isShowing()){
-                progressDialog.dismiss();
-            }
-		}
-	}
 }
