@@ -86,7 +86,9 @@ public class DBController {
         }
         //Generate Content for all tables
         ContentValues wordResultContent = new ContentValues();
+
         wordResultContent.put(DBHelper.TYPE, result.getSearchWord());
+        wordResultContent.put(DBHelper.TYPE, result.getDescription());
         wordResultContent.put(DBHelper.TITLE, result.getTitle());
         wordResultContent.put(DBHelper.NOTE, result.getWarning());
         wordResultContent.put(DBHelper.DATE, new Date().getTime());

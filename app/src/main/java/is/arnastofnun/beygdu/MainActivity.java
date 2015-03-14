@@ -28,6 +28,8 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import is.arnastofnun.SkrambiWebTool.PostRequestHandler;
+import is.arnastofnun.SkrambiWebTool.SkrambiWT;
 import is.arnastofnun.beygdu.R;
 
 import org.jsoup.Jsoup;
@@ -39,6 +41,7 @@ import java.net.URLEncoder;
 import java.sql.SQLData;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.concurrent.ExecutionException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -68,13 +71,13 @@ public class MainActivity extends NavDrawer {
 	 * The result from the parser search.
      * ---Depricated
 	 */
+
 	//public ParserResult pR = new ParserResult();
 
     /**
      * The WordResult Document, containing all data on searched word
      */
     public WordResult wR;
-
 
 	public void setWordResult(WordResult wordResult) {
 		this.wR = wordResult;
@@ -235,21 +238,33 @@ public class MainActivity extends NavDrawer {
 		EditText editText = (EditText) findViewById(R.id.mainSearch);
 		String word = editText.getText().toString();
 		
-		if(word.isEmpty()){
+		if(word.isEmpty())  {
 			Toast.makeText(this, "Vinsamlegasta sláið inn orð í reitinn hér að ofan", Toast.LENGTH_SHORT).show();
-		} else if(word.contains(" ")){
-			if (islegalInput(word)) {
-				word = replaceSpaces(word);
-				word = convertToUTF8(word);
-				new ParseThread(word, 1).execute();
-			} else {
-				Toast.makeText(this, "Einingis hægt að leita að einu orði í einu", Toast.LENGTH_SHORT).show();
-			}
-		} else {
-			//New Thread to get word
-			word = convertToUTF8(word);
-			new ParseThread(word, 1).execute();
 		}
+        else if(islegalInput(word)) {
+            if(word.contains(" ")) {
+                word = replaceSpaces(word);
+            }
+            word = convertToUTF8(word);
+            BinHelper bHelper = new BinHelper(getApplicationContext());
+            try {
+                setWordResult(bHelper.sendThread(word, 1));
+            }
+            catch( Exception e ) {
+                this.wR = null;
+            }
+            if(this.wR != null) {
+                checkWordCount();
+            }
+            else {
+                Toast.makeText(getApplicationContext(), "Villa i btnclicked", Toast.LENGTH_SHORT).show();
+            }
+        }
+        else {
+            Toast.makeText(getApplicationContext(), "Einingis hægt að leita að einu orði í einu", Toast.LENGTH_SHORT).show();
+        }
+
+
 	}
     public void cacheClick(@SuppressWarnings("unused") View view){
         Intent intent = new Intent(MainActivity.this, Cache.class);
@@ -276,7 +291,8 @@ public class MainActivity extends NavDrawer {
 	 * @param a the string
 	 * @return the string without spacecharactes (" ")
 	 */
-	private boolean islegalInput(String a) { 
+	private boolean islegalInput(String a) {
+        /* TODO: FIX THIS
 	    if (a.equals("")) {
 	    	return false;
 	    } else {
@@ -293,6 +309,9 @@ public class MainActivity extends NavDrawer {
 		    } 
 		    return false;
 	    }
+	    */
+        return true;
+        
 	  }
 	
 	private String replaceSpaces(String a) {
@@ -306,15 +325,19 @@ public class MainActivity extends NavDrawer {
 	 * Or no result.
 	 */
 	private void checkWordCount() {
+
 		String pr = wR.getDescription();
+
 		if (pr.equals("MultiHit")) {
 			FragmentManager fM = getSupportFragmentManager();
 			DialogFragment newFragment = new WordChooserDialogFragment();
 			newFragment.show(fM, "wordChooserFragment");
 		} else if (pr.equals("SingleHit")) {
-			createNewActivity(wR);
+			WordResult word = this.wR;
+			createNewActivity(word);
 		} else if (pr.equals("Miss")) {
 			Toast.makeText(this, "Engin leitarniðurstaða", Toast.LENGTH_SHORT).show();
+            //new SkrambiBT(this.wR.getSearchWord()).execute();
 		}
 	}
 
@@ -328,6 +351,27 @@ public class MainActivity extends NavDrawer {
 		intent.putExtra("word", word);
 		startActivity(intent);
 	}
+
+    private void manageDialogFragmentOutput(String word) {
+        if(islegalInput(word)) {
+            if(word.contains(" ")) {
+                word = replaceSpaces(word);
+            }
+            word = convertToUTF8(word);
+            BinHelper bHelper = new BinHelper(getApplicationContext());
+            this.wR = bHelper.sendThread(word, 0);
+            if(this.wR != null) {
+                checkWordCount();
+            }
+            else {
+                Log.w("app", "wR is null");
+                Toast.makeText(getApplicationContext(), "Villa i manageDialogFragmentOutput", Toast.LENGTH_SHORT).show();
+            }
+        }
+        else {
+            Toast.makeText(getApplicationContext(), "Engin leit fannst", Toast.LENGTH_SHORT).show();
+        }
+    }
 
 	/**
 	 * @author Jón Friðrik
@@ -388,8 +432,9 @@ public class MainActivity extends NavDrawer {
 				 */
 				public void onClick(DialogInterface dialog, int id) {
 					if( selectedItem != null) {
-						int wordId = Integer.parseInt(selectedItem);
-						new ParseThread(wordId, 1).execute();
+
+                        manageDialogFragmentOutput(selectedItem);
+
 					}
 				}
 			});
@@ -403,91 +448,5 @@ public class MainActivity extends NavDrawer {
 			});
 			return builder.create();
 		}	
-	}
-
-	/**
-	 * 
-	 * @author Arnar, Jón Friðrik
-	 * @since 23.10.14
-	 * @version 1.0
-	 * 
-	 */
-	private class ParseThread extends AsyncTask<Void, Void, Void> {
-		/**
-		 * parser - the parser which is constructed to retrieve the results
-		 * url - the url which the parser uses. 
-		 */
-		private BinParser parser;
-		private String url;
-        private int urlId = 0;
-
-		/**
-		 * 
-		 * @param searchWord -the string which is concated into the url
-		 * the searchWord string has been converted to UTF-8
-		 * (Má leita af hvaða orðmynd.)
-		 */
-		public ParseThread(String searchWord, int step) {
-			this.url = searchWord;
-		}
-
-		/**
-		 * @param searchId - the id (int) which will be concated into the url
-		 */
-		public ParseThread(int searchId, int step) {
-			this.urlId = searchId;
-		}
-
-		@Override
-		protected void onPreExecute() {
-			super.onPreExecute();
-
-            /**
-             * Show a progress dialog while we are getting the data
-             */
-            progressDialog = new ProgressDialog(MainActivity.this);
-            progressDialog.setMessage(getString(R.string.progressdialog));
-            progressDialog.setCancelable(false);
-            progressDialog.show();
-		}
-
-		/**
-		 * the function which is after the thread has been constructed
-		 */
-		@Override
-		protected Void doInBackground(Void... args) {
-			//Document doc;
-			//try {
-			//	doc = Jsoup.connect(url).get();
-			//	parser = new HTMLParser(doc);
-			//} catch (IOException e) {
-			//	Toast.makeText(MainActivity.this,
-			//			"Tenging rofnaði, vinsamlega reynið aftur.", Toast.LENGTH_LONG).show();
-			//}
-            if( this.urlId == 0 ) {
-                this.parser = new BinParser(this.url, 1, new String[]{"h2", "h3", "h4", "th", "tr"});
-            }
-            else {
-                this.parser = new BinParser(this.urlId, 1, new String[]{"h2", "h3", "h4", "th", "tr"});
-            }
-
-			return null;
-		}
-		/**
-		 * the function which is called when the diInBackground function is finished
-		 * ParserResults are set in MainActivity.
-		 */
-		@Override
-		protected void onPostExecute(Void args) {
-			setWordResult(parser.getWordResult());
-			checkWordCount();
-
-            /**
-             * Remove the progress dialog
-             */
-            if(progressDialog.isShowing()){
-                progressDialog.dismiss();
-            }
-		}
 	}
 }
