@@ -70,6 +70,8 @@ public class WordResult implements Serializable {
 
     public String getTitle() {
         return this.title;
+    }
+
 
     public void setMultiHitIds(int[] multiHitIds) {
         this.multiHitIds = multiHitIds;
