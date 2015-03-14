@@ -18,7 +18,7 @@ import is.arnastofnun.DB.DBController;
 import is.arnastofnun.parser.WordResult;
 
 
-public class Cache extends FragmentActivity {
+public class Cache extends NavDrawer {
 
     private DBController controller;
     private ListView listView;
@@ -27,7 +27,22 @@ public class Cache extends FragmentActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_cache);
+
+        /**
+         * Not setting the content view here since we are
+         * inflating it in the NavDrawer (see below)
+         */
+//        setContentView(R.layout.activity_cache);
+
+        /**
+         * Inflate the layout into the NavDrawer layout
+         * where `frameLayout` is a FrameLayout in the layout for the
+         * NavDrawer (see file nav_base_layout)
+         */
+        getLayoutInflater().inflate(R.layout.activity_cache,frameLayout);
+        mDrawerList.setItemChecked(position,true);
+        setTitle(navArray[position]);
+
 
         listView = (ListView) findViewById(R.id.list_view);
         listView.setEmptyView(findViewById(R.id.empty));
@@ -57,7 +72,7 @@ public class Cache extends FragmentActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_cache, menu);
+//        getMenuInflater().inflate(R.menu.menu_cache, menu);
         return true;
     }
 
