@@ -292,7 +292,7 @@ public class MainActivity extends NavDrawer {
 	 * @return the string without spacecharactes (" ")
 	 */
 	private boolean islegalInput(String a) {
-
+        /* TODO: FIX THIS
 	    if (a.equals("")) {
 	    	return false;
 	    } else {
@@ -309,6 +309,8 @@ public class MainActivity extends NavDrawer {
 		    } 
 		    return false;
 	    }
+	    */
+        return true;
         
 	  }
 	
