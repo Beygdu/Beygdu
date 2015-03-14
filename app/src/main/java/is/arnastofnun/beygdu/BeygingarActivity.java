@@ -33,7 +33,7 @@ import is.arnastofnun.parser.WordResult;
 import is.arnastofnun.utils.TableFragment;
 
 /**
- * @author Jón Friðrik Jónatansson
+ * @author Jón Friðrik Jónatansson, Daniel Pall
  * @since 25.10.14
  * @version 1.0
  *
@@ -106,7 +106,7 @@ public class BeygingarActivity extends NavDrawer {
 		Intent intent = getIntent();
 		words = (WordResult) intent.getSerializableExtra("word");
 		tableLayout = (TableLayout) findViewById(R.id.data_table);
-		
+
 		//fill mSelectedItems with all possible blocks
 		for (int i = 0; i < words.getBlocks().size(); i++) {
 			mSelectedItems.add(i);
@@ -120,7 +120,65 @@ public class BeygingarActivity extends NavDrawer {
 
         // Set the title in the actionbar
         setTitle(firstWordInString(words.getTitle()));
+
+        // If it is possible to filter the word result, add a Navigation
+        // Drawer Item at the second last position in the list
+        navDrawerFilterableListItem();
 }
+
+    /**
+     * If the word is filterable, set the option to filter in the navigation drawer
+     */
+    public void navDrawerFilterableListItem(){
+        if(checkWordFilterable()){
+            navArray.add(navArray.size()-1,getString(R.string.nav_drawer_sia));
+        }
+    }
+
+    /**
+     * Checks if it is possible to filter the world result and returns true
+     * if it is possible, false if it is not possible
+     */
+    public boolean checkWordFilterable(){
+        if (words.getBlocks().size() > 1) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * Override the behavior of the navigation drawer because we want to have
+     * added functionality just for this Activity, the Sía functionality
+     */
+    @Override
+    protected void openActivity(int position) {
+        if(checkWordFilterable()){
+            mDrawerLayout.closeDrawer(mDrawerList);
+            // Set the position so we can access it from child activities
+            NavDrawer.position = position;
+
+            switch (position) {
+                case 0:
+                    startActivity(new Intent(this, MainActivity.class));
+                    overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
+                    break;
+                case 1:
+                    startActivity(new Intent(this, Cache.class));
+                    overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
+                    break;
+                case 2:
+                    filterAction();
+                    break;
+                case 3:
+                    startActivity(new Intent(this, AboutActivity.class));
+                    overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
+                    break;
+            }
+        } else {
+            super.openActivity(position);
+        }
+    }
 
     /**
      * Accepts a String of word(s) and returns the first word in that string.
@@ -186,8 +244,7 @@ public class BeygingarActivity extends NavDrawer {
 
 			note.setText(words.getWarning());
             note.setTypeface(LatoLight);
-			note.setText(words.getWarning());
-            
+
 			note.setBackgroundResource(R.drawable.noteborder);
 			tableLayout.addView(note);
 		}

@@ -50,6 +50,7 @@
     <string name="open_drawer">Skúffa opin</string>
     <string name="close_drawer">Skúffa lokuð</string>
     <string name="cache_button_text">Fyrri leitir</string>
+    <string name="nav_drawer_sia">Sía</string>
 
 
     <!-- Items in Navigation Drawer -->
