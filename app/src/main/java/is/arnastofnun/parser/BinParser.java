@@ -5,9 +5,11 @@ import org.jsoup.nodes.Element;
 import java.util.ArrayList;
 
 /**
+<<<<<<< HEAD
  * Created by arnarjons on 8.3.2015.
  */
 public class BinParser {
+
     String url = "";
     String searchWord;
 
@@ -47,7 +49,8 @@ public class BinParser {
 
     }
 
-    public BinParser(int id, int step, String[] elements) {
+
+    public BinParser(int id, String[] elements) {
 
         constructSearchStringById(id);
 
@@ -112,5 +115,4 @@ public class BinParser {
 
         this.wR.constructWordResult(this.parser, elements);
     }
-    
 }

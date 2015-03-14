@@ -55,11 +55,14 @@ public class WordResult implements Serializable {
         return this.searchWord;
     }
 
-
+    public void setMultiHitDescriptions(String[] multiHitDescriptions) {
+        this.multiHitDescriptions = multiHitDescriptions;
+    }
 
     public String[] getMultiHitDescriptions() {
         return this.multiHitDescriptions;
     }
+
 
     public int[] getMultiHitIds() {
         return this.multiHitIds;
@@ -67,11 +70,15 @@ public class WordResult implements Serializable {
 
     public String getTitle() {
         return this.title;
+
+    public void setMultiHitIds(int[] multiHitIds) {
+        this.multiHitIds = multiHitIds;
     }
 
     public void setTitle(String title) {
         this.title = title;
     }
+
 
     public String getWarning() {
         return this.warning;
@@ -87,6 +94,7 @@ public class WordResult implements Serializable {
 
     public void setBlocks(ArrayList<Block> blocks) {
         this.result = blocks;
+
     }
 
 
@@ -391,7 +399,8 @@ public class WordResult implements Serializable {
         if( this.title.contains("Sagnorð") ) {
             if( blockTitle.contains("Persónuleg notkun - Germynd") || blockTitle.contains("Persónuleg notkun - Miðmynd")  ) {
                 if( subBlockTitle.contains("Nafnháttur") ) {
-                    return new String[] { "" };
+                    return new String[] { "", "" };
+
                 }
                 else {
                     return new String[] { "", "Eintala", "Fleirtala" };
@@ -401,7 +410,9 @@ public class WordResult implements Serializable {
                 return new String[] { "", "Germynd", "Miðmynd" };
             }
             if( blockTitle.contains("Lýsingarháttur nútíðar") ) {
-                return new String[] { "" };
+
+                return new String[] { "", "" };
+
             }
             if( blockTitle.contains("Sagnbót")) {
                 return new String[] { "", "Germynd", "Miðmynd" };
@@ -424,7 +435,9 @@ public class WordResult implements Serializable {
             return new String[] { "", "Karlkyn", "Kvenkyn", "Hvorugkyn" };
         }
 
-        return new String[] {  "" };
+
+        return new String[] { "", "" };
+
     }
 
     private String[] getTableRows(String blockTitle, String subBlockTitle, String tableTitle) {
@@ -447,6 +460,7 @@ public class WordResult implements Serializable {
                 return new String[] { "", "Stýfður", "Eintala", "Fleirtala" };
             }
             if( blockTitle.contains("Lýsingarháttur nútíðar") ) {
+
                 return new String[] { "", "" };
             }
             if( blockTitle.contains("Sagnbót")) {
@@ -533,8 +547,8 @@ public class WordResult implements Serializable {
             }
         }
 
-        Tables firstTable = new Tables("Eintala", new String[] { "", "Karlkyn", "Kvenkyn", "Hvorugkyn" }, new String[] { "Nf.", "Þf.", "Þgf.", "Ef." }, firstTableContent);
-        Tables secondTable = new Tables("Fleirtala", new String[] { "", "Karlkyn", "Kvenkyn", "Hvorugkyn" }, new String[] { "Nf.", "Þf.", "Þgf.", "Ef." }, secondTableContent);
+        Tables firstTable = new Tables("Eintala", new String[] { "", "Karlkyn", "Kvenkyn", "Hvorugkyn" }, new String[] { "", "Nf.", "Þf.", "Þgf.", "Ef." }, firstTableContent);
+        Tables secondTable = new Tables("Fleirtala", new String[] { "", "Karlkyn", "Kvenkyn", "Hvorugkyn" }, new String[] { "", "Nf.", "Þf.", "Þgf.", "Ef." }, secondTableContent);
 
         ArrayList<Tables> tables = new ArrayList<Tables>();
         tables.add(firstTable);
