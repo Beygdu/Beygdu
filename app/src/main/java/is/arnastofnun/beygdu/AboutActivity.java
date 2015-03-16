@@ -40,6 +40,9 @@ public class AboutActivity extends NavDrawer {
         getLayoutInflater().inflate(R.layout.activity_about, frameLayout);
 
 
+
+
+
 		if (savedInstanceState == null) {
 			getFragmentManager().beginTransaction()
 					.add(R.id.container, new PlaceholderFragment()).commit();
@@ -84,6 +87,9 @@ public class AboutActivity extends NavDrawer {
 					"Engin póst miðill uppsettur.", Toast.LENGTH_SHORT).show();
 		}
 	}
+
+
+
 
 	/**
 	 * A placeholder fragment containing a simple view.

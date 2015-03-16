@@ -88,7 +88,7 @@ public class BeygingarActivity extends NavDrawer {
          */
         mDrawerList.setItemChecked(position,true);
 
-        getActionBar().setDisplayHomeAsUpEnabled(true);
+//        getActionBar().setDisplayHomeAsUpEnabled(true);
 
         // Get screen sizes
         Display display = getWindowManager().getDefaultDisplay();

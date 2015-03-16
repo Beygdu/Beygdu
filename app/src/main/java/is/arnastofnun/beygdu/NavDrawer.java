@@ -101,6 +101,7 @@ public class NavDrawer extends FragmentActivity{
         getActionBar().setDisplayHomeAsUpEnabled(true);
         getActionBar().setHomeButtonEnabled(true);
 
+
         /**
          * ActionbarDrawerToggle ties together the proper interactions
          * between the nav drawer and the action bar
