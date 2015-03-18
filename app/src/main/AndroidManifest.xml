@@ -51,10 +51,7 @@
             android:label="@string/title_activity_beygingar"
             android:parentActivityName=".MainActivity"
             android:screenOrientation="portrait" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="is.arnastofnun.beygdu.MainActivity"
-                />
+
         </activity>
 
         <activity

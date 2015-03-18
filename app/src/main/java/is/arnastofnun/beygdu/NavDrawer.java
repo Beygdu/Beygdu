@@ -195,9 +195,6 @@ public class NavDrawer extends FragmentActivity{
         // ActionBarDrawerToggle will take care of this
         if(actionBarDrawerToggle.onOptionsItemSelected(item)){
 
-            // called when the up carat in actionbar is pressed
-            this.onBackPressed();
-
             return true;
         }
 
