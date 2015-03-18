@@ -99,7 +99,7 @@ public class NavDrawer extends FragmentActivity{
 
         // enable ActionBar app icon to behave as action to toggle nav drawer
         getActionBar().setDisplayHomeAsUpEnabled(true);
-        getActionBar().setHomeButtonEnabled(true);
+//        getActionBar().setHomeButtonEnabled(true);
 
 
         /**
@@ -194,6 +194,10 @@ public class NavDrawer extends FragmentActivity{
         // The action bar home/up action should open or close the drawer
         // ActionBarDrawerToggle will take care of this
         if(actionBarDrawerToggle.onOptionsItemSelected(item)){
+
+            // called when the up carat in actionbar is pressed
+            this.onBackPressed();
+
             return true;
         }
 

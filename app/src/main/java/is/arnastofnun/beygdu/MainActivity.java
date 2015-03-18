@@ -116,6 +116,8 @@ public class MainActivity extends NavDrawer {
         mDrawerList.setItemChecked(position,true);
         //setTitle(listArray[position]);
 
+        getActionBar().setDisplayHomeAsUpEnabled(false);
+
 		checkNetworkState();
         headerText();
 	}
