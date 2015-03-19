@@ -75,10 +75,17 @@
 
         <activity
             android:name=".Cache"
-            android:label="@string/title_activity_cache"
             android:configChanges="orientation"
+            android:label="@string/title_activity_cache"
             android:parentActivityName=".MainActivity"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".StatisticsActivity"
+            android:configChanges="orientation"
+            android:label="@string/title_activity_statistics"
+            android:parentActivityName=".MainActivity"
+            android:screenOrientation="portrait" >
         </activity>
 
     </application>

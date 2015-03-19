@@ -117,6 +117,7 @@ public class BeygingarActivity extends NavDrawer {
         //Save to DB -- if it does not exist before
         DBController dbController = new DBController(this);
         dbController.insert(words);
+        dbController.insertStats(words.getTitle());
 
         // Set the title in the actionbar
         setTitle(firstWordInString(words.getTitle()));
