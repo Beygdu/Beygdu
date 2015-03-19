@@ -11,45 +11,22 @@ import android.graphics.Typeface;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import is.arnastofnun.SkrambiWebTool.PostRequestHandler;
-import is.arnastofnun.SkrambiWebTool.SkrambiWT;
-import is.arnastofnun.beygdu.R;
-
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-import java.sql.SQLData;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.concurrent.ExecutionException;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
-import is.arnastofnun.parser.BinParser;
-import is.arnastofnun.parser.HTMLParser;
-import is.arnastofnun.parser.ParserResult;
 import is.arnastofnun.parser.WordResult;
-import is.arnastofnun.utils.MultiChoiseDialog;
+
 
 /**
  * @author Jón Friðrik, Arnar, Snær, Máni
@@ -341,7 +318,7 @@ public class MainActivity extends NavDrawer {
 		String pr = wR.getDescription();
 
 		if (pr.equals("MultiHit")) {
-			//FragmentManager fM = getSupportFragmentManager();
+/*			//FragmentManager fM = getSupportFragmentManager();
 			//DialogFragment newFragment = new WordChooserDialogFragment();
 			//newFragment.show(fM, "wordChooserFragment");
             Bundle dialogBundle = new Bundle();
@@ -354,7 +331,7 @@ public class MainActivity extends NavDrawer {
                 public void finish(int flag, String str) {
                     manageDialogFragmentOutput(str);
                 }
-            });
+            });*/
 		} else if (pr.equals("SingleHit")) {
 			WordResult word = this.wR;
 			createNewActivity(word);
