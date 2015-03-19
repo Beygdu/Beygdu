@@ -1,19 +1,32 @@
 package is.arnastofnun.utils;
 
+import android.animation.ArgbEvaluator;
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.app.Fragment;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.Typeface;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.util.Property;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
-import is.arnastofnun.beygdu.R;
+import org.hamcrest.CoreMatchers;
 
+import is.arnastofnun.beygdu.R;
 import is.arnastofnun.parser.Block;
 import is.arnastofnun.parser.SubBlock;
 import is.arnastofnun.parser.Tables;
@@ -39,6 +52,17 @@ public class TableFragment extends Fragment {
     private Block block;
     private TextView title;
 
+    private long initTime = -1;
+
+    //Fonts
+    private Typeface LatoBold;
+    private Typeface LatoSemiBold;
+    private Typeface LatoLight;
+
+    //Colors
+    //private int textColor;
+
+
     //Fragments have to have one empty constructor
     public TableFragment() {
 
@@ -55,6 +79,15 @@ public class TableFragment extends Fragment {
         this.tableLayout = tableLayout;
         this.block = block;
         this.title = title;
+
+        // Fonts
+        LatoBold = Typeface.createFromAsset(context.getAssets(), "fonts/Lato-Bold.ttf");
+        LatoSemiBold = Typeface.createFromAsset(context.getAssets(), "fonts/Lato-Semibold.ttf");
+        LatoLight = Typeface.createFromAsset(context.getAssets(), "fonts/Lato-Light.ttf");
+
+        //Colors
+        //textColor = getResources().getColor(R.color.font_default);
+
     }
 
     /**
@@ -71,6 +104,8 @@ public class TableFragment extends Fragment {
                 container, false);
         createBlock();
         return rootView;
+        //Set typeface for fonts
+
     }
 
     /**
@@ -85,19 +120,26 @@ public class TableFragment extends Fragment {
             if(!sBlock.getTitle().equals("")) {
                 TextView subBlockTitle = new TextView(context);
                 subBlockTitle.setText(sBlock.getTitle());
-                subBlockTitle.setTextSize(25);
-                subBlockTitle.setHeight(50);
+                subBlockTitle.setTextSize(22);
+                subBlockTitle.setMinHeight(70);
+                subBlockTitle.setTypeface(LatoLight);
+                subBlockTitle.setBackgroundResource(R.drawable.bottom_border);
+                subBlockTitle.setTextColor(getResources().getColor(R.color.font_default));
+                subBlockTitle.setPadding(0,50,0,50);
                 tableLayout.addView(subBlockTitle);
             }
             //Create the tables and set title
             for (Tables tables : sBlock.getTables()) {
-//					if(!tables.getTitle().equals("")) {
-                TextView tableTitle = new TextView(context);
-                tableTitle.setText(tables.getTitle());
-                tableTitle.setTextSize(20);
-                tableTitle.setHeight(50);
-                tableLayout.addView(tableTitle);
-                createTable(tables);
+                //if(!tables.getTitle().equals("")) {
+                    TextView tableTitle = new TextView(context);
+                    tableTitle.setText(tables.getTitle());
+                    tableTitle.setTextSize(20);
+                    tableTitle.setMinHeight(80);
+                    tableTitle.setTypeface(LatoLight);
+                    tableTitle.setPadding(10, 20, 0, 20);
+                    tableLayout.addView(tableTitle);
+                    createTable(tables);
+                //}
             }
         }
     }
@@ -111,23 +153,82 @@ public class TableFragment extends Fragment {
         final int colNum = table.getColumnNames().length;
 
         TableRow.LayoutParams tableRowParams = new TableRow.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
-        tableRowParams.setMargins(1, 1, 1, 1);
         tableRowParams.weight = colNum;
-//			tableRowParams.height = 100;
+        tableRowParams.setMargins(1, 1, 1, 1);
 
         int contentIndex = 0;
         for (int row = 0; row < rowNum; row++) {
             TableRow tr = new TableRow(context);
             tr.setLayoutParams(tableRowParams);
+            tr.setMinimumHeight(80);
+            if (row % 2 == 0) {
+                tr.setBackgroundResource(R.drawable.top_border_blue);
+            }
+            else if (row == (rowNum - 1)){
+                if(row % 2 == 0) {
+                    tr.setBackgroundResource(R.drawable.bottom_top_border_blue);
+                }
+                else {
+                    tr.setBackgroundResource(R.drawable.bottom_top_border_white);
+                }
+            }
+            else if(row % 1 == 0) {
+                tr.setBackgroundResource(R.drawable.top_border_white);
+            }
+            if(rowNum < 2) {
+                tr.setBackgroundResource(R.drawable.bottom_top_border_blue);
+            }
 
-            tr.setBackgroundColor(getResources().getColor(R.color.grey));
             for (int col = 0; col < colNum; col++) {
-                TextView cell = new TextView(context);
+                final TextView cell = new TextView(context);
+                if(!(row == 0 || col == 0)) {
+                    cell.setClickable(true);
+                    cell.setOnLongClickListener(new View.OnLongClickListener() {
+                        @Override
+                        public boolean onLongClick(View v) {
+                            cell.setBackgroundColor(Color.GREEN);
+
+                            final Property<TextView, Integer> property = new Property<TextView, Integer>(int.class, "BackgroundColor") {
+                                @Override
+                                public Integer get(TextView object) {
+                                    ColorDrawable cd = (ColorDrawable) object.getBackground();
+                                    int colorCode = cd.getColor();
+                                    return colorCode;
+                                }
+
+                                @Override
+                                public void set(TextView object, Integer value) {
+                                    object.setBackgroundColor(value);
+                                }
+                            };
+
+                            final ObjectAnimator animator = ObjectAnimator.ofInt(cell, property, Color.RED);
+                            animator.setDuration(500L);
+                            animator.setEvaluator(new ArgbEvaluator());
+                            animator.setInterpolator(new DecelerateInterpolator(2));
+                            animator.start();
+                            ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
+                            ClipData clip = ClipData.newPlainText(cell.getText(), cell.getText());
+                            clipboard.setPrimaryClip(clip);
+                            animator.setRepeatCount(1);
+                            animator.setRepeatMode(ValueAnimator.REVERSE);
+                            return false;
+                        }
+                    });
+                }
                 cell.setTextAppearance(context, R.style.BodyText);
                 cell.setLayoutParams(new TableRow.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, 1f));
+                cell.setMinHeight(80);
                 cell.setGravity(Gravity.CENTER);
-                cell.setTextColor(getResources().getColor(R.color.navy));
-                cell.setBackgroundResource(R.drawable.border);
+                cell.setTypeface(LatoLight);
+                if (row % 2 == 0) {
+                    cell.setTextColor(getResources().getColor(R.color.white));
+                }
+                else {
+                    cell.setTextColor(getResources().getColor(R.color.font_default));
+                }
+
+
                 if (row == 0) {
                     if (table.getContent().size() == 1) {
                         cell.setText(table.getContent().get(row));

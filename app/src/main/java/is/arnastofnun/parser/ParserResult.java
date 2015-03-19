@@ -153,9 +153,10 @@ public void setResults(ArrayList<ArrayList<String>> a) {
  * Block - SubBlock - Tables architecture
  */
 public WordResult getWordResult() {
-  
-  return new WordResult(this.type, this.title, this.note, this.results);
-  
+
+  //return new WordResult(this.type, this.title, this.note, this.results);
+    return null;
+
   }
 
  

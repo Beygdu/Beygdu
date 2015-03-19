@@ -2,9 +2,12 @@ package is.arnastofnun.beygdu;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Resources;
+import android.graphics.Typeface;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -13,14 +16,20 @@ import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TableRow;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import is.arnastofnun.SkrambiWebTool.PostRequestHandler;
+import is.arnastofnun.SkrambiWebTool.SkrambiWT;
 import is.arnastofnun.beygdu.R;
 
 import org.jsoup.Jsoup;
@@ -32,9 +41,11 @@ import java.net.URLEncoder;
 import java.sql.SQLData;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.concurrent.ExecutionException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import is.arnastofnun.parser.BinParser;
 import is.arnastofnun.parser.HTMLParser;
 import is.arnastofnun.parser.ParserResult;
 import is.arnastofnun.parser.WordResult;
@@ -45,32 +56,108 @@ import is.arnastofnun.parser.WordResult;
  * @version 1.0
  * 
  * The initial activity of the program. Has a Text input og a button for initializing the search.
- * Also has an actionbar where the user can open other activies such as AboutActivity
+ * Also has an actionbar where the user can open other activities such as AboutActivity
  * and send an email to the creator of the database
  * 
  */
-public class MainActivity extends FragmentActivity {
+public class MainActivity extends NavDrawer {
+
+    /**
+     * Progress dialog to be used in Async Task
+     */
+    ProgressDialog progressDialog;
 
 	/**
 	 * The result from the parser search.
+     * ---Depricated
 	 */
-	public ParserResult pR = new ParserResult();
 
-	/**
-	 * @param pR the parser results.
-	 */
-	public void setParserResult(ParserResult pR) {
-		this.pR = pR;
+	//public ParserResult pR = new ParserResult();
+
+    /**
+     * The WordResult Document, containing all data on searched word
+     */
+    public WordResult wR;
+
+	public void setWordResult(WordResult wordResult) {
+		this.wR = wordResult;
 	}
+
+
+    //Fonts
+    private Typeface LatoBold;
+    private Typeface LatoSemiBold;
+    private Typeface LatoLight;
+
+    //Screen width
+    private float width;
+    private float height;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_main);
-		
+
+        /**
+         * Not setting the content view here since we are
+         * inflating it in the NavDrawer (see below)
+         */
+        // setContentView(R.layout.activity_main);
+
+		/**
+        * Inflate the layout into the NavDrawer layout
+        * where `frameLayout` is a FrameLayout in the layout for the
+        * NavDrawer (see file nav_base_layout)
+        */
+        getLayoutInflater().inflate(R.layout.activity_main, frameLayout);
+
+        /**
+         * Setting the title and what item is checked
+         */
+        mDrawerList.setItemChecked(position,true);
+        //setTitle(listArray[position]);
+
 		checkNetworkState();
+        headerText();
 	}
-	
+
+
+    /**
+     * This method changes text size depending on screen sizes
+     * Snær Seljan
+     */
+    public void headerText() {
+        //Set typeface for fonts
+        LatoBold = Typeface.createFromAsset(getAssets(), "fonts/Lato-Bold.ttf");
+        LatoSemiBold = Typeface.createFromAsset(getAssets(), "fonts/Lato-Semibold.ttf");
+        LatoLight = Typeface.createFromAsset(getAssets(), "fonts/Lato-Light.ttf");
+
+        TextView header = (TextView)findViewById(R.id.title);
+        header.setTypeface(LatoLight);
+        if (320 > width && width < 384) {
+            header.setTextSize(30);
+        }
+        else if(384 > width && width < 600) {
+            header.setTextSize(36);
+        }
+        else if(width > 600){
+            header.setTextSize(40);
+        }
+    }
+
+    /**
+     * This method converts device specific pixels to density independent pixels.
+     * @param px A value in px (pixels) unit. Which we need to convert into db
+     * @return A float value to represent dp equivalent to px value
+     * Snær Seljan
+     */
+    public float convertPixelsToDp(float px){
+        Resources resources = this.getResources();
+        DisplayMetrics metrics = resources.getDisplayMetrics();
+        float dp = px / (metrics.densityDpi / 160f);
+        return dp;
+    }
+
+
 	/**
 	 * Checks if the user is connected to a network.
 	 * TODO - Should be implemented so that it shows a dialog if 
@@ -89,8 +176,8 @@ public class MainActivity extends FragmentActivity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu items for use in the action bar
-		MenuInflater inflater = getMenuInflater();
-		inflater.inflate(R.menu.main, menu);
+//		MenuInflater inflater = getMenuInflater();
+//		inflater.inflate(R.menu.main, menu);
 		return super.onCreateOptionsMenu(menu);
 	}
 
@@ -100,7 +187,9 @@ public class MainActivity extends FragmentActivity {
 	 */
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
+        /**
+         *
+        switch (item.getItemId()) {
 		case R.id.action_about:
 			Intent intent1 = new Intent(this, AboutActivity.class);
 			startActivity(intent1);
@@ -108,7 +197,8 @@ public class MainActivity extends FragmentActivity {
 		case R.id.action_mail:
 			sendEmail();
 			break;
-		} 
+		}
+         */
 		return super.onOptionsItemSelected(item);
 	}
 	
@@ -148,21 +238,33 @@ public class MainActivity extends FragmentActivity {
 		EditText editText = (EditText) findViewById(R.id.mainSearch);
 		String word = editText.getText().toString();
 		
-		if(word.isEmpty()){
+		if(word.isEmpty())  {
 			Toast.makeText(this, "Vinsamlegasta sláið inn orð í reitinn hér að ofan", Toast.LENGTH_SHORT).show();
-		} else if(word.contains(" ")){
-			if (islegalInput(word)) {
-				word = replaceSpaces(word);
-				word = convertToUTF8(word);
-				new ParseThread(word).execute();
-			} else {
-				Toast.makeText(this, "Einingis hægt að leita að einu orði í einu", Toast.LENGTH_SHORT).show();
-			}
-		} else {
-			//New Thread to get word
-			word = convertToUTF8(word);
-			new ParseThread(word).execute();
 		}
+        else if(islegalInput(word)) {
+            if(word.contains(" ")) {
+                word = replaceSpaces(word);
+            }
+            word = convertToUTF8(word);
+            BinHelper bHelper = new BinHelper(getApplicationContext());
+            try {
+                setWordResult(bHelper.sendThread(word, 1));
+            }
+            catch( Exception e ) {
+                this.wR = null;
+            }
+            if(this.wR != null) {
+                checkWordCount();
+            }
+            else {
+                Toast.makeText(getApplicationContext(), "Villa i btnclicked", Toast.LENGTH_SHORT).show();
+            }
+        }
+        else {
+            Toast.makeText(getApplicationContext(), "Einingis hægt að leita að einu orði í einu", Toast.LENGTH_SHORT).show();
+        }
+
+
 	}
     public void cacheClick(@SuppressWarnings("unused") View view){
         Intent intent = new Intent(MainActivity.this, Cache.class);
@@ -196,7 +298,8 @@ public class MainActivity extends FragmentActivity {
 	 * @param a the string
 	 * @return the string without spacecharactes (" ")
 	 */
-	private boolean islegalInput(String a) { 
+	private boolean islegalInput(String a) {
+        /* TODO: FIX THIS
 	    if (a.equals("")) {
 	    	return false;
 	    } else {
@@ -213,6 +316,9 @@ public class MainActivity extends FragmentActivity {
 		    } 
 		    return false;
 	    }
+	    */
+        return true;
+        
 	  }
 	
 	private String replaceSpaces(String a) {
@@ -226,16 +332,19 @@ public class MainActivity extends FragmentActivity {
 	 * Or no result.
 	 */
 	private void checkWordCount() {
-		String pr = pR.getType();
-		if (pr.equals("Multiple results")) {
+
+		String pr = wR.getDescription();
+
+		if (pr.equals("MultiHit")) {
 			FragmentManager fM = getSupportFragmentManager();
 			DialogFragment newFragment = new WordChooserDialogFragment();
 			newFragment.show(fM, "wordChooserFragment");
-		} else if (pr.equals("Single result")) {
-			WordResult word = pR.getWordResult();
+		} else if (pr.equals("SingleHit")) {
+			WordResult word = this.wR;
 			createNewActivity(word);
-		} else if (pr.equals("Word not found")) {
+		} else if (pr.equals("Miss")) {
 			Toast.makeText(this, "Engin leitarniðurstaða", Toast.LENGTH_SHORT).show();
+            //new SkrambiBT(this.wR.getSearchWord()).execute();
 		}
 	}
 
@@ -249,6 +358,27 @@ public class MainActivity extends FragmentActivity {
 		intent.putExtra("word", word);
 		startActivity(intent);
 	}
+
+    private void manageDialogFragmentOutput(String word) {
+        if(islegalInput(word)) {
+            if(word.contains(" ")) {
+                word = replaceSpaces(word);
+            }
+            word = convertToUTF8(word);
+            BinHelper bHelper = new BinHelper(getApplicationContext());
+            this.wR = bHelper.sendThread(word, 0);
+            if(this.wR != null) {
+                checkWordCount();
+            }
+            else {
+                Log.w("app", "wR is null");
+                Toast.makeText(getApplicationContext(), "Villa i manageDialogFragmentOutput", Toast.LENGTH_SHORT).show();
+            }
+        }
+        else {
+            Toast.makeText(getApplicationContext(), "Engin leit fannst", Toast.LENGTH_SHORT).show();
+        }
+    }
 
 	/**
 	 * @author Jón Friðrik
@@ -280,9 +410,9 @@ public class MainActivity extends FragmentActivity {
 		 * cast the ArrayList to a CharSequence.
 		 */
 		private void toCharArr() {
-			charArr = new CharSequence[pR.getDesc().length];
-			for (int i = 0; i < pR.getDesc().length; i++){
-				charArr[i] = pR.getDesc()[i];
+			charArr = new CharSequence[wR.getMultiHitDescriptions().length];
+			for (int i = 0; i < wR.getMultiHitDescriptions().length; i++){
+				charArr[i] = wR.getMultiHitDescriptions()[i];
 			}
 		}
 
@@ -298,7 +428,7 @@ public class MainActivity extends FragmentActivity {
 				 */
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
-					selectedItem = pR.getIds()[which]+"";
+					selectedItem = wR.getMultiHitIds()[which]+"";
 				}
 			});
 
@@ -309,8 +439,9 @@ public class MainActivity extends FragmentActivity {
 				 */
 				public void onClick(DialogInterface dialog, int id) {
 					if( selectedItem != null) {
-						int wordId = Integer.parseInt(selectedItem);
-						new ParseThread(wordId).execute();
+
+                        manageDialogFragmentOutput(selectedItem);
+
 					}
 				}
 			});
@@ -324,70 +455,5 @@ public class MainActivity extends FragmentActivity {
 			});
 			return builder.create();
 		}	
-	}
-
-	/**
-	 * 
-	 * @author Arnar, Jón Friðrik
-	 * @since 23.10.14
-	 * @version 1.0
-	 * 
-	 */
-	private class ParseThread extends AsyncTask<Void, Void, Void> {
-		/**
-		 * parser - the parser which is constructed to retrieve the results
-		 * url - the url which the parser uses. 
-		 */
-		private HTMLParser parser;
-		private String url;
-
-		/**
-		 * 
-		 * @param searchWord -the string which is concated into the url
-		 * the searchWord string has been converted to UTF-8
-		 * (Má leita af hvaða orðmynd.)
-		 */
-		public ParseThread(String searchWord) {
-			String baseURL = "http://dev.phpbin.ja.is/ajax_leit.php/?q=";
-			url = baseURL + searchWord + "&ordmyndir=on";
-		}
-
-		/**
-		 * @param searchId - the id (int) which will be concated into the url
-		 */
-		public ParseThread(int searchId) {
-			String baseURL = "http://dev.phpbin.ja.is/ajax_leit.php/?id=";
-			url = baseURL + searchId + "&ordmyndir=on";
-		}
-
-		@Override
-		protected void onPreExecute() {
-			super.onPreExecute();
-		}
-
-		/**
-		 * the function which is after the thread has been constructed
-		 */
-		@Override
-		protected Void doInBackground(Void... args) {
-			Document doc;
-			try {
-				doc = Jsoup.connect(url).get();
-				parser = new HTMLParser(doc);
-			} catch (IOException e) {
-				Toast.makeText(MainActivity.this,
-						"Tenging rofnaði, vinsamlega reynið aftur.", Toast.LENGTH_LONG).show();
-			}
-			return null;
-		}
-		/**
-		 * the function which is called when the diInBackground function is finished
-		 * ParserResults are set in MainActivity.
-		 */
-		@Override
-		protected void onPostExecute(Void args) {
-			setParserResult(parser.getParserResult());
-			checkWordCount();
-		}
 	}
 }

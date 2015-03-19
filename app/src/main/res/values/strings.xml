@@ -41,6 +41,7 @@
     <string name="choosedialog">Smelltu á það orð sem þú vilt sjá: </string>
     <string name="afram">Áfram</string>
     <string name="cancel">Hætta við</string>
+    <string name="progressdialog">Sæki gögn...</string>
 
     <!-- Cache -->
     <string name="title_activity_cache">cache</string>
@@ -52,5 +53,18 @@
     <!-- Auto-Generated -->
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+
+    <!-- Navigation Drawer-->
+    <string name="open_drawer">Skúffa opin</string>
+    <string name="close_drawer">Skúffa lokuð</string>
+    <string name="cache_button_text">Fyrri leitir</string>
+
+
+    <!-- Items in Navigation Drawer -->
+        <string-array name="navdrawer_items">
+            <item>Beygðu</item>
+            <item>Fyrri leitir</item>
+            <item>Um Beygðu</item>
+        </string-array>
 
 </resources>
