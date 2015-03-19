@@ -49,7 +49,6 @@ import is.arnastofnun.parser.BinParser;
 import is.arnastofnun.parser.HTMLParser;
 import is.arnastofnun.parser.ParserResult;
 import is.arnastofnun.parser.WordResult;
-import is.arnastofnun.utils.MultiChoiseDialog;
 
 /**
  * @author Jón Friðrik, Arnar, Snær, Máni
@@ -341,20 +340,7 @@ public class MainActivity extends NavDrawer {
 		String pr = wR.getDescription();
 
 		if (pr.equals("MultiHit")) {
-			//FragmentManager fM = getSupportFragmentManager();
-			//DialogFragment newFragment = new WordChooserDialogFragment();
-			//newFragment.show(fM, "wordChooserFragment");
-            Bundle dialogBundle = new Bundle();
-            dialogBundle.putInt("flag", 1);
-            dialogBundle.putStringArray("descriptions", this.wR.getMultiHitDescriptions());
-            dialogBundle.putStringArray("descriptionActions", intArrayToStringArray(this.wR.getMultiHitIds()));
-            MultiChoiseDialog mChoiseDialog = new MultiChoiseDialog(getApplicationContext(), dialogBundle);
-            mChoiseDialog.setMultiChoiseDialogResult(new MultiChoiseDialog.MultiChoiseDialogResult() {
-                @Override
-                public void finish(int flag, String str) {
-                    manageDialogFragmentOutput(str);
-                }
-            });
+
 		} else if (pr.equals("SingleHit")) {
 			WordResult word = this.wR;
 			createNewActivity(word);
