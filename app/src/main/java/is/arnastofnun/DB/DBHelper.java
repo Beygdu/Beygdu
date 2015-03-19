@@ -3,6 +3,14 @@ package is.arnastofnun.DB;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 
 /**
  * @author Jón Friðrik
@@ -27,6 +35,7 @@ public class DBHelper extends SQLiteOpenHelper{
     public static final String TABLE_SUBBLOCK = "subblock";
     public static final String TABLE_TABLES = "tables";
     public static final String TABLE_STATISTICS = "statistics";
+    public static final String TABLE_OBEYGJANLEG = "obeygjanleg";
 
     // Table columns
     public static final String WORDID = "wordid";
@@ -99,6 +108,12 @@ public class DBHelper extends SQLiteOpenHelper{
                     STAT_OTHER + " INTEGER " +
                     ");";
 
+    private static final String CREATE_OBEYGJANLEG_TABLE =
+            "CREATE TABLE " + TABLE_OBEYGJANLEG + " (" +
+                    STAT_NO + " TEXT" +
+                    ");";
+
+
     public DBHelper(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
     }
@@ -127,8 +142,8 @@ public class DBHelper extends SQLiteOpenHelper{
         db.execSQL(CREATE_SUBBLOCK_TABLE);
         db.execSQL(CREATE_TABLES_TABLE);
         db.execSQL(CREATE_STATISTICS_TABLE);
+        db.execSQL(CREATE_OBEYGJANLEG_TABLE);
     }
-
 
     /**
      * @param db the db
