@@ -11,44 +11,22 @@ import android.graphics.Typeface;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import is.arnastofnun.SkrambiWebTool.PostRequestHandler;
-import is.arnastofnun.SkrambiWebTool.SkrambiWT;
-import is.arnastofnun.beygdu.R;
-
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-import java.sql.SQLData;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.concurrent.ExecutionException;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
-import is.arnastofnun.parser.BinParser;
-import is.arnastofnun.parser.HTMLParser;
-import is.arnastofnun.parser.ParserResult;
 import is.arnastofnun.parser.WordResult;
+
 
 /**
  * @author Jón Friðrik, Arnar, Snær, Máni
@@ -73,6 +51,7 @@ public class MainActivity extends NavDrawer {
 	 */
 
 	//public ParserResult pR = new ParserResult();
+
 
     /**
      * The WordResult Document, containing all data on searched word
@@ -325,6 +304,16 @@ public class MainActivity extends NavDrawer {
 	    return a.replaceAll("\\s+","");
 	  }
 
+    private String[] intArrayToStringArray(int[] id) {
+        String[] returnArray = new String[id.length];
+
+        for(int i = 0; i < id.length; i++) {
+            returnArray[i] = Integer.toString(id[i]);
+        }
+
+        return returnArray;
+    }
+
 	/**
 	 * sees if the results are:
 	 * <strong>Partial hit: </strong> many words with the different meaning spelled the same way.
@@ -336,9 +325,20 @@ public class MainActivity extends NavDrawer {
 		String pr = wR.getDescription();
 
 		if (pr.equals("MultiHit")) {
-			FragmentManager fM = getSupportFragmentManager();
-			DialogFragment newFragment = new WordChooserDialogFragment();
-			newFragment.show(fM, "wordChooserFragment");
+/*			//FragmentManager fM = getSupportFragmentManager();
+			//DialogFragment newFragment = new WordChooserDialogFragment();
+			//newFragment.show(fM, "wordChooserFragment");
+            Bundle dialogBundle = new Bundle();
+            dialogBundle.putInt("flag", 1);
+            dialogBundle.putStringArray("descriptions", this.wR.getMultiHitDescriptions());
+            dialogBundle.putStringArray("descriptionActions", intArrayToStringArray(this.wR.getMultiHitIds()));
+            MultiChoiseDialog mChoiseDialog = new MultiChoiseDialog(getApplicationContext(), dialogBundle);
+            mChoiseDialog.setMultiChoiseDialogResult(new MultiChoiseDialog.MultiChoiseDialogResult() {
+                @Override
+                public void finish(int flag, String str) {
+                    manageDialogFragmentOutput(str);
+                }
+            });*/
 		} else if (pr.equals("SingleHit")) {
 			WordResult word = this.wR;
 			createNewActivity(word);

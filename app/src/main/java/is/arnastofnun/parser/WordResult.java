@@ -251,6 +251,62 @@ public class WordResult implements Serializable {
         return false;
     }
 
+    private ArrayList<String> constructVerbSpecialCase(String str) {
+
+        ArrayList<String> firstIteration = new ArrayList<String>();
+        ArrayList<String> secondIteration = new ArrayList<String>();
+
+        if( str.contains("/") ) {
+            String[] split = str.split("");
+            for(int i = 1; i < split.length-1; i++) {
+                if( !split[i-1].equals("/") && split[i].equals(" ") && !split[i+1].equals("/") ) {
+                    split[i] = "1234";
+                }
+            }
+            String[] temp = new String[split.length-1];
+            for( int i = 0; i < temp.length; i++ ) {
+                temp[i] = split[i+1];
+            }
+            String st = arrayToString(temp);
+            String[] tempT = st.split("1234");
+            for( int i = 0; i < tempT.length; i++ ) {
+                firstIteration.add(tempT[i]);
+            }
+
+            for( String string : firstIteration ) {
+
+                if( string.contains(".") && !string.contains("/") ) {
+                    String[] spliti = str.split(" ");
+                    for( String rts : spliti ) {
+                        secondIteration.add(rts);
+                    }
+                }
+                else {
+                    if( isNotVerb(str) ) {
+                        for( String rts : firstIteration ) {
+                            secondIteration.add(rts);
+                        }
+                    }
+                    else {
+                        String[] spl = str.split(" ");
+                        for( String rtts : spl ) {
+                            secondIteration.add(rtts);
+                        }
+                    }
+                }
+
+            }
+        }
+        else {
+            String[] splitString = str.split(" ");
+            for(int i = 0; i < splitString.length; i++) {
+                secondIteration.add(splitString[i]);
+            }
+        }
+
+        return secondIteration;
+    }
+
     private ArrayList<String> constructTableResults(String str) {
 
         ArrayList<String> firstIteration = new ArrayList<String>();
@@ -585,7 +641,21 @@ public class WordResult implements Serializable {
         ArrayList<String> tableResults = new ArrayList<String>();
 
         for( String str : rawTables ) {
-            if( str.contains(elements[4]) ) {
+
+            if( blockTitle.equals("Sagnbót") ) {
+
+                if(str.contains(elements[4])) {
+                    str = destroyPointers(str);
+                    ArrayList<String> tempArrayList = constructVerbSpecialCase(str);
+
+                    for( int i = 0; i < tempArrayList.size(); i++ ) {
+                        tableResults.add(tempArrayList.get(i));
+                    }
+                }
+
+            }
+
+            else if( str.contains(elements[4]) ) {
 
                 str = destroyPointers(str);
 
