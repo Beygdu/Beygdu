@@ -4,7 +4,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Typeface;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -59,7 +58,7 @@ public class DBController {
         Cursor cursor = dB.rawQuery(myQuery, null);
         cursor.moveToFirst();
         ContentValues statsContent = new ContentValues();
-        if(cursor != null && cursor.getCount() > 0) {
+        if(cursor != null && cursor.getCount() == 0) {
             statsContent.put(DBHelper.STAT_NO, 0);
             statsContent.put(DBHelper.STAT_LO, 0);
             statsContent.put(DBHelper.STAT_SO, 0);
@@ -71,7 +70,7 @@ public class DBController {
         }
 
         String columnName = column.toLowerCase();
-        String foundCol = null;
+        String foundCol = "Annað"; //initially set to other and changed if column is found
         for(int i = 0 ; i < cursor.getColumnNames().length; i++) {
             String col = cursor.getColumnNames()[i].toLowerCase();
             if(columnName.contains(col)){
@@ -80,7 +79,7 @@ public class DBController {
             }
         }
 
-        int currentValue = fetchStats(foundCol);
+        int currentValue = fetchStatsForColumn(foundCol);
 
         try {
             open();
@@ -240,7 +239,7 @@ public class DBController {
      *
      * @return the cursor pointing at the only row in Statistics table.
      */
-    public int fetchStats(String column){
+    private int fetchStatsForColumn(String column){
         try {
             open();
         } catch (SQLException e) {
@@ -251,10 +250,34 @@ public class DBController {
                 "SELECT " + column + " FROM " + DBHelper.TABLE_STATISTICS;
 
         Cursor cursor = dB.rawQuery(myQuery, null);
+        cursor.moveToFirst();
 
-        int currentValue = cursor.getInt(1);
+        int currentValue = cursor.getInt(0);
         close();
         return currentValue;
+    }
+
+    public ArrayList<Integer> fetchAllStats(){
+        try {
+            open();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        final String myQuery =
+                "SELECT * FROM " + DBHelper.TABLE_STATISTICS;
+
+        Cursor cursor = dB.rawQuery(myQuery, null);
+        cursor.moveToFirst();
+
+        ArrayList<Integer> stats = new ArrayList<Integer>();
+
+        for(int i = 0; i < cursor.getColumnCount(); i++){
+            stats.add(cursor.getInt(i));
+        }
+
+        close();
+        return stats;
     }
 
     private ArrayList<Block> fetchBlocks(Cursor cursor) {

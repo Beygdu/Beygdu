@@ -3,6 +3,7 @@ package is.arnastofnun.beygdu;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -12,6 +13,8 @@ import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 
 import java.util.ArrayList;
+
+import is.arnastofnun.DB.DBController;
 
 /**
  * @author Jón Friðrik
@@ -48,6 +51,9 @@ public class StatisticsActivity extends FragmentActivity {
 
         data.setColors(new int[] {Color.RED, Color.BLUE, Color.GREEN});
 
+        createDataSet();
+
+
         chart.setData(new PieData(testNames, data));
         chart.invalidate();
 
@@ -57,6 +63,12 @@ public class StatisticsActivity extends FragmentActivity {
         PieDataSet data = null;// = new PieDataSet(yVals, "label");
 
         //TODO: Connect to DB and fetch Statistics
+        DBController controller = new DBController(this);
+        ArrayList<Integer> stats = controller.fetchAllStats();
+
+        for(Integer i : stats) {
+            Log.v("", ""+i);
+        }
 
         return data;
     }
