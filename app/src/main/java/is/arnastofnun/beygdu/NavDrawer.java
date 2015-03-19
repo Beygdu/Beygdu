@@ -14,6 +14,9 @@ import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
 import android.widget.ListView;
 
+import java.util.ArrayList;
+import java.util.Collections;
+
 
 /**
  * @author Daniel Pall Johannsson
@@ -44,7 +47,7 @@ public class NavDrawer extends FragmentActivity{
      * List item array for navigation drawer items. This array will be populated
      * from a String Array in strings.xml
      */
-    protected String[] navArray;
+    protected ArrayList<String> navArray;
 
     /**
      * Static variable for selected item position in the navigation drawer.
@@ -61,7 +64,7 @@ public class NavDrawer extends FragmentActivity{
     /**
      * Base layout of this activity
      */
-    private DrawerLayout mDrawerLayout;
+    protected DrawerLayout mDrawerLayout;
 
     /**
      * Drawer listener class for drawer open, close, etc.
@@ -80,7 +83,10 @@ public class NavDrawer extends FragmentActivity{
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
 
         // get the drawer items string
-        navArray = getResources().getStringArray(R.array.navdrawer_items);
+        navArray = new ArrayList<String>();
+        Collections.addAll(navArray, getResources().getStringArray(R.array.navdrawer_items));
+
+
 
         // set up the drawer's list view with items and click listener
         mDrawerList.setAdapter(new ArrayAdapter<String>(this, R.layout.nav_drawer_item,R.id.navDrawerItem,navArray));
@@ -114,8 +120,8 @@ public class NavDrawer extends FragmentActivity{
 
             @Override
             public void onDrawerClosed(View drawerView) {
-//                getActionBar().setTitle(listArray[position]);
-                getActionBar().setTitle(navArray[position]);
+//                getActionBar().setTitle(navArray[position]);
+                getActionBar().setTitle(navArray.get(position));
                 invalidateOptionsMenu();
                 super.onDrawerClosed(drawerView);
             }
