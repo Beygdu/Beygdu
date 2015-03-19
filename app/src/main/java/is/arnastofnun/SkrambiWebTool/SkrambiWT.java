@@ -8,24 +8,7 @@ import is.arnastofnun.beygdu.MainActivity;
 /**
  * Created by arnarjons on 10.3.2015.
  */
-public class SkrambiWT extends AsyncTask<Void, Void, Void> {
-
-    public Activity activity;
-
-    private String word;
-    private String URL;
-
-    private String responseString;
-
-
-    public SkrambiWT(Activity activity, String word) {
-
-        this.activity = activity;
-
-        this.URL = "http://skrambi.arnastofnun.is/checkDocument";
-        this.word = word;
-
-    }
+public class SkrambiWT extends AsyncTask<String, Void, String> {
 
     @Override
     protected  void onPreExecute() {
@@ -33,17 +16,17 @@ public class SkrambiWT extends AsyncTask<Void, Void, Void> {
     }
 
     @Override
-    protected Void doInBackground(Void... args) {
-        PostRequestHandler pHandler = new PostRequestHandler(this.URL, this.word,
+    protected String doInBackground(String... args) {
+        String url = "http://skrambi.arnastofnun.is/checkDocument";
+        PostRequestHandler pHandler = new PostRequestHandler(url, args[0],
                 "text/plain", "en-US", false, true, true);
-        this.responseString = pHandler.sendRequest();
-        return null;
+        String responseString = pHandler.sendRequest();
+        return responseString;
     }
 
     @Override
-    protected void onPostExecute(Void args) {
-        String returnString = this.responseString;
-        //activity.(returnString);
+    protected void onPostExecute(String args) {
+        // Do nothing
     }
 
 
