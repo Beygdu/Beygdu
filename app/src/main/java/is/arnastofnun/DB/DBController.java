@@ -274,8 +274,10 @@ public class DBController {
 
         HashMap<String, Integer> stats = new HashMap<String, Integer>();
 
-        for(int i = 0; i < cursor.getColumnCount(); i++){
-            stats.put(cursor.getColumnName(i), cursor.getInt(i));
+        if(cursor.getCount() != 0) {
+            for (int i = 0; i < cursor.getColumnCount(); i++) {
+                stats.put(cursor.getColumnName(i), cursor.getInt(i));
+            }
         }
 
         close();
