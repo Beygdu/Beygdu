@@ -409,13 +409,13 @@ public class BeygingarActivity extends NavDrawer {
 				}
 			})
 			// Set the action buttons
-			.setPositiveButton(R.string.afram, new DialogInterface.OnClickListener() {
+			.setPositiveButton(R.string.PositiveButton, new DialogInterface.OnClickListener() {
 				@Override
 				public void onClick(DialogInterface dialog, int id) {
 					updateFragments();
 				}
 			})
-			.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+			.setNegativeButton(R.string.NegativeButton, new DialogInterface.OnClickListener() {
 				@Override
 				public void onClick(DialogInterface dialog, int id) {
 					//Ekkert gerist
