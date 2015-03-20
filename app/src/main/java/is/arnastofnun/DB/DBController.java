@@ -9,6 +9,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import is.arnastofnun.parser.Block;
 import is.arnastofnun.parser.SubBlock;
@@ -257,7 +259,7 @@ public class DBController {
         return currentValue;
     }
 
-    public ArrayList<Integer> fetchAllStats(){
+    public HashMap<String, Integer> fetchAllStats(){
         try {
             open();
         } catch (SQLException e) {
@@ -270,10 +272,10 @@ public class DBController {
         Cursor cursor = dB.rawQuery(myQuery, null);
         cursor.moveToFirst();
 
-        ArrayList<Integer> stats = new ArrayList<Integer>();
+        HashMap<String, Integer> stats = new HashMap<String, Integer>();
 
         for(int i = 0; i < cursor.getColumnCount(); i++){
-            stats.add(cursor.getInt(i));
+            stats.put(cursor.getColumnName(i), cursor.getInt(i));
         }
 
         close();

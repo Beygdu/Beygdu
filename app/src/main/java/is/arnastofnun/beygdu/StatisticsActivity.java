@@ -13,6 +13,8 @@ import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import is.arnastofnun.DB.DBController;
 
@@ -31,48 +33,34 @@ public class StatisticsActivity extends FragmentActivity {
         setContentView(R.layout.activity_statistics);
 
         PieChart chart = (PieChart) findViewById(R.id.chart);
-        chart.setDescription(getResources().getString(R.string.pieChart_Desc));
 
-        ArrayList<String> testNames = new ArrayList<String>();
-        testNames.add("NO");
-        testNames.add("LO");
-        testNames.add(("SO"));
-
-        ArrayList<Entry> yVals = new ArrayList<Entry>();
-        Entry entry = new Entry(10, 0);
-        Entry entry2 = new Entry(34, 1);
-        Entry entry3 = new Entry(89, 2);
-
-        yVals.add(entry);
-        yVals.add(entry2);
-        yVals.add(entry3);
-
-        PieDataSet data = new PieDataSet(yVals, "label");
-
-        data.setColors(new int[] {Color.RED, Color.BLUE, Color.GREEN});
-
-        createDataSet();
-
-
-        chart.setData(new PieData(testNames, data));
-        chart.invalidate();
-
-    }
-
-    private PieDataSet createDataSet() {
-        PieDataSet data = null;// = new PieDataSet(yVals, "label");
-
-        //TODO: Connect to DB and fetch Statistics
         DBController controller = new DBController(this);
-        ArrayList<Integer> stats = controller.fetchAllStats();
+        HashMap<String, Integer> stats = controller.fetchAllStats();
 
-        for(Integer i : stats) {
-            Log.v("", ""+i);
+        ArrayList<String> labels = new ArrayList<String>();
+        ArrayList<Entry> entries = new ArrayList<Entry>();
+        int i = 0;
+        int sum = 0;
+        for(HashMap.Entry<String, Integer> entry : stats.entrySet()) {
+            String key = entry.getKey();
+            Integer value = entry.getValue();
+
+            if(value != 0) {
+                entries.add(new Entry(value, i++));
+                labels.add(key);
+                sum = sum + value;
+            }
         }
 
-        return data;
-    }
+        PieDataSet data = new PieDataSet(entries, "");
 
+        data.setColors(new int[] {Color.parseColor("#428bca"), Color.parseColor("#5cb85c"), Color.parseColor("#d9534f"), Color.parseColor("#5bc0de"), Color.parseColor("#f0ad4e")});
+        chart.setData(new PieData(labels, data));
+        chart.setCenterText("Orðflokkar");
+        chart.setDescription("Fjöldi leita: " + sum);
+        chart.invalidate();
+        chart.animateY(1500);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
