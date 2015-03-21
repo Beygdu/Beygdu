@@ -184,6 +184,7 @@ public class BeygingarActivity extends NavDrawer {
 		if(!words.getWarning().equals("")) {
 			TextView note = new TextView(this);
 
+			note.setText(words.getWarning());
             note.setTypeface(LatoLight);
 			note.setText(words.getWarning());
             
