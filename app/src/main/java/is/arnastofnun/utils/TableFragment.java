@@ -13,6 +13,8 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+import java.lang.reflect.Array;
+
 import is.arnastofnun.beygdu.R;
 
 import is.arnastofnun.parser.Block;
@@ -131,20 +133,38 @@ public class TableFragment extends Fragment {
     private void createTable(Tables table) {
         final int rowNum = table.getRowNames().length;
         final int colNum = table.getColumnNames().length;
+        final int rowLast = rowNum - 1;
+        int moreMarginBottom = 0;
 
-        TableRow.LayoutParams tableRowParams = new TableRow.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
+        /*TableRow.LayoutParams tableRowParams = new TableRow.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
         tableRowParams.weight = colNum;
-        tableRowParams.setMargins(1, 1, 1, 1);
+        tableRowParams.setMargins(1, 1, 1, 100);*/
 
         int contentIndex = 0;
+        int counter = 0;
         for (int row = 0; row < rowNum; row++) {
             TableRow tr = new TableRow(context);
-            tr.setLayoutParams(tableRowParams);
+            //tr.setLayoutParams(tableRowParams);
             tr.setMinimumHeight(80);
-            if (row % 2 == 0) {
+
+            // For small tables like, nafnbót and sagnbót
+            if(rowNum < 2) {
+                tr.setBackgroundResource(R.drawable.bottom_top_border_blue);
+            }
+
+            // Even numbers and not last row
+            else if (row % 2 == 0 && (row != rowLast)) {
                 tr.setBackgroundResource(R.drawable.top_border_blue);
             }
-            else if (row == (rowNum - 1)){
+
+
+            // Odd numbers and not last row
+            else if( (row % 1 == 0) && (row != rowLast) ) {
+                tr.setBackgroundResource(R.drawable.top_border_white);
+            }
+
+            // Last row
+            else if (row == rowLast){
                 if(row % 2 == 0) {
                     tr.setBackgroundResource(R.drawable.bottom_top_border_blue);
                 }
@@ -152,17 +172,16 @@ public class TableFragment extends Fragment {
                     tr.setBackgroundResource(R.drawable.bottom_top_border_white);
                 }
             }
-            else if(row % 1 == 0) {
-                tr.setBackgroundResource(R.drawable.top_border_white);
-            }
-            if(rowNum < 2) {
-                tr.setBackgroundResource(R.drawable.bottom_top_border_blue);
-            }
 
             for (int col = 0; col < colNum; col++) {
                 TextView cell = new TextView(context);
                 cell.setTextAppearance(context, R.style.BodyText);
-                cell.setLayoutParams(new TableRow.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, 1f));
+                //TableRow.LayoutParams rowParams = new TableRow.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, 1f);
+                cell.setLayoutParams(new TableRow.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT, 1f));
+                //if(table.getContent().get(counter++).contains("/")) {
+                  //  cell.setMargins(0,0,0,100);
+                //}
+                //cell.setLayoutParams(rowParams);
                 cell.setMinHeight(80);
                 cell.setGravity(Gravity.CENTER);
                 cell.setTypeface(LatoLight);
@@ -183,8 +202,14 @@ public class TableFragment extends Fragment {
                 } else {
                     if (col == 0) {
                         cell.setText(table.getRowNames()[row]);
-                    } else {
-                        cell.setText(table.getContent().get(contentIndex++));
+                    }  else {
+                        String cellString = table.getContent().get(contentIndex++);
+                        if (cellString.contains("/")) {
+                            String firstLine = cellString.split("/")[0];
+                            String secondLine = cellString.split("/")[1];
+                            cellString = firstLine + "/" + System.getProperty ("line.separator") + secondLine;
+                        }
+                        cell.setText(cellString);
                     }
                 }
 

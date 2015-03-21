@@ -8,17 +8,27 @@
         android:id="@+id/scrollview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="10dp"
+        android:paddingLeft="10dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
         android:fillViewport="true"
         android:scrollbarStyle="outsideInset"
-        android:scrollbars="vertical" >
-
-        <TableLayout
-            android:id="@+id/data_table"
+        android:scrollbars="horizontal|vertical">
+        <HorizontalScrollView
+            android:id="@+id/horizontalView"
+            android:layout_height="fill_parent"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:fillViewport="true"
+            android:scrollbars="horizontal|vertical"
+            android:layout_marginTop="5dip">
 
-        </TableLayout>
+            <TableLayout
+                android:id="@+id/data_table"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+            </TableLayout>
+        </HorizontalScrollView>
+
     </ScrollView>
 
 </LinearLayout>

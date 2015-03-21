@@ -209,7 +209,6 @@ public class BeygingarActivity extends NavDrawer {
 				blockTitle.setMinHeight(100);
 				blockTitle.setText(block.getTitle());
                 blockTitle.setTypeface(LatoLight);
-                blockTitle.setGravity(Gravity.CENTER);
                 blockTitle.setTextColor(getResources().getColor(R.color.font_default));
                 TableFragment tFragment = new TableFragment(BeygingarActivity.this, tableLayout, block, blockTitle);
 				getFragmentManager().beginTransaction().add(tableLayout.getId(), tFragment).commit();
