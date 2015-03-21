@@ -132,7 +132,8 @@ public class BeygingarActivity extends NavDrawer {
      */
     public void navDrawerFilterableListItem(){
         if(checkWordFilterable()){
-            navArray.add(navArray.size()-1,getString(R.string.nav_drawer_sia));
+            // add the string to the second-to-last place in the array
+            navArray.add(navArray.size()-2,getString(R.string.nav_drawer_sia));
         }
     }
 
@@ -175,6 +176,9 @@ public class BeygingarActivity extends NavDrawer {
                     startActivity(new Intent(this, AboutActivity.class));
                     overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
                     break;
+                case 4:
+                    startActivity(new Intent(this, StatisticsActivity.class));
+                    overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
             }
         } else {
             super.openActivity(position);

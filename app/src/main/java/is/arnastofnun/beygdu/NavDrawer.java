@@ -172,6 +172,10 @@ public class NavDrawer extends FragmentActivity{
                 startActivity(new Intent(this, AboutActivity.class));
                 overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
                 break;
+            case 3:
+                startActivity(new Intent(this, StatisticsActivity.class));
+                overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
+                break;
         }
     }
 
