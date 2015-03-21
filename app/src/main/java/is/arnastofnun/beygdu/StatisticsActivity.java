@@ -25,7 +25,7 @@ import is.arnastofnun.DB.DBController;
  *
  */
 
-public class StatisticsActivity extends FragmentActivity {
+public class StatisticsActivity extends NavDrawer {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
