@@ -196,38 +196,7 @@ public class TableFragment extends Fragment {
                 final TextView cell = new TextView(context);
                 if(!(row == 0 || col == 0)) {
                     cell.setClickable(true);
-                    cell.setOnLongClickListener(new View.OnLongClickListener() {
-                        @Override
-                        public boolean onLongClick(View v) {
-                            cell.setBackgroundColor(Color.GREEN);
-
-                            final Property<TextView, Integer> property = new Property<TextView, Integer>(int.class, "BackgroundColor") {
-                                @Override
-                                public Integer get(TextView object) {
-                                    ColorDrawable cd = (ColorDrawable) object.getBackground();
-                                    int colorCode = cd.getColor();
-                                    return colorCode;
-                                }
-
-                                @Override
-                                public void set(TextView object, Integer value) {
-                                    object.setBackgroundColor(value);
-                                }
-                            };
-
-                            final ObjectAnimator animator = ObjectAnimator.ofInt(cell, property, Color.RED);
-                            animator.setDuration(500L);
-                            animator.setEvaluator(new ArgbEvaluator());
-                            animator.setInterpolator(new DecelerateInterpolator(2));
-                            animator.start();
-                            ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
-                            ClipData clip = ClipData.newPlainText(cell.getText(), cell.getText());
-                            clipboard.setPrimaryClip(clip);
-                            animator.setRepeatCount(1);
-                            animator.setRepeatMode(ValueAnimator.REVERSE);
-                            return false;
-                        }
-                    });
+                    cell.setOnLongClickListener(new XLongClickListener(context, cell));
                 }
 
                 //TableRow.LayoutParams rowParams = new TableRow.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, 1f);

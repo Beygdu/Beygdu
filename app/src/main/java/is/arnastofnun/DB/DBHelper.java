@@ -1,15 +1,14 @@
 package is.arnastofnun.DB;
 
 import android.content.Context;
+import android.content.res.AssetManager;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.database.sqlite.SQLiteStatement;
 import android.util.Log;
 
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 
 /**
@@ -19,6 +18,9 @@ import java.io.InputStreamReader;
  *
  */
 public class DBHelper extends SQLiteOpenHelper{
+
+    //Context
+    private Context context;
 
     // Database Information
     static final String DB_NAME = "BEYGDU.DB";
@@ -110,12 +112,13 @@ public class DBHelper extends SQLiteOpenHelper{
 
     private static final String CREATE_OBEYGJANLEG_TABLE =
             "CREATE TABLE " + TABLE_OBEYGJANLEG + " (" +
-                    STAT_NO + " TEXT" +
+                    WORDID + " TEXT" +
                     ");";
 
 
     public DBHelper(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
+        this.context = context;
     }
 
     @Override
@@ -143,6 +146,34 @@ public class DBHelper extends SQLiteOpenHelper{
         db.execSQL(CREATE_TABLES_TABLE);
         db.execSQL(CREATE_STATISTICS_TABLE);
         db.execSQL(CREATE_OBEYGJANLEG_TABLE);
+        insertIntoObeygjanlegTable(db);
+    }
+
+    private void insertIntoObeygjanlegTable(SQLiteDatabase db) {
+        db.beginTransaction();
+        try{
+            AssetManager am = context.getAssets();
+            InputStream is = am.open("obeygjanleg.txt");
+            String line = null;
+            String sql = "INSERT INTO " + TABLE_OBEYGJANLEG + " ( " + WORDID + " ) VALUES (?)";
+
+            BufferedReader in = new BufferedReader(new InputStreamReader(is));
+
+            SQLiteStatement stmt;
+            while((line = in.readLine()) != null) {
+                stmt = db.compileStatement(sql);
+                stmt.bindString(1, line);
+                stmt.execute();
+                stmt.clearBindings();
+            }
+
+            db.setTransactionSuccessful();
+        }catch(Exception e){
+            //end the transaction on error too when doing exception handling
+            db.endTransaction();
+            Log.v("", e.toString());
+        }
+        db.endTransaction();
     }
 
     /**
@@ -160,6 +191,7 @@ public class DBHelper extends SQLiteOpenHelper{
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_SUBBLOCK);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_TABLES);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_STATISTICS);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_OBEYGJANLEG);
         onCreate(db);
     }
 }

@@ -284,6 +284,27 @@ public class DBController {
         return stats;
     }
 
+    public String fetchObeygjanlegt(String title) {
+        try {
+            open();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        String result = null;
+
+        final String myQuery =
+                "SELECT " + DBHelper.WORDID + " FROM " + DBHelper.TABLE_OBEYGJANLEG + " WHERE " +  DBHelper.WORDID + " = '" + title + "'";
+
+        Cursor cursor = dB.rawQuery(myQuery, null);
+        cursor.moveToFirst();
+
+        if(cursor.getCount() != 0) {
+            result = cursor.getString(0);
+        }
+        close();
+        return result;
+    }
+
     private ArrayList<Block> fetchBlocks(Cursor cursor) {
         ArrayList<Block> blocks = new ArrayList<Block>();
         int blockID = -1;
