@@ -11,44 +11,23 @@ import android.graphics.Typeface;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import is.arnastofnun.SkrambiWebTool.PostRequestHandler;
-import is.arnastofnun.SkrambiWebTool.SkrambiWT;
-import is.arnastofnun.beygdu.R;
-
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-import java.sql.SQLData;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.concurrent.ExecutionException;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
-import is.arnastofnun.parser.BinParser;
-import is.arnastofnun.parser.HTMLParser;
-import is.arnastofnun.parser.ParserResult;
 import is.arnastofnun.parser.WordResult;
+import is.arnastofnun.utils.CustomDialog;
+
 
 /**
  * @author Jón Friðrik, Arnar, Snær, Máni
@@ -60,7 +39,7 @@ import is.arnastofnun.parser.WordResult;
  * and send an email to the creator of the database
  * 
  */
-public class MainActivity extends NavDrawer {
+public class MainActivity extends NavDrawer implements CustomDialog.DialogListener {
 
     /**
      * Progress dialog to be used in Async Task
@@ -73,6 +52,7 @@ public class MainActivity extends NavDrawer {
 	 */
 
 	//public ParserResult pR = new ParserResult();
+
 
     /**
      * The WordResult Document, containing all data on searched word
@@ -271,6 +251,13 @@ public class MainActivity extends NavDrawer {
         startActivity(intent);
     }
 
+
+    public void statisticsClick(@SuppressWarnings("unused") View view){
+        Intent intent = new Intent(MainActivity.this, StatisticsActivity.class);
+        startActivity(intent);
+    }
+
+
 	
 	/**
 	 * @param word the searchword
@@ -318,6 +305,16 @@ public class MainActivity extends NavDrawer {
 	    return a.replaceAll("\\s+","");
 	  }
 
+    private String[] intArrayToStringArray(int[] id) {
+        String[] returnArray = new String[id.length];
+
+        for(int i = 0; i < id.length; i++) {
+            returnArray[i] = Integer.toString(id[i]);
+        }
+
+        return returnArray;
+    }
+
 	/**
 	 * sees if the results are:
 	 * <strong>Partial hit: </strong> many words with the different meaning spelled the same way.
@@ -329,15 +326,40 @@ public class MainActivity extends NavDrawer {
 		String pr = wR.getDescription();
 
 		if (pr.equals("MultiHit")) {
-			FragmentManager fM = getSupportFragmentManager();
-			DialogFragment newFragment = new WordChooserDialogFragment();
-			newFragment.show(fM, "wordChooserFragment");
+
+            Bundle bundle = new Bundle();
+            bundle.putInt("id", 0);
+            bundle.putString("title", getString(R.string.MultiHitDialog));
+            bundle.putString("positiveButtonText", getString(R.string.PositiveButton));
+            bundle.putString("negativeButtonText", getString(R.string.NegativeButton));
+            bundle.putStringArray("descriptions", wR.getMultiHitDescriptions());
+            bundle.putStringArray("descriptionActions", intArrayToStringArray(wR.getMultiHitIds()));
+            android.app.DialogFragment multiDialog = new CustomDialog();
+            multiDialog.setArguments(bundle);
+            multiDialog.show(getFragmentManager(), "0");
+
 		} else if (pr.equals("SingleHit")) {
 			WordResult word = this.wR;
 			createNewActivity(word);
 		} else if (pr.equals("Miss")) {
-			Toast.makeText(this, "Engin leitarniðurstaða", Toast.LENGTH_SHORT).show();
-            //new SkrambiBT(this.wR.getSearchWord()).execute();
+            //TODO: Check if word is non-beygjable?
+            SkrambiHelper sHelper = new SkrambiHelper();
+            String[] correctedWords = sHelper.getSpellingCorrection(wR.getSearchWord());
+            if( correctedWords == null ) {
+                Toast.makeText(this, "Engin leitarniðurstaða", Toast.LENGTH_SHORT).show();
+            }
+            else {
+                Bundle bundle = new Bundle();
+                bundle.putInt("id", 1);
+                bundle.putString("title", getString(R.string.SkrambiDialog));
+                bundle.putString("positiveButtonText", getString(R.string.PositiveButton));
+                bundle.putString("negativeButtonText", getString(R.string.NegativeButton));
+                bundle.putStringArray("descriptions", correctedWords);
+                bundle.putStringArray("descriptionActions", correctedWords);
+                android.app.DialogFragment multiDialog = new CustomDialog();
+                multiDialog.setArguments(bundle);
+                multiDialog.show(getFragmentManager(), "0");
+            }
 		}
 	}
 
@@ -373,80 +395,22 @@ public class MainActivity extends NavDrawer {
         }
     }
 
-	/**
-	 * @author Jón Friðrik
-	 * @since 23.10.14
-	 * @version 0.1
-	 * 
-	 * Construct a Dialog where the user can choose <strong>one</strong> of the words in results ArrayList
-	 * or go back
-	 */
-	public class WordChooserDialogFragment extends DialogFragment {
+    // INTERFACE HANDLER FOR CUSTOMDIALOG RESULTS
+    @Override
+    public void onPositiveButtonClick(String selectedItem, int id) {
+        BinHelper binHelper = new BinHelper(getApplicationContext());
+        try {
+            setWordResult(binHelper.sendThread(selectedItem, 1));
+            checkWordCount();
+        }
+        catch (Exception e) {
+            Log.w("Exception", e);
+            Toast.makeText(getApplicationContext(), "Engin leit fannst", Toast.LENGTH_SHORT).show();
+        }
+    }
 
-		/**
-		 * selectedItem - the object which was last chosen in the dialog, or the first object in the list if nothing was chosen
-		 * charArr - Are the words which the ParserResult contains if it return a PartialHit
-		 */
-		private String selectedItem = null;
-		private CharSequence[] charArr;
+    @Override
+    public void onNegativeButtonClick(String errorString) {
 
-		/**
-		 *  The constructor for WordChooserDialogFragment
-		 *  A dialog where the user can choose between search results
-		 *  Only one word can be chosen.
-		 */
-		public WordChooserDialogFragment() {
-			toCharArr();
-		}
-
-		/**
-		 * cast the ArrayList to a CharSequence.
-		 */
-		private void toCharArr() {
-			charArr = new CharSequence[wR.getMultiHitDescriptions().length];
-			for (int i = 0; i < wR.getMultiHitDescriptions().length; i++){
-				charArr[i] = wR.getMultiHitDescriptions()[i];
-			}
-		}
-
-		@Override
-		public Dialog onCreateDialog(Bundle savedInstance) {
-			AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-			builder.setTitle(R.string.choosedialog);
-
-			builder.setSingleChoiceItems(charArr, -1 , 
-					new DialogInterface.OnClickListener() {
-				/**
-				 * a listener which listens to which result the user chooses from the dialog
-				 */
-				@Override
-				public void onClick(DialogInterface dialog, int which) {
-					selectedItem = wR.getMultiHitIds()[which]+"";
-				}
-			});
-
-			builder.setPositiveButton(R.string.afram, new DialogInterface.OnClickListener() {
-				/**
-				 * a listener if the user presses the continue button
-				 * If nothing is chosem then the dialog closes
-				 */
-				public void onClick(DialogInterface dialog, int id) {
-					if( selectedItem != null) {
-
-                        manageDialogFragmentOutput(selectedItem);
-
-					}
-				}
-			});
-			builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-				/**
-				 * a listener for the cancel button, nothing happens except the dialog closes
-				 */
-				public void onClick(DialogInterface dialog, int id) {
-					// User cancelled the dialog
-				}
-			});
-			return builder.create();
-		}	
-	}
+    }
 }
