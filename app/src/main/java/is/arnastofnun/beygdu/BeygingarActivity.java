@@ -215,6 +215,13 @@ public class BeygingarActivity extends NavDrawer {
         return dp;
     }
 
+    public int getScreenWidth() {
+        Display display = getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        int width = size.x;
+        return width;
+    }
 
 	
 	/**
@@ -236,7 +243,8 @@ public class BeygingarActivity extends NavDrawer {
         }
 
 		titleDesc.setMinHeight(130);
-		titleDesc.setTypeface(LatoLight);
+		titleDesc.setTypeface(LatoBold);
+        titleDesc.setTextColor(R.color.white);
         tableLayout.addView(titleDesc);
 		
 		//SetNote
@@ -244,7 +252,7 @@ public class BeygingarActivity extends NavDrawer {
 			TextView note = new TextView(this);
 			note.setText(words.getWarning());
             note.setTypeface(LatoLight);
-
+            note.setMaxWidth(getScreenWidth());
 			note.setBackgroundResource(R.drawable.noteborder);
 			tableLayout.addView(note);
 		}
@@ -256,18 +264,19 @@ public class BeygingarActivity extends NavDrawer {
 				Block block = words.getBlocks().get(i);
 				TextView blockTitle = new TextView(this);
                 if (320 > width && width < 384) {
-                    blockTitle.setTextSize(16);
+                    blockTitle.setTextSize(18);
                 }
                 else if(384 > width && width < 600) {
-                    blockTitle.setTextSize(20);
+                    blockTitle.setTextSize(22);
                 }
                 else if(width > 600){
-                    blockTitle.setTextSize(24);
+                    blockTitle.setTextSize(28);
                 }
 				blockTitle.setMinHeight(100);
 				blockTitle.setText(block.getTitle());
-                blockTitle.setTypeface(LatoLight);
-                blockTitle.setTextColor(getResources().getColor(R.color.font_default));
+                blockTitle.setTypeface(LatoSemiBold);
+                blockTitle.setTextColor(getResources().getColor(R.color.white));
+                blockTitle.setPadding(0, 10, 0, 10);
                 TableFragment tFragment = new TableFragment(BeygingarActivity.this, tableLayout, block, blockTitle);
 				getFragmentManager().beginTransaction().add(tableLayout.getId(), tFragment).commit();
 				tables.add(tFragment);				

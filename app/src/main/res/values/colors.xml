@@ -6,6 +6,7 @@
     <color name="grey">#f3f3f3</color>
     <color name="red">#dc423a</color>
     <color name="tableBorderColor">#dddddd</color>
+    <color name="inputborder">#505050</color>
     <!-- Default colors -->
     <!-- BLUE -->
     <color name="d_blue">#3395de</color>

@@ -7,16 +7,16 @@
     android:background="@color/white">
     <FrameLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_height="fill_parent">
         <ImageView
             android:id="@+id/banner"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="fill_parent"
             android:adjustViewBounds="true"
             android:layout_alignParentTop="true"
             android:background="@drawable/gradient_image"
             android:scaleType="fitXY"
-            android:src="@drawable/bannermain"/>
+            android:src="@drawable/blurredbackground"/>
         <TextView
             android:id="@+id/title"
             android:layout_width="fill_parent"
@@ -35,7 +35,7 @@
         android:id="@+id/tableLayout1"
         android:layout_width="fill_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="260dp">
+        android:layout_marginTop="100dp">
 
 
         <TableRow
@@ -85,34 +85,18 @@
                 android:layout_column="1" />
         </TableRow>
 
-        <TextView
-	         android:id="@+id/titleSmall"
-	         android:layout_width="wrap_content"
-	         android:layout_height="wrap_content"
-	         android:text="@string/titleSmall"
-	         android:textColor="@color/navy"
-	         android:textSize="12sp"
-	         android:gravity="center"/>
+
 
     </TableLayout>
-    <Button
-        android:layout_width="fill_parent"
+    <TextView
+        android:id="@+id/titleSmall"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/cache_button_text"
-        android:id="@+id/cache"
-        android:onClick="cacheClick"
+        android:text="@string/titleSmall"
+        android:textColor="@color/white"
         android:layout_alignParentBottom="true"
-        android:background="@drawable/button"
-        android:textColor="@color/white"/>
-    <!--TextView
-         android:id="@+id/titleSmall"
-         android:layout_width="wrap_content"
-         android:layout_height="wrap_content"
-         android:text="@string/titleSmall"
-         android:textColor="@color/font_default"
-         android:textSize="12sp"
-         android:layout_alignParentBottom="true"
-         android:gravity="center"/-->
+        android:textSize="12sp"
+        android:gravity="center"/>
 
 </RelativeLayout>
 
