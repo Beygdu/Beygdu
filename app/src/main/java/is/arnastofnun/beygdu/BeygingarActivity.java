@@ -117,6 +117,7 @@ public class BeygingarActivity extends NavDrawer {
         //Save to DB -- if it does not exist before
         DBController dbController = new DBController(this);
         dbController.insert(words);
+        dbController.insertStats(words.getTitle());
 
         // Set the title in the actionbar
         setTitle(firstWordInString(words.getTitle()));
@@ -241,7 +242,6 @@ public class BeygingarActivity extends NavDrawer {
 		//SetNote
 		if(!words.getWarning().equals("")) {
 			TextView note = new TextView(this);
-
 			note.setText(words.getWarning());
             note.setTypeface(LatoLight);
 
@@ -409,13 +409,13 @@ public class BeygingarActivity extends NavDrawer {
 				}
 			})
 			// Set the action buttons
-			.setPositiveButton(R.string.afram, new DialogInterface.OnClickListener() {
+			.setPositiveButton(R.string.PositiveButton, new DialogInterface.OnClickListener() {
 				@Override
 				public void onClick(DialogInterface dialog, int id) {
 					updateFragments();
 				}
 			})
-			.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+			.setNegativeButton(R.string.NegativeButton, new DialogInterface.OnClickListener() {
 				@Override
 				public void onClick(DialogInterface dialog, int id) {
 					//Ekkert gerist

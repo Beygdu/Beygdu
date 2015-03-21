@@ -37,14 +37,28 @@
     <string name="lo_kvk">KVK</string>
     <string name="lo_hk">HK</string>
 
+    <!-- BeygingarActivityDialog -->
+    <string name="choosedialog">Smelltu a thad ord sem thu villt sja</string>
+
     <!-- Dialog -->
-    <string name="choosedialog">Smelltu á það orð sem þú vilt sjá: </string>
-    <string name="afram">Áfram</string>
-    <string name="cancel">Hætta við</string>
+    <string name="MultiHitDialog"> orð fundust. Smelltu á það orð sem þú vilt sjá: </string>
+    <string name="SkrambiDialog">Stafsetningavillur fundust í leitarorði. Varstu að reyna að leita að: </string>
+    <string name="PositiveButton">Áfram</string>
+    <string name="NegativeButton">Hætta við</string>
+
+    <!-- Spinner -->
     <string name="progressdialog">Sæki gögn...</string>
 
     <!-- Cache -->
     <string name="title_activity_cache">cache</string>
+
+    <!-- Statistics -->
+    <string name="title_activity_statistics">StatisticsActivity</string>
+    <string name="pieChart_Desc">Fjöldi leita eftir orðflokkum</string>
+
+    <!-- Auto-Generated -->
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
 
     <!-- Navigation Drawer-->
     <string name="open_drawer">Skúffa opin</string>
