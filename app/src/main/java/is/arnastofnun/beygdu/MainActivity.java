@@ -25,6 +25,7 @@ import android.widget.Toast;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
+import is.arnastofnun.DB.DBController;
 import is.arnastofnun.parser.WordResult;
 import is.arnastofnun.utils.CustomDialog;
 
@@ -342,11 +343,15 @@ public class MainActivity extends NavDrawer implements CustomDialog.DialogListen
 			WordResult word = this.wR;
 			createNewActivity(word);
 		} else if (pr.equals("Miss")) {
-            //TODO: Check if word is non-beygjable?
             SkrambiHelper sHelper = new SkrambiHelper();
             String[] correctedWords = sHelper.getSpellingCorrection(wR.getSearchWord());
-            if( correctedWords == null ) {
-                Toast.makeText(this, "Engin leitarniðurstaða", Toast.LENGTH_SHORT).show();
+            if( correctedWords == null || correctedWords[0].equals("")) {
+                DBController controller = new DBController(this);
+                if(controller.fetchObeygjanlegt(wR.getSearchWord()) != null){
+                    Toast.makeText(this, wR.getSearchWord() + " er óbeygjanlegt orð", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(this, "Engin leitarniðurstaða", Toast.LENGTH_SHORT).show();
+                }
             }
             else {
                 Bundle bundle = new Bundle();
