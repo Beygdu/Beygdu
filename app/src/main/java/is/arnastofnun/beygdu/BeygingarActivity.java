@@ -1,5 +1,7 @@
 package is.arnastofnun.beygdu;
 
+import android.animation.AnimatorInflater;
+import android.animation.AnimatorSet;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -236,15 +238,15 @@ public class BeygingarActivity extends NavDrawer {
             titleDesc.setTextSize(20);
         }
         else if(384 > width && width < 600) {
-            titleDesc.setTextSize(24);
+            titleDesc.setTextSize(32);
         }
         else if(width > 600){
-            titleDesc.setTextSize(30);
+            titleDesc.setTextSize(50);
         }
-
 		titleDesc.setMinHeight(130);
-		titleDesc.setTypeface(LatoBold);
-        titleDesc.setTextColor(R.color.white);
+		titleDesc.setTypeface(LatoSemiBold);
+
+        titleDesc.setTextColor(getResources().getColor(R.color.white));
         tableLayout.addView(titleDesc);
 		
 		//SetNote
@@ -264,19 +266,20 @@ public class BeygingarActivity extends NavDrawer {
 				Block block = words.getBlocks().get(i);
 				TextView blockTitle = new TextView(this);
                 if (320 > width && width < 384) {
-                    blockTitle.setTextSize(18);
+                    blockTitle.setTextSize(20);
                 }
                 else if(384 > width && width < 600) {
-                    blockTitle.setTextSize(22);
+                    blockTitle.setTextSize(28);
                 }
                 else if(width > 600){
-                    blockTitle.setTextSize(28);
+                    blockTitle.setTextSize(42);
                 }
 				blockTitle.setMinHeight(100);
 				blockTitle.setText(block.getTitle());
-                blockTitle.setTypeface(LatoSemiBold);
+                blockTitle.setTypeface(LatoLight);
                 blockTitle.setTextColor(getResources().getColor(R.color.white));
                 blockTitle.setPadding(0, 10, 0, 10);
+
                 TableFragment tFragment = new TableFragment(BeygingarActivity.this, tableLayout, block, blockTitle);
 				getFragmentManager().beginTransaction().add(tableLayout.getId(), tFragment).commit();
 				tables.add(tFragment);				

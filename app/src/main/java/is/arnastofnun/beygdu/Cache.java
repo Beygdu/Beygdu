@@ -64,6 +64,7 @@ public class Cache extends NavDrawer {
                 Intent intent = new Intent(Cache.this, BeygingarActivity.class);
                 intent.putExtra("word", word);
                 startActivity(intent);
+                overridePendingTransition(R.animator.activity_open_scale,R.animator.activity_close_translate);
             }
         });
     }

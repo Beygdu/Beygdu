@@ -3,8 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="is.arnastofnun.beygdu.Main"
 	android:layout_width="fill_parent"
-	android:layout_height="wrap_content"
-    android:background="@color/white">
+	android:layout_height="wrap_content">
     <FrameLayout
         android:layout_width="wrap_content"
         android:layout_height="fill_parent">
@@ -14,29 +13,29 @@
             android:layout_height="fill_parent"
             android:adjustViewBounds="true"
             android:layout_alignParentTop="true"
-            android:background="@drawable/gradient_image"
             android:scaleType="fitXY"
             android:src="@drawable/blurredbackground"/>
         <TextView
-            android:id="@+id/title"
+            android:id="@+id/fakeForGradient"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:layout_alignLeft="@+id/banner"
-            android:layout_alignBottom="@+id/banner"
-            android:layout_alignRight="@+id/banner"
-            android:background="@drawable/gradient_image"
+            android:background="@drawable/gradient_image"/>
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
             android:text="@string/title"
             android:textColor="@color/white"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
-        android:paddingTop="20dp"/>
+            android:paddingTop="20dp"/>
     </FrameLayout>
+
     <TableLayout
         android:id="@+id/tableLayout1"
         android:layout_width="fill_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="100dp">
-
 
         <TableRow
             android:id="@+id/search_row"
@@ -64,31 +63,48 @@
                 android:textSize="20sp" />
         </TableRow>
 
-        <TableRow
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent">
 
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Cache"
-                android:id="@+id/cache"
-                android:onClick="cacheClick"
-                android:layout_column="1" />
-
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Statistics"
-                android:id="@+id/statisticsBtn"
-                android:onClick="statisticsClick"
-                android:layout_column="1" />
-        </TableRow>
 
 
 
     </TableLayout>
-    <TextView
+    <TableRow
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="3sp"
+        android:gravity="center"
+        android:weightSum="2"
+        android:layout_alignParentBottom="true">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Cache"
+            android:layout_weight="1"
+            android:textColor="@color/white"
+            android:id="@+id/cache"
+            android:onClick="cacheClick"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Statistics"
+            android:textColor="@color/white"
+            android:layout_weight="1"
+            android:id="@+id/statisticsBtn"
+            android:onClick="statisticsClick"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Google Maps"
+            android:textColor="@color/red"
+            android:layout_weight="1"
+            android:id="@+id/mapBtn"
+            android:onClick="googleClick"/>
+    </TableRow>
+
+    <!--TextView
         android:id="@+id/titleSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -96,7 +112,7 @@
         android:textColor="@color/white"
         android:layout_alignParentBottom="true"
         android:textSize="12sp"
-        android:gravity="center"/>
+        android:gravity="center"/-->
 
 </RelativeLayout>
 

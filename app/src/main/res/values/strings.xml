@@ -73,5 +73,6 @@
             <item>Fyrri leitir</item>
             <item>Um Beygðu</item>
         </string-array>
+    <string name="title_activity_maps">Map</string>
 
 </resources>
