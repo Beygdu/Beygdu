@@ -29,7 +29,9 @@
             android:name=".MainActivity"
             android:configChanges="orientation"
             android:label="@string/app_name"
-            android:screenOrientation="portrait" >
+            android:screenOrientation="portrait"
+            android:launchMode="singleTask"
+            >
 <!--
 
             <intent-filter>
@@ -58,40 +60,43 @@
             android:name=".BeygingarActivity"
             android:configChanges="orientation"
             android:label="@string/title_activity_beygingar"
+            android:screenOrientation="portrait"
             android:parentActivityName=".MainActivity"
-            android:screenOrientation="portrait" >
+            >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity"
+                />
         </activity>
 
         <activity
             android:name=".AboutActivity"
             android:configChanges="orientation"
             android:label="@string/title_activity_about"
-            android:parentActivityName=".MainActivity"
-            android:screenOrientation="portrait" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="is.arnastofnun.beygdu.MainActivity"
-            />
+            android:screenOrientation="portrait"
+            android:launchMode="singleTask"
+            >
+
+
+
         </activity>
 
         <activity
             android:name=".Cache"
             android:label="@string/title_activity_cache"
             android:configChanges="orientation"
-            android:parentActivityName=".MainActivity"
-            android:screenOrientation="portrait">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="is.arnastofnun.beygdu.MainActivity"
-                />
+            android:screenOrientation="portrait"
+            android:launchMode="singleTask"
+            >
         </activity>
 
         <activity
             android:name=".StatisticsActivity"
             android:configChanges="orientation"
             android:label="@string/title_activity_statistics"
-            android:parentActivityName=".MainActivity"
-            android:screenOrientation="portrait" >
+            android:screenOrientation="portrait"
+            android:launchMode="singleTask"
+            >
         </activity>
 
     </application>

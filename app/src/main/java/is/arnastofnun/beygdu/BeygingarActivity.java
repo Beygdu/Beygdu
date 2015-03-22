@@ -88,8 +88,6 @@ public class BeygingarActivity extends NavDrawer {
          */
         mDrawerList.setItemChecked(position,true);
 
-//        getActionBar().setDisplayHomeAsUpEnabled(true);
-
         // Get screen sizes
         Display display = getWindowManager().getDefaultDisplay();
         Point size = new Point();
@@ -121,6 +119,13 @@ public class BeygingarActivity extends NavDrawer {
 
         // Set the title in the actionbar
         setTitle(firstWordInString(words.getTitle()));
+
+        // Set the action bar activity for going backwards to last activity
+        getActionBar().setDisplayHomeAsUpEnabled(true);
+        getActionBar().setHomeButtonEnabled(true);
+
+
+
 
         // If it is possible to filter the word result, add a Navigation
         // Drawer Item at the second last position in the list
@@ -305,9 +310,9 @@ public class BeygingarActivity extends NavDrawer {
 	public boolean onOptionsItemSelected(MenuItem item) {
 
         switch (item.getItemId()) {
-		case android.R.id.home:
-			NavUtils.navigateUpFromSameTask(this);
-			return true;
+        case R.id.home:
+            onBackPressed();
+            break;
 		case R.id.action_filter:
 			filterAction();
 			break;

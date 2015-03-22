@@ -13,6 +13,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -97,11 +98,6 @@ public class NavDrawer extends FragmentActivity{
             }
         });
 
-        // enable ActionBar app icon to behave as action to toggle nav drawer
-        getActionBar().setDisplayHomeAsUpEnabled(true);
-//        getActionBar().setHomeButtonEnabled(true);
-
-
         /**
          * ActionbarDrawerToggle ties together the proper interactions
          * between the nav drawer and the action bar
@@ -121,7 +117,6 @@ public class NavDrawer extends FragmentActivity{
 
             @Override
             public void onDrawerClosed(View drawerView) {
-//                getActionBar().setTitle(navArray[position]);
                 getActionBar().setTitle(navArray.get(position));
                 invalidateOptionsMenu();
                 super.onDrawerClosed(drawerView);
@@ -137,7 +132,20 @@ public class NavDrawer extends FragmentActivity{
                 super.onDrawerSlide(drawerView, slideOffset);
             }
         };
+        actionBarDrawerToggle.setDrawerIndicatorEnabled(true);
         mDrawerLayout.setDrawerListener(actionBarDrawerToggle);
+/**
+ * ==========================================================================================
+ */
+        // enable ActionBar app icon to behave as action to toggle nav drawer
+
+        getActionBar().setDisplayHomeAsUpEnabled(true);
+        getActionBar().setHomeButtonEnabled(true);
+
+/**
+ * ==========================================================================================
+ */
+
 
         /**
          * Since NavDrawer is the Launcher Activity, if it is launching for the first time in the apps
@@ -161,19 +169,31 @@ public class NavDrawer extends FragmentActivity{
 
         switch (position) {
             case 0:
-                startActivity(new Intent(this, MainActivity.class));
+                Intent mainAct = new Intent(this, MainActivity.class);
+                startActivity(mainAct);
+
+//                startActivity(new Intent(this, MainActivity.class));
                 overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
                 break;
             case 1:
-                startActivity(new Intent(this, Cache.class));
+                Intent cacheAct = new Intent(this, Cache.class);
+                startActivity(cacheAct);
+
+//                startActivity(new Intent(this, Cache.class));
                 overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
                 break;
             case 2:
-                startActivity(new Intent(this, AboutActivity.class));
+                Intent aboutAct = new Intent(this, AboutActivity.class);
+                startActivity(aboutAct);
+
+//                startActivity(new Intent(this, AboutActivity.class));
                 overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
                 break;
             case 3:
-                startActivity(new Intent(this, StatisticsActivity.class));
+                Intent statisticsAct = new Intent(this, StatisticsActivity.class);
+                startActivity(statisticsAct);
+
+//                startActivity(new Intent(this, StatisticsActivity.class));
                 overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
                 break;
         }
@@ -197,20 +217,38 @@ public class NavDrawer extends FragmentActivity{
     public boolean onOptionsItemSelected(MenuItem item) {
         // The action bar home/up action should open or close the drawer
         // ActionBarDrawerToggle will take care of this
+        /**
+         *
         if(actionBarDrawerToggle.onOptionsItemSelected(item)){
 
             return true;
         }
-
-        /**
-         *
-        switch (item.getItemId()){
-            case R.id.action_settings:
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
          */
+
+/*        if(actionBarDrawerToggle.onOptionsItemSelected(item)){
+
+//            switch (item.getItemId()){
+//
+//                case R.id.home:
+//                    onBackPressed();
+//                    Toast.makeText(this,"Home pressed!",Toast.LENGTH_SHORT).show();
+//                    return true;
+//                default:
+//                    return super.onOptionsItemSelected(item);
+//            }
+            return true;
+        }*/
+
+        if(item.getItemId() == R.id.home){
+            Toast.makeText(this,"Home selected",Toast.LENGTH_SHORT).show();
+            onBackPressed();
+        }
+        /*
+        if(actionBarDrawerToggle.onOptionsItemSelected(item)){
+            Toast.makeText(this,"Home selected",Toast.LENGTH_SHORT).show();
+            return true;
+        }
+*/
         return super.onOptionsItemSelected(item);
     }
 
