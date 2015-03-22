@@ -217,13 +217,12 @@ public class NavDrawer extends FragmentActivity{
     public boolean onOptionsItemSelected(MenuItem item) {
         // The action bar home/up action should open or close the drawer
         // ActionBarDrawerToggle will take care of this
-        /**
-         *
-        if(actionBarDrawerToggle.onOptionsItemSelected(item)){
 
+        /*
+        if(actionBarDrawerToggle.onOptionsItemSelected(item)){
             return true;
-        }
-         */
+        }*/
+
 
 /*        if(actionBarDrawerToggle.onOptionsItemSelected(item)){
 
@@ -239,10 +238,6 @@ public class NavDrawer extends FragmentActivity{
             return true;
         }*/
 
-        if(item.getItemId() == R.id.home){
-            Toast.makeText(this,"Home selected",Toast.LENGTH_SHORT).show();
-            onBackPressed();
-        }
         /*
         if(actionBarDrawerToggle.onOptionsItemSelected(item)){
             Toast.makeText(this,"Home selected",Toast.LENGTH_SHORT).show();
@@ -261,6 +256,7 @@ public class NavDrawer extends FragmentActivity{
             mDrawerLayout.openDrawer(mDrawerList);
         }
         */
+        Toast.makeText(this,"Back home button pressed!",Toast.LENGTH_SHORT).show();
         super.onBackPressed();
     }
 }

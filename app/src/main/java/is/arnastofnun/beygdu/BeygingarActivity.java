@@ -124,9 +124,6 @@ public class BeygingarActivity extends NavDrawer {
         getActionBar().setDisplayHomeAsUpEnabled(true);
         getActionBar().setHomeButtonEnabled(true);
 
-
-
-
         // If it is possible to filter the word result, add a Navigation
         // Drawer Item at the second last position in the list
         navDrawerFilterableListItem();
@@ -160,6 +157,10 @@ public class BeygingarActivity extends NavDrawer {
      */
     @Override
     protected void openActivity(int position) {
+        /**
+         * if the word is filterable, add the option in the navigation drawer,else
+         * just call the super method
+         */
         if(checkWordFilterable()){
             mDrawerLayout.closeDrawer(mDrawerList);
             // Set the position so we can access it from child activities
@@ -311,7 +312,9 @@ public class BeygingarActivity extends NavDrawer {
 
         switch (item.getItemId()) {
         case R.id.home:
-            onBackPressed();
+            Toast.makeText(this,"Pewpew",Toast.LENGTH_SHORT).show();
+
+//            onBackPressed();
             break;
 		case R.id.action_filter:
 			filterAction();
