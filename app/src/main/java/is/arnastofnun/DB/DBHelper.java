@@ -16,6 +16,15 @@ import java.io.InputStreamReader;
  * @since 14.02.15
  * @version 1.0
  *
+ *
+ * A helper class for the DBController. The DBHelper creates the DB the
+ * first time it is constructed. It also reconstructs the DB if it has
+ * been updated (In future versions the update function would be used to
+ * migrate data from old tables to new one and then delete the old tables).
+ * It also contains useful  static variables which are constantly being
+ * used in the DB, such as the CREATE queries the table and column names
+ * and the max size of the DB.
+ *
  */
 public class DBHelper extends SQLiteOpenHelper{
 
@@ -23,10 +32,10 @@ public class DBHelper extends SQLiteOpenHelper{
     private Context context;
 
     // Database Information
-    static final String DB_NAME = "BEYGDU.DB";
+    private static final String DB_NAME = "BEYGDU.DB";
 
     // database version
-    static final int DB_VERSION = 1;
+    private static final int DB_VERSION = 1;
 
     // database max size
     static final int MAX_SIZE = 10;
