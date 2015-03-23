@@ -44,6 +44,7 @@ public class TableFragment extends Fragment {
      * content - is an arraylist of the content which is added into the table, in the right order
      * block - contains the row and col headers and the content of the of the table.
      * title - the title of the table
+     * fonts - app fonts
      */
     private Context context;
     private TableLayout tableLayout;
@@ -105,6 +106,7 @@ public class TableFragment extends Fragment {
     }
 
     /**
+     * @author Snær Seljan, Jón Friðrik
      * constructs a TextView containing the title of the subBlock
      * and a TextView containing the title of the tables and then calls
      * the function createTable which constucts the tables in the subBlock
@@ -166,6 +168,9 @@ public class TableFragment extends Fragment {
     }
 
     /**
+     * @author Snær Seljan, Jón Friðrik
+     * @since 20.03.15
+     * @version 2.0
      * @param table the table which is to be built
      * Makes a tableTow for each row which contains TextView for each column.
      */
@@ -252,7 +257,13 @@ public class TableFragment extends Fragment {
             tableLayout.addView(tr);
         }
     }
-
+    /**
+     * @author Snær Seljan
+     * @since 20.03.15
+     * @version 2.0
+     * @param table the table which is to be built
+     * Makes a textview for a single table cell like nafnhattur, lysingarhattur þt.
+     */
     private void createTableSpecial(Tables table) {
         TableRow tr = new TableRow(context);
         final TextView cell = new TextView(context);

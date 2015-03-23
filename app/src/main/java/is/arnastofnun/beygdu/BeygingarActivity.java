@@ -206,6 +206,9 @@ public class BeygingarActivity extends NavDrawer {
 
 
     /**
+     * @author Snær Seljan
+     * @since 23.03.15
+     * @version 2.0
      * This method converts device specific pixels to density independent pixels.
      * @param px A value in px (pixels) unit. Which we need to convert into db
      * @return A float value to represent dp equivalent to px value
@@ -217,6 +220,13 @@ public class BeygingarActivity extends NavDrawer {
         return dp;
     }
 
+
+    /**
+     * @author Snær Seljan
+     * @since 23.03.15
+     * @version 2.0
+     * @return device screen width
+     */
     public int getScreenWidth() {
         Display display = getWindowManager().getDefaultDisplay();
         Point size = new Point();
@@ -330,6 +340,13 @@ public class BeygingarActivity extends NavDrawer {
 		return super.onOptionsItemSelected(item);
 	}
 
+    /**
+     * @author Snær Seljan
+     * @since 23.03.15
+     * @version 2.0
+     *
+     * Opens up mail intent width extra predefined params
+     */
 	protected void sendEmail() {
 		Log.i("Senda post", "");
 		String[] TO = {"sth132@hi.is"};

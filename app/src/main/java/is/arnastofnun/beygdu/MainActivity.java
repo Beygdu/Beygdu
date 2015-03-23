@@ -70,7 +70,13 @@ public class MainActivity extends NavDrawer implements CustomDialog.DialogListen
 		this.wR = wordResult;
 	}
 
-
+    /**
+     * LatoBold - default font bold
+     * LatoSemiBold - default font semibold
+     * LatoLight - default font
+     * width - sceen width
+     * height - screen height
+     */
     //Fonts
     private Typeface LatoBold;
     private Typeface LatoSemiBold;
@@ -104,17 +110,22 @@ public class MainActivity extends NavDrawer implements CustomDialog.DialogListen
         //setTitle(listArray[position]);
 
 		checkNetworkState();
+        /**
+         * Animate header text and set it's size
+         */
         headerText();
 
 
 	}
 
-
-
     /**
+     * @author Snær Seljan
+     * @since 22.03.15
+     * @version 2.0
+     *
      * This method changes text size depending on screen sizes
-     * Snær Seljan
      */
+
     public void headerText() {
         //Set typeface for fonts
         LatoBold = Typeface.createFromAsset(getAssets(), "fonts/Lato-Bold.ttf");
