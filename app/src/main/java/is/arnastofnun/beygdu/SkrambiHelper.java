@@ -1,7 +1,11 @@
 package is.arnastofnun.beygdu;
 
 import android.util.Log;
+import android.widget.Toast;
 
+import java.io.StringReader;
+import java.io.UnsupportedEncodingException;
+import java.util.Properties;
 import java.util.concurrent.ExecutionException;
 
 import is.arnastofnun.SkrambiWebTool.SkrambiWT;
@@ -27,6 +31,22 @@ public class SkrambiHelper {
         return correctStrings;
     }
 
+    private String[] checkEncodingStage(String[] args) {
+        String[] decodingArray = new String[args.length];
+        for(int i = 0; i < args.length; i++) {
+            try {
+                Properties p = new Properties();
+                p.load(new StringReader("key="+args[i]));
+                decodingArray[i] = p.getProperty("key");
+            }
+            catch ( Exception e ) {
+                Log.w("Exception", e);
+                decodingArray[i] = args[i];
+            }
+        }
+        return decodingArray;
+    }
+
     public String[] getSpellingCorrection(String spellCheck) {
         try {
             String str = new SkrambiWT().execute(spellCheck).get();
@@ -36,6 +56,7 @@ public class SkrambiHelper {
                     str.indexOf("]"));
             String[] results = str.split(" ");
             results = prepareResults(results);
+            results = checkEncodingStage(results);
             return results;
         }
         catch( Exception e ) {
