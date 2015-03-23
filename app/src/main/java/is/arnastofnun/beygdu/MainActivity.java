@@ -101,15 +101,15 @@ public class MainActivity extends NavDrawer implements CustomDialog.DialogListen
          * Setting the title and what item is checked
          */
         mDrawerList.setItemChecked(position,true);
-        //setTitle(listArray[position]);
+        setTitle(R.string.app_name);
+
+        getActionBar().setDisplayHomeAsUpEnabled(false);
 
 		checkNetworkState();
         headerText();
 
 
 	}
-
-
 
     /**
      * This method changes text size depending on screen sizes

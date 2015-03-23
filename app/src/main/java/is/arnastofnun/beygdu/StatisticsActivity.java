@@ -23,12 +23,29 @@ import is.arnastofnun.DB.DBController;
  *
  */
 
-public class StatisticsActivity extends FragmentActivity {
+public class StatisticsActivity extends NavDrawer {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_statistics);
+
+        /**
+         * Not setting the content view here since we are
+         * inflating it in the NavDrawer (see below)
+         */
+//        setContentView(R.layout.activity_statistics);
+
+        /**
+         * Inflate the layout into the NavDrawer layout
+         * where `frameLayout` is a FrameLayout in the layout for the
+         * NavDrawer (see file nav_base_layout)
+         */
+        getLayoutInflater().inflate(R.layout.activity_statistics, frameLayout);
+
+        /**
+         * Setting what item is checked
+         */
+        mDrawerList.setItemChecked(position,true);
 
         PieChart chart = (PieChart) findViewById(R.id.chart);
 
@@ -58,6 +75,9 @@ public class StatisticsActivity extends FragmentActivity {
         chart.setDescription("Fjöldi leita: " + sum);
         chart.invalidate();
         chart.animateY(1500);
+
+        setTitle(R.string.title_activity_statistics);
+
     }
 
     @Override
