@@ -111,8 +111,6 @@ public class MainActivity extends NavDrawer implements CustomDialog.DialogListen
 
 	}
 
-
-
     /**
      * This method changes text size depending on screen sizes
      * Snær Seljan
