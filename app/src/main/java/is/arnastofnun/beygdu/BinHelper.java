@@ -4,6 +4,9 @@ import android.content.Context;
 import android.util.Log;
 import android.widget.Toast;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+
 import is.arnastofnun.parser.BinThread;
 import is.arnastofnun.parser.WordResult;
 
@@ -20,10 +23,20 @@ public class BinHelper {
 
     }
 
+    private String convertToUTF8(String word) {
+        try {
+            word = URLEncoder.encode(word, "UTF-8");
+            return word;
+        }
+        catch( UnsupportedEncodingException e ) {
+            return word;
+        }
+    }
+
     public WordResult sendThread(String string, int flag) {
 
         try {
-            return new BinThread(this.context).execute(string, Integer.toString(flag)).get();
+            return new BinThread(this.context).execute(convertToUTF8(string), Integer.toString(flag)).get();
         }
         catch( Exception e ) {
             Log.w("Exception", e);
