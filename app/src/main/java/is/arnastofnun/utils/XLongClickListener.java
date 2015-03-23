@@ -15,6 +15,10 @@ import android.widget.TextView;
 
 /**
  * Created by jfjclarke on 21.3.2015.
+ *
+ * A LongClickListener which with animation which highlights a TextView object
+ * by setting background color to yellow and then reverting setting to Transparent.
+ *
  */
 public class XLongClickListener implements View.OnLongClickListener {
 
@@ -22,10 +26,15 @@ public class XLongClickListener implements View.OnLongClickListener {
     private TextView cell;
 
 
-    public XLongClickListener(Context context, TextView cell) {
+    /**
+     *
+     * @param context the context where used.
+     * @param textView the Textview.
+     */
+    public XLongClickListener(Context context, TextView textView) {
         super();
         this.context = context;
-        this.cell = cell;
+        this.cell = textView;
     }
 
     @Override

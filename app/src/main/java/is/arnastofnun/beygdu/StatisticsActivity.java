@@ -2,7 +2,6 @@ package is.arnastofnun.beygdu;
 
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -19,11 +18,22 @@ import is.arnastofnun.DB.DBController;
 /**
  * @author Jón Friðrik
  * @since 05.03.15
- * @version 0.1
+ * @version 1.0
+ *
+ * StatisticsActivity contains (will contain) various methods to show the user
+ * statistics of his former searches.
  *
  */
 
 public class StatisticsActivity extends NavDrawer {
+
+    /**
+     * Creates the activity and fetches statistics from the database. Then constructs a pieChart
+     * with MPAndroid library (see link below).
+     *
+     * @see <a href="https://github.com/PhilJay/MPAndroidChart"</a>
+     * @param savedInstanceState
+     */
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,7 +79,7 @@ public class StatisticsActivity extends NavDrawer {
 
         PieDataSet data = new PieDataSet(entries, "");
 
-        data.setColors(new int[] {Color.parseColor("#428bca"), Color.parseColor("#5cb85c"), Color.parseColor("#d9534f"), Color.parseColor("#5bc0de"), Color.parseColor("#f0ad4e")});
+        data.setColors(new int[]{Color.parseColor("#428bca"), Color.parseColor("#5cb85c"), Color.parseColor("#d9534f"), Color.parseColor("#5bc0de"), Color.parseColor("#f0ad4e")});
         chart.setData(new PieData(labels, data));
         chart.setCenterText("Orðflokkar");
         chart.setDescription("Fjöldi leita: " + sum);
