@@ -13,6 +13,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -74,32 +75,38 @@ public class NavDrawer extends FragmentActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // Set the layout
+        /**
+         * Set the layout
+         */
         setContentView(R.layout.nav_base_layout);
 
-        // "Connect" to the layout
+        /**
+         * attach variables to items in the loaded layout
+         */
         frameLayout = (FrameLayout) findViewById(R.id.content_frame);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
 
-        // get the drawer items string
-        navArray = new ArrayList<String>();
+        /**
+         * retrieve the array of strings from strings.xml and load it into
+         * an arraylist because we want to be able to add and remove from this
+         * list dynamically
+         */
+        navArray = new ArrayList<>();
         Collections.addAll(navArray, getResources().getStringArray(R.array.navdrawer_items));
 
 
-
-        // set up the drawer's list view with items and click listener
-        mDrawerList.setAdapter(new ArrayAdapter<String>(this, R.layout.nav_drawer_item,R.id.navDrawerItem,navArray));
+        /**
+         * populate the list for the navigation drawer and attach a
+         * click listener for when an item is selected
+         */
+        mDrawerList.setAdapter(new ArrayAdapter<>(this, R.layout.nav_drawer_item,R.id.navDrawerItem,navArray));
         mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 openActivity(position);
             }
         });
-
-        // enable ActionBar app icon to behave as action to toggle nav drawer
-        getActionBar().setDisplayHomeAsUpEnabled(true);
-        getActionBar().setHomeButtonEnabled(true);
 
         /**
          * ActionbarDrawerToggle ties together the proper interactions
@@ -120,7 +127,6 @@ public class NavDrawer extends FragmentActivity{
 
             @Override
             public void onDrawerClosed(View drawerView) {
-//                getActionBar().setTitle(navArray[position]);
                 getActionBar().setTitle(navArray.get(position));
                 invalidateOptionsMenu();
                 super.onDrawerClosed(drawerView);
@@ -136,7 +142,19 @@ public class NavDrawer extends FragmentActivity{
                 super.onDrawerSlide(drawerView, slideOffset);
             }
         };
+        actionBarDrawerToggle.setDrawerIndicatorEnabled(true);
+        /**
+         * TODO: Use .syncState() to properly display the 'hamburger' icon for the navDrawer
+         * actionBarDrawerToggle.syncState();
+         */
         mDrawerLayout.setDrawerListener(actionBarDrawerToggle);
+        /**
+         * enable ActionBar app icon to behave as a button to toggle navigation drawer
+         */
+
+        getActionBar().setDisplayHomeAsUpEnabled(true);
+        getActionBar().setHomeButtonEnabled(true);
+
 
         /**
          * Since NavDrawer is the Launcher Activity, if it is launching for the first time in the apps
@@ -149,9 +167,11 @@ public class NavDrawer extends FragmentActivity{
         }
     }
 
+
+
     /**
      * Launching respective activity when selected list item is clicked
-     * @param position
+     * @param position position in the list of items in the navigation drawer
      */
     protected void openActivity(int position){
         mDrawerLayout.closeDrawer(mDrawerList);
@@ -161,24 +181,34 @@ public class NavDrawer extends FragmentActivity{
         switch (position) {
             case 0:
                 startActivity(new Intent(this, MainActivity.class));
-                overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
+                activityAnimationTransition();
                 break;
             case 1:
                 startActivity(new Intent(this, Cache.class));
-                overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
+                activityAnimationTransition();
                 break;
             case 2:
                 startActivity(new Intent(this, AboutActivity.class));
-                overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
+                activityAnimationTransition();
+                break;
+            case 3:
+                startActivity(new Intent(this, StatisticsActivity.class));
+                activityAnimationTransition();
                 break;
         }
+    }
+
+    /**
+     * Handles the animation when the app is transitioning between activities
+     */
+    public void activityAnimationTransition(){
+        overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
     }
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         // if the drawer is open, hide action items related to the content view
         boolean drawerOpen = mDrawerLayout.isDrawerOpen(mDrawerList);
-//        menu.findItem(R.id.action_settings).setVisible(!drawerOpen);
         return super.onPrepareOptionsMenu(menu);
     }
 
@@ -192,19 +222,18 @@ public class NavDrawer extends FragmentActivity{
     public boolean onOptionsItemSelected(MenuItem item) {
         // The action bar home/up action should open or close the drawer
         // ActionBarDrawerToggle will take care of this
+
         if(actionBarDrawerToggle.onOptionsItemSelected(item)){
-            return true;
+
+            switch (item.getItemId()){
+                case R.id.home:
+                    onBackPressed();
+                    break;
+                default:
+                    return super.onOptionsItemSelected(item);
+            }
         }
 
-        /**
-         *
-        switch (item.getItemId()){
-            case R.id.action_settings:
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-         */
         return super.onOptionsItemSelected(item);
     }
 
@@ -217,6 +246,7 @@ public class NavDrawer extends FragmentActivity{
             mDrawerLayout.openDrawer(mDrawerList);
         }
         */
+
         super.onBackPressed();
     }
 }
