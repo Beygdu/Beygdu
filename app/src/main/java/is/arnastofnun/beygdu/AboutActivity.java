@@ -39,14 +39,12 @@ public class AboutActivity extends NavDrawer {
          */
         getLayoutInflater().inflate(R.layout.activity_about, frameLayout);
 
-
-
-
-
 		if (savedInstanceState == null) {
 			getFragmentManager().beginTransaction()
 					.add(R.id.container, new PlaceholderFragment()).commit();
 		}
+
+        setTitle(R.string.title_activity_about);
 		
 	}
 

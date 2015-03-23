@@ -75,6 +75,9 @@ public class StatisticsActivity extends NavDrawer {
         chart.setDescription("Fjöldi leita: " + sum);
         chart.invalidate();
         chart.animateY(1500);
+
+        setTitle(R.string.title_activity_statistics);
+
     }
 
     @Override

@@ -120,7 +120,8 @@ public class BeygingarActivity extends NavDrawer {
         dbController.insertStats(words.getTitle());
 
         // Set the title in the actionbar
-        setTitle(firstWordInString(words.getTitle()));
+//        setTitle(firstWordInString(words.getTitle()));
+        setTitle(R.string.title_activity_beygingar);
 
         // Set the action bar activity for going backwards to last activity
         getActionBar().setDisplayHomeAsUpEnabled(true);
@@ -192,28 +193,6 @@ public class BeygingarActivity extends NavDrawer {
             super.openActivity(position);
         }
     }
-
-    /**
-     * Accepts a String of word(s) and returns the first word in that string.
-     * Looks for an empty space (" ") to see where the word ends.
-     * @param title String of words
-     * @return String that is the first word in a String
-     */
-    private String firstWordInString(String title){
-        String firstWord = null;
-
-        // Get the first word
-        if(title.contains(" ")){
-            firstWord = title.substring(0, title.indexOf(" "));
-        }
-
-        // Capitalize the first letter of the word
-        if(firstWord != null){
-            firstWord = firstWord.substring(0,1).toUpperCase() + firstWord.substring(1);
-        }
-        return firstWord;
-    }
-
 
     /**
      * This method converts device specific pixels to density independent pixels.

@@ -50,10 +50,10 @@
     <string name="progressdialog">Sæki gögn...</string>
 
     <!-- Cache -->
-    <string name="title_activity_cache">cache</string>
+    <string name="title_activity_cache">Fyrri leitir</string>
 
     <!-- Statistics -->
-    <string name="title_activity_statistics">StatisticsActivity</string>
+    <string name="title_activity_statistics">Tölfræði</string>
     <string name="pieChart_Desc">Fjöldi leita eftir orðflokkum</string>
 
     <!-- Auto-Generated -->

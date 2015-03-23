@@ -41,7 +41,7 @@ public class Cache extends NavDrawer {
          */
         getLayoutInflater().inflate(R.layout.activity_cache,frameLayout);
         mDrawerList.setItemChecked(position,true);
-        setTitle(navArray.get(position));
+        setTitle(R.string.title_activity_cache);
 
 
         listView = (ListView) findViewById(R.id.list_view);
