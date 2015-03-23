@@ -301,12 +301,7 @@ public class BeygingarActivity extends NavDrawer {
 	public boolean onOptionsItemSelected(MenuItem item) {
 
         switch (item.getItemId()) {
-        case R.id.home:
-            Toast.makeText(this,"Pewpew",Toast.LENGTH_SHORT).show();
-
-//            onBackPressed();
-            break;
-		case R.id.action_filter:
+        case R.id.action_filter:
 			filterAction();
 			break;
 //		case R.id.action_about:
