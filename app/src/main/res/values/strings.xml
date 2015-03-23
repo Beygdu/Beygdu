@@ -74,5 +74,6 @@
             <item>Um Beygðu</item>
             <item>Tölfræði</item>
         </string-array>
+    <string name="title_activity_maps">Map</string>
 
 </resources>

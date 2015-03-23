@@ -241,7 +241,7 @@ public class NavDrawer extends FragmentActivity{
             mDrawerLayout.openDrawer(mDrawerList);
         }
         */
-        Toast.makeText(this,"Back home button pressed!",Toast.LENGTH_SHORT).show();
+        
         super.onBackPressed();
     }
 }

@@ -3,7 +3,6 @@ package is.arnastofnun.beygdu;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -14,7 +13,6 @@ import com.github.mikephil.charting.data.PieDataSet;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 
 import is.arnastofnun.DB.DBController;
 

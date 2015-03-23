@@ -1,5 +1,7 @@
 package is.arnastofnun.beygdu;
 
+import android.animation.AnimatorInflater;
+import android.animation.AnimatorSet;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
@@ -18,13 +20,18 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
+import is.arnastofnun.DB.DBController;
 import is.arnastofnun.parser.WordResult;
 import is.arnastofnun.utils.CustomDialog;
 
@@ -100,7 +107,10 @@ public class MainActivity extends NavDrawer implements CustomDialog.DialogListen
 
 		checkNetworkState();
         headerText();
+
+
 	}
+
 
 
     /**
@@ -114,17 +124,33 @@ public class MainActivity extends NavDrawer implements CustomDialog.DialogListen
         LatoLight = Typeface.createFromAsset(getAssets(), "fonts/Lato-Light.ttf");
 
         TextView header = (TextView)findViewById(R.id.title);
+        TableRow rowSearch = (TableRow) findViewById(R.id.search_row);
+
         header.setTypeface(LatoLight);
         if (320 > width && width < 384) {
             header.setTextSize(30);
         }
         else if(384 > width && width < 600) {
-            header.setTextSize(36);
+            header.setTextSize(50);
         }
         else if(width > 600){
-            header.setTextSize(40);
+            header.setTextSize(50);
         }
+
+        Animation animateFromTop = AnimationUtils.loadAnimation(this, R.animator.animator);
+        Animation fadeIn = AnimationUtils.loadAnimation(this, R.animator.fadein);
+        rowSearch.startAnimation(fadeIn);
+        header.startAnimation(animateFromTop);
+
+
     }
+
+
+    /*public void animationTest(TextView name) {
+        AnimatorSet set = (AnimatorSet) AnimatorInflater.loadAnimator(this, R.animator.animator);
+        set.setTarget(header);
+        set.start();
+    }*/
 
     /**
      * This method converts device specific pixels to density independent pixels.
@@ -251,11 +277,18 @@ public class MainActivity extends NavDrawer implements CustomDialog.DialogListen
     public void cacheClick(@SuppressWarnings("unused") View view){
         Intent intent = new Intent(MainActivity.this, Cache.class);
         startActivity(intent);
+        overridePendingTransition(R.animator.activity_open_scale,R.animator.activity_close_translate);
     }
 
 
     public void statisticsClick(@SuppressWarnings("unused") View view){
         Intent intent = new Intent(MainActivity.this, StatisticsActivity.class);
+        startActivity(intent);
+        overridePendingTransition(R.animator.activity_open_scale,R.animator.activity_close_translate);
+    }
+
+    public void googleClick(@SuppressWarnings("unused")  View view) {
+        Intent intent = new Intent(MainActivity.this, MapsActivity.class);
         startActivity(intent);
     }
 
@@ -344,11 +377,15 @@ public class MainActivity extends NavDrawer implements CustomDialog.DialogListen
 			WordResult word = this.wR;
 			createNewActivity(word);
 		} else if (pr.equals("Miss")) {
-            //TODO: Check if word is non-beygjable?
             SkrambiHelper sHelper = new SkrambiHelper();
             String[] correctedWords = sHelper.getSpellingCorrection(wR.getSearchWord());
-            if( correctedWords == null ) {
-                Toast.makeText(this, "Engin leitarniðurstaða", Toast.LENGTH_SHORT).show();
+            if( correctedWords == null || correctedWords[0].equals("")) {
+                DBController controller = new DBController(this);
+                if(controller.fetchObeygjanlegt(wR.getSearchWord()) != null){
+                    Toast.makeText(this, wR.getSearchWord() + " er óbeygjanlegt orð", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(this, "Engin leitarniðurstaða", Toast.LENGTH_SHORT).show();
+                }
             }
             else {
                 Bundle bundle = new Bundle();
@@ -374,6 +411,7 @@ public class MainActivity extends NavDrawer implements CustomDialog.DialogListen
 		Intent intent = new Intent(this, BeygingarActivity.class);
 		intent.putExtra("word", word);
 		startActivity(intent);
+        overridePendingTransition(R.animator.activity_open_scale,R.animator.activity_close_translate);
 	}
 
     private void manageDialogFragmentOutput(String word) {

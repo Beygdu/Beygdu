@@ -22,6 +22,8 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+import java.lang.reflect.Array;
+
 import is.arnastofnun.beygdu.R;
 import is.arnastofnun.parser.Block;
 import is.arnastofnun.parser.SubBlock;
@@ -55,8 +57,10 @@ public class TableFragment extends Fragment {
     private Typeface LatoSemiBold;
     private Typeface LatoLight;
 
-    //Colors
-    //private int textColor;
+
+    private int subBlockTitleText = 22;
+    private int tableTitleText = 18;
+    private int cellText = 16;
 
 
     //Fragments have to have one empty constructor
@@ -80,10 +84,6 @@ public class TableFragment extends Fragment {
         LatoBold = Typeface.createFromAsset(context.getAssets(), "fonts/Lato-Bold.ttf");
         LatoSemiBold = Typeface.createFromAsset(context.getAssets(), "fonts/Lato-Semibold.ttf");
         LatoLight = Typeface.createFromAsset(context.getAssets(), "fonts/Lato-Light.ttf");
-
-        //Colors
-        //textColor = getResources().getColor(R.color.font_default);
-
     }
 
     /**
@@ -113,29 +113,54 @@ public class TableFragment extends Fragment {
         tableLayout.addView(title);
         //Iterate through sub-blocks and set title
         for (SubBlock sBlock: block.getBlocks()){
+
+            //Special case for nafnháttur
+            if(sBlock.getTitle().equals("Nafnháttur")) {
+                TextView nafnhatturTitle = new TextView(context);
+                nafnhatturTitle.setText(sBlock.getTitle());
+                nafnhatturTitle.setTextSize(subBlockTitleText);
+                nafnhatturTitle.setMinHeight(70);
+                nafnhatturTitle.setTypeface(LatoLight);
+                nafnhatturTitle.setPadding(0,80,0,20);
+                nafnhatturTitle.setTextColor(getResources().getColor(R.color.white));
+                tableLayout.addView(nafnhatturTitle);
+                TextView tableTitle = new TextView(context);
+                tableTitle.setText(sBlock.getTitle());
+                createTableSpecial(sBlock.getTables().get(0));
+                continue;
+            }
+
+            //Special case for lýsingarháttur nútíðar
+            if(block.getTitle().toLowerCase().equals("lýsingarháttur nútíðar") ) {
+                TextView tableTitle = new TextView(context);
+                tableTitle.setText(sBlock.getTitle());
+                createTableSpecial(sBlock.getTables().get(0));
+                continue;
+            }
+
+            // The rest of the tables
             if(!sBlock.getTitle().equals("")) {
                 TextView subBlockTitle = new TextView(context);
                 subBlockTitle.setText(sBlock.getTitle());
-                subBlockTitle.setTextSize(22);
+                subBlockTitle.setTextSize(subBlockTitleText);
                 subBlockTitle.setMinHeight(70);
                 subBlockTitle.setTypeface(LatoLight);
-                subBlockTitle.setBackgroundResource(R.drawable.bottom_border);
-                subBlockTitle.setTextColor(getResources().getColor(R.color.font_default));
-                subBlockTitle.setPadding(0,50,0,50);
+                subBlockTitle.setTextColor(getResources().getColor(R.color.white));
+                subBlockTitle.setPadding(0,80,0,20);
                 tableLayout.addView(subBlockTitle);
             }
             //Create the tables and set title
             for (Tables tables : sBlock.getTables()) {
-                //if(!tables.getTitle().equals("")) {
-                    TextView tableTitle = new TextView(context);
-                    tableTitle.setText(tables.getTitle());
-                    tableTitle.setTextSize(20);
-                    tableTitle.setMinHeight(80);
-                    tableTitle.setTypeface(LatoLight);
-                    tableTitle.setPadding(10, 20, 0, 20);
-                    tableLayout.addView(tableTitle);
-                    createTable(tables);
-                //}
+                TextView tableTitle = new TextView(context);
+                tableTitle.setText(tables.getTitle());
+                tableTitle.setTextSize(tableTitleText);
+                tableTitle.setMinHeight(80);
+                tableTitle.setTypeface(LatoLight);
+                tableTitle.setTextColor(getResources().getColor(R.color.white));
+                tableTitle.setBackgroundResource(R.drawable.top_border_orange);
+                tableTitle.setPadding(10, 10, 0, 10);
+                tableLayout.addView(tableTitle);
+                createTable(tables);
             }
         }
     }
@@ -147,20 +172,32 @@ public class TableFragment extends Fragment {
     private void createTable(Tables table) {
         final int rowNum = table.getRowNames().length;
         final int colNum = table.getColumnNames().length;
-
-        TableRow.LayoutParams tableRowParams = new TableRow.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
-        tableRowParams.weight = colNum;
-        tableRowParams.setMargins(1, 1, 1, 1);
+        final int rowLast = rowNum - 1;
 
         int contentIndex = 0;
+        int counter = 0;
         for (int row = 0; row < rowNum; row++) {
             TableRow tr = new TableRow(context);
-            tr.setLayoutParams(tableRowParams);
             tr.setMinimumHeight(80);
-            if (row % 2 == 0) {
+
+            // For small tables like, nafnbót and sagnbót
+            if(rowNum < 2) {
+                tr.setBackgroundResource(R.drawable.bottom_top_border_blue);
+            }
+
+            // Even numbers and not last row
+            else if (row % 2 == 0 && (row != rowLast)) {
                 tr.setBackgroundResource(R.drawable.top_border_blue);
             }
-            else if (row == (rowNum - 1)){
+
+
+            // Odd numbers and not last row
+            else if( (row % 1 == 0) && (row != rowLast) ) {
+                tr.setBackgroundResource(R.drawable.top_border_white);
+            }
+
+            // Last row
+            else if (row == rowLast){
                 if(row % 2 == 0) {
                     tr.setBackgroundResource(R.drawable.bottom_top_border_blue);
                 }
@@ -168,57 +205,21 @@ public class TableFragment extends Fragment {
                     tr.setBackgroundResource(R.drawable.bottom_top_border_white);
                 }
             }
-            else if(row % 1 == 0) {
-                tr.setBackgroundResource(R.drawable.top_border_white);
-            }
-            if(rowNum < 2) {
-                tr.setBackgroundResource(R.drawable.bottom_top_border_blue);
-            }
 
             for (int col = 0; col < colNum; col++) {
                 final TextView cell = new TextView(context);
                 if(!(row == 0 || col == 0)) {
                     cell.setClickable(true);
-                    cell.setOnLongClickListener(new View.OnLongClickListener() {
-                        @Override
-                        public boolean onLongClick(View v) {
-                            cell.setBackgroundColor(Color.GREEN);
-
-                            final Property<TextView, Integer> property = new Property<TextView, Integer>(int.class, "BackgroundColor") {
-                                @Override
-                                public Integer get(TextView object) {
-                                    ColorDrawable cd = (ColorDrawable) object.getBackground();
-                                    int colorCode = cd.getColor();
-                                    return colorCode;
-                                }
-
-                                @Override
-                                public void set(TextView object, Integer value) {
-                                    object.setBackgroundColor(value);
-                                }
-                            };
-
-                            final ObjectAnimator animator = ObjectAnimator.ofInt(cell, property, Color.RED);
-                            animator.setDuration(500L);
-                            animator.setEvaluator(new ArgbEvaluator());
-                            animator.setInterpolator(new DecelerateInterpolator(2));
-                            animator.start();
-                            ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
-                            ClipData clip = ClipData.newPlainText(cell.getText(), cell.getText());
-                            clipboard.setPrimaryClip(clip);
-                            animator.setRepeatCount(1);
-                            animator.setRepeatMode(ValueAnimator.REVERSE);
-                            return false;
-                        }
-                    });
+                    cell.setOnLongClickListener(new XLongClickListener(context, cell));
                 }
-                cell.setTextAppearance(context, R.style.BodyText);
-                cell.setLayoutParams(new TableRow.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, 1f));
-                cell.setMinHeight(80);
+
+                cell.setLayoutParams(new TableRow.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT, 1f));
+                cell.setMinHeight(100);
                 cell.setGravity(Gravity.CENTER);
                 cell.setTypeface(LatoLight);
+                cell.setTextSize(cellText);
                 if (row % 2 == 0) {
-                    cell.setTextColor(getResources().getColor(R.color.white));
+                    cell.setTextColor(getResources().getColor(R.color.font_default));
                 }
                 else {
                     cell.setTextColor(getResources().getColor(R.color.font_default));
@@ -234,8 +235,16 @@ public class TableFragment extends Fragment {
                 } else {
                     if (col == 0) {
                         cell.setText(table.getRowNames()[row]);
-                    } else {
-                        cell.setText(table.getContent().get(contentIndex++));
+                    }  else {
+                        String cellString = table.getContent().get(contentIndex++);
+                        if (cellString.contains("/")) {
+                            String firstLine = cellString.split("/")[0];
+                            String secondLine = cellString.split("/")[1];
+                            cellString = firstLine + "/" + System.getProperty ("line.separator") + secondLine;
+                            cell.setMinHeight(180);
+                        }
+                        cell.setText(cellString);
+
                     }
                 }
                 tr.addView(cell);
@@ -243,4 +252,21 @@ public class TableFragment extends Fragment {
             tableLayout.addView(tr);
         }
     }
+
+    private void createTableSpecial(Tables table) {
+        TableRow tr = new TableRow(context);
+        final TextView cell = new TextView(context);
+        cell.setLayoutParams(new TableRow.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, 1f));
+        cell.setMinHeight(80);
+        cell.setPadding(20,10,0,0);
+        cell.setBackgroundResource(R.drawable.top_border_orange);
+        cell.setTypeface(LatoLight);
+        cell.setTextColor(getResources().getColor(R.color.white));
+        cell.setClickable(true);
+        cell.setOnLongClickListener(new XLongClickListener(context, cell));
+        cell.setText(table.getContent().get(0));
+        tr.addView(cell);
+        tableLayout.addView(tr);
+    }
+
 }

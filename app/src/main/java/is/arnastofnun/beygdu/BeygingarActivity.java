@@ -1,5 +1,7 @@
 package is.arnastofnun.beygdu;
 
+import android.animation.AnimatorInflater;
+import android.animation.AnimatorSet;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -225,6 +227,13 @@ public class BeygingarActivity extends NavDrawer {
         return dp;
     }
 
+    public int getScreenWidth() {
+        Display display = getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        int width = size.x;
+        return width;
+    }
 
 	
 	/**
@@ -239,14 +248,15 @@ public class BeygingarActivity extends NavDrawer {
             titleDesc.setTextSize(20);
         }
         else if(384 > width && width < 600) {
-            titleDesc.setTextSize(24);
+            titleDesc.setTextSize(32);
         }
         else if(width > 600){
-            titleDesc.setTextSize(30);
+            titleDesc.setTextSize(50);
         }
-
 		titleDesc.setMinHeight(130);
-		titleDesc.setTypeface(LatoLight);
+		titleDesc.setTypeface(LatoSemiBold);
+
+        titleDesc.setTextColor(getResources().getColor(R.color.white));
         tableLayout.addView(titleDesc);
 		
 		//SetNote
@@ -254,7 +264,7 @@ public class BeygingarActivity extends NavDrawer {
 			TextView note = new TextView(this);
 			note.setText(words.getWarning());
             note.setTypeface(LatoLight);
-
+            note.setMaxWidth(getScreenWidth());
 			note.setBackgroundResource(R.drawable.noteborder);
 			tableLayout.addView(note);
 		}
@@ -266,19 +276,20 @@ public class BeygingarActivity extends NavDrawer {
 				Block block = words.getBlocks().get(i);
 				TextView blockTitle = new TextView(this);
                 if (320 > width && width < 384) {
-                    blockTitle.setTextSize(16);
-                }
-                else if(384 > width && width < 600) {
                     blockTitle.setTextSize(20);
                 }
+                else if(384 > width && width < 600) {
+                    blockTitle.setTextSize(28);
+                }
                 else if(width > 600){
-                    blockTitle.setTextSize(24);
+                    blockTitle.setTextSize(42);
                 }
 				blockTitle.setMinHeight(100);
 				blockTitle.setText(block.getTitle());
                 blockTitle.setTypeface(LatoLight);
-                blockTitle.setGravity(Gravity.CENTER);
-                blockTitle.setTextColor(getResources().getColor(R.color.font_default));
+                blockTitle.setTextColor(getResources().getColor(R.color.white));
+                blockTitle.setPadding(0, 10, 0, 10);
+
                 TableFragment tFragment = new TableFragment(BeygingarActivity.this, tableLayout, block, blockTitle);
 				getFragmentManager().beginTransaction().add(tableLayout.getId(), tFragment).commit();
 				tables.add(tFragment);				
