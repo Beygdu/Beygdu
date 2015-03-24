@@ -18,6 +18,7 @@ import is.arnastofnun.SkrambiWebTool.SkrambiWT;
  */
 public class SkrambiHelper {
 
+    private Context context;
     /**
      * SkrambiHelper - A helper class for SkrambiWT
      * Allows the application to call SkrambiWT, which returns potential spelling
@@ -25,7 +26,7 @@ public class SkrambiHelper {
      * @param context Context of the calling application
      */
     public SkrambiHelper(Context context) {
-        // Empty Constructor
+        this.context = context;
     }
 
     /**
@@ -70,7 +71,7 @@ public class SkrambiHelper {
      */
     public String[] getSpellingCorrection(String spellCheck) {
         try {
-            String str = new SkrambiWT().execute(spellCheck).get();
+            String str = new SkrambiWT(this.context).execute(spellCheck).get();
             //Destroying duplicates of [ and ]
             str = str.substring(1, str.length()-1);
             str = str.substring(str.indexOf("[")+1,

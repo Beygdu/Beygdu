@@ -251,7 +251,7 @@ public class MainActivity extends NavDrawer implements CustomDialog.DialogListen
             if(word.contains(" ")) {
                 word = replaceSpaces(word);
             }
-            BinHelper bHelper = new BinHelper(getApplicationContext());
+            BinHelper bHelper = new BinHelper(MainActivity.this);
             try {
                 setWordResult(bHelper.sendThread(word, 1));
             }
@@ -374,7 +374,7 @@ public class MainActivity extends NavDrawer implements CustomDialog.DialogListen
 			WordResult word = this.wR;
 			createNewActivity(word);
 		} else if (pr.equals("Miss")) {
-            SkrambiHelper sHelper = new SkrambiHelper(getApplicationContext());
+            SkrambiHelper sHelper = new SkrambiHelper(MainActivity.this);
             String[] correctedWords = sHelper.getSpellingCorrection(wR.getSearchWord());
             if( correctedWords == null || correctedWords[0].equals("")) {
                 DBController controller = new DBController(this);
@@ -417,7 +417,7 @@ public class MainActivity extends NavDrawer implements CustomDialog.DialogListen
                 word = replaceSpaces(word);
             }
             word = convertToUTF8(word);
-            BinHelper bHelper = new BinHelper(getApplicationContext());
+            BinHelper bHelper = new BinHelper(MainActivity.this);
             this.wR = bHelper.sendThread(word, 0);
             if(this.wR != null) {
                 checkWordCount();
@@ -435,7 +435,7 @@ public class MainActivity extends NavDrawer implements CustomDialog.DialogListen
     // INTERFACE HANDLER FOR CUSTOMDIALOG RESULTS
     @Override
     public void onPositiveButtonClick(String selectedItem, int id) {
-        BinHelper binHelper = new BinHelper(getApplicationContext());
+        BinHelper binHelper = new BinHelper(MainActivity.this);
         try {
             setWordResult(binHelper.sendThread(selectedItem, 1));
             checkWordCount();

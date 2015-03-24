@@ -4,6 +4,9 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 
+import is.arnastofnun.beygdu.MainActivity;
+import is.arnastofnun.beygdu.R;
+
 /**
  * @author Arnar Jónsson
  * @since 13.3.2015
@@ -11,17 +14,22 @@ import android.os.AsyncTask;
  */
 public class BinThread extends AsyncTask<String, Void, WordResult> {
 
+    private Context context;
+    ProgressDialog pDialog;
     /**
      * BinThread - An AsyncTask that uses the BinParser to fetch information about a given word
      * Returns a WordResult object containing information about the search
      */
-    //TODO: remove context, processdialog has been moved closer to the UI thread
-    public BinThread(Context context) {
 
+    public BinThread(Context context) {
+        this.context = context;
     }
 
     protected void onPreExecute() {
-
+        this.pDialog = new ProgressDialog(context);
+        this.pDialog.setMessage(this.context.getString(R.string.progressdialog));
+        this.pDialog.setCancelable(false);
+        this.pDialog.show();
     }
 
     protected WordResult doInBackground(String... string) {
@@ -49,7 +57,7 @@ public class BinThread extends AsyncTask<String, Void, WordResult> {
     }
 
     protected void onPostExecute(WordResult wordResult) {
-
+        this.pDialog.dismiss();
     }
 
 }
