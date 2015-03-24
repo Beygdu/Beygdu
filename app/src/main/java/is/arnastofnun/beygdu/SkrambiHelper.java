@@ -72,6 +72,11 @@ public class SkrambiHelper {
     public String[] getSpellingCorrection(String spellCheck) {
         try {
             String str = new SkrambiWT(this.context).execute(spellCheck).get();
+
+            if(str == null) {
+                return null;
+            }
+
             //Destroying duplicates of [ and ]
             str = str.substring(1, str.length()-1);
             str = str.substring(str.indexOf("[")+1,
