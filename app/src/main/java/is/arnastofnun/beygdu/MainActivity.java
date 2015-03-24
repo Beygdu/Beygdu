@@ -362,7 +362,7 @@ public class MainActivity extends NavDrawer implements CustomDialog.DialogListen
 
             Bundle bundle = new Bundle();
             bundle.putInt("id", 0);
-            bundle.putString("title", getString(R.string.MultiHitDialog));
+            bundle.putString("title", wR.getMultiHitDescriptions().length + " " + getString(R.string.MultiHitDialog));
             bundle.putString("positiveButtonText", getString(R.string.PositiveButton));
             bundle.putString("negativeButtonText", getString(R.string.NegativeButton));
             bundle.putStringArray("descriptions", wR.getMultiHitDescriptions());
