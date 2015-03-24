@@ -90,6 +90,8 @@ public class BeygingarActivity extends NavDrawer {
          */
         mDrawerList.setItemChecked(position,true);
 
+        getActionBar().setDisplayHomeAsUpEnabled(true);
+
         // Get screen sizes
         Display display = getWindowManager().getDefaultDisplay();
         Point size = new Point();
@@ -120,12 +122,7 @@ public class BeygingarActivity extends NavDrawer {
         dbController.insertStats(words.getTitle());
 
         // Set the title in the actionbar
-//        setTitle(firstWordInString(words.getTitle()));
-        setTitle(R.string.title_activity_beygingar);
-
-        // Set the action bar activity for going backwards to last activity
-        getActionBar().setDisplayHomeAsUpEnabled(true);
-        getActionBar().setHomeButtonEnabled(true);
+        setTitle(firstWordInString(words.getTitle()));
 
         // If it is possible to filter the word result, add a Navigation
         // Drawer Item at the second last position in the list
@@ -137,8 +134,7 @@ public class BeygingarActivity extends NavDrawer {
      */
     public void navDrawerFilterableListItem(){
         if(checkWordFilterable()){
-            // add the string to the second-to-last place in the array
-            navArray.add(navArray.size()-2,getString(R.string.nav_drawer_sia));
+            navArray.add(navArray.size()-1,getString(R.string.nav_drawer_sia));
         }
     }
 
@@ -160,10 +156,6 @@ public class BeygingarActivity extends NavDrawer {
      */
     @Override
     protected void openActivity(int position) {
-        /**
-         * if the word is filterable, add the option in the navigation drawer,else
-         * just call the super method
-         */
         if(checkWordFilterable()){
             mDrawerLayout.closeDrawer(mDrawerList);
             // Set the position so we can access it from child activities
@@ -185,14 +177,33 @@ public class BeygingarActivity extends NavDrawer {
                     startActivity(new Intent(this, AboutActivity.class));
                     overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
                     break;
-                case 4:
-                    startActivity(new Intent(this, StatisticsActivity.class));
-                    overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
             }
         } else {
             super.openActivity(position);
         }
     }
+
+    /**
+     * Accepts a String of word(s) and returns the first word in that string.
+     * Looks for an empty space (" ") to see where the word ends.
+     * @param title String of words
+     * @return String that is the first word in a String
+     */
+    private String firstWordInString(String title){
+        String firstWord = null;
+
+        // Get the first word
+        if(title.contains(" ")){
+            firstWord = title.substring(0, title.indexOf(" "));
+        }
+
+        // Capitalize the first letter of the word
+        if(firstWord != null){
+            firstWord = firstWord.substring(0,1).toUpperCase() + firstWord.substring(1);
+        }
+        return firstWord;
+    }
+
 
     /**
      * This method converts device specific pixels to density independent pixels.
@@ -301,7 +312,10 @@ public class BeygingarActivity extends NavDrawer {
 	public boolean onOptionsItemSelected(MenuItem item) {
 
         switch (item.getItemId()) {
-        case R.id.action_filter:
+		case android.R.id.home:
+			NavUtils.navigateUpFromSameTask(this);
+			return true;
+		case R.id.action_filter:
 			filterAction();
 			break;
 //		case R.id.action_about:
