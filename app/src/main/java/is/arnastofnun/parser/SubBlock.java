@@ -11,37 +11,35 @@ import java.util.ArrayList;
  */
 public class SubBlock implements Serializable {
 
-  private String title;
+    private String title;
   
-  private ArrayList<Tables> tables;
+    private ArrayList<Tables> tables;
 
-  /**
- * @param title Title if the SubBlock
- * @param tables A list of tables belonging to the SubBlock
- */
-public SubBlock(String title, ArrayList<Tables> tables) {
+    /**
+     * SubBlock - Represents a collection of Tables
+     * Contains a title and an Arraylist of Tables
+     * @param title Title of the SubBlock
+     * @param tables Tables belonging to the SubBlock
+     */
+    public SubBlock(String title, ArrayList<Tables> tables) {
   
-    this.title = title;
-    
-    this.tables = tables;
+        this.title = title;
+        this.tables = tables;
   
-  }
-  
-  /**
- * @return Title of the SubBlock
- */
-public String getTitle() {
-    return this.title;
-  }
-  
-  /**
- * @return A list of the tables belonging to the SubBlock
- */
-public ArrayList<Tables> getTables() {
-    return this.tables;
-  }
+    }
 
-  
-  
+    /**
+     * @return Title of the SubBlock
+     */
+    public String getTitle() {
+        return this.title;
+    }
+
+    /**
+     * @return ArrayList of the Tables belonging to the SubBlock
+     */
+    public ArrayList<Tables> getTables() {
+        return this.tables;
+    }
 
 }

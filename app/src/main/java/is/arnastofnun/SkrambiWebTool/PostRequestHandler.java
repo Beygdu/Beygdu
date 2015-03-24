@@ -8,7 +8,9 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 /**
- * Created by arnarjons on 10.3.2015.
+ * @author Arnar Jonsson
+ * @since 10.3.2015
+ * @version 0.5
  */
 public class PostRequestHandler {
 
@@ -24,6 +26,17 @@ public class PostRequestHandler {
 
     private String contentLength;
 
+    /**
+     * PostRequestHandler - A handler class for POST Requests
+     * Configures a POST request from the parameters and readies it for use
+     * @param targetUrl Taget server url
+     * @param urlParam Target server POST argument
+     * @param contentType Content Type of response
+     * @param contentLanguage Content Language of the response
+     * @param useCaches Toggle Caches
+     * @param doInput Toggle input
+     * @param doOutput Toggle output
+     */
     public PostRequestHandler(String targetUrl, String urlParam, String contentType, String contentLanguage, Boolean useCaches, Boolean doInput, Boolean doOutput) {
 
         this.targetUrl = targetUrl;
@@ -39,6 +52,12 @@ public class PostRequestHandler {
 
     }
 
+    /**
+     * sendRequest - Send a POST request constructed by the constructor params
+     * @return String representation of the server response if the constructor
+     * configuration allows for a legal POST request. Returns an error string if the
+     * request miss fired
+     */
     public String sendRequest() {
 
         String responseLine;

@@ -1,5 +1,6 @@
 package is.arnastofnun.beygdu;
 
+import android.content.Context;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -11,14 +12,26 @@ import java.util.concurrent.ExecutionException;
 import is.arnastofnun.SkrambiWebTool.SkrambiWT;
 
 /**
- * Created by arnarjons on 19.3.2015.
+ * @author Arnar Jonsson
+ * @since 19.3.2015
+ * @version 1.0
  */
 public class SkrambiHelper {
 
-    public SkrambiHelper() {
-        // Empty Constructor
+    private Context context;
+    /**
+     * SkrambiHelper - A helper class for SkrambiWT
+     * Allows the application to call SkrambiWT, which returns potential spelling
+     * correnctions of the searchword
+     * @param context Context of the calling application
+     */
+    public SkrambiHelper(Context context) {
+        this.context = context;
     }
 
+    /**
+     * Regex statements to fetch the current result from the server callback
+     */
     private String[] prepareResults(String[] rawResults) {
         String[] correctStrings = new String[rawResults.length];
         int count = 0;
@@ -31,6 +44,11 @@ public class SkrambiHelper {
         return correctStrings;
     }
 
+    /**
+     * @param args
+     * @return Special character reconstruction of the strings within
+     * the array
+     */
     private String[] checkEncodingStage(String[] args) {
         String[] decodingArray = new String[args.length];
         for(int i = 0; i < args.length; i++) {
@@ -47,9 +65,18 @@ public class SkrambiHelper {
         return decodingArray;
     }
 
+    /**
+     * @param spellCheck A word that needs to be spell checked
+     * @return An array of suggestion by the Skrambi Web Tool
+     */
     public String[] getSpellingCorrection(String spellCheck) {
         try {
-            String str = new SkrambiWT().execute(spellCheck).get();
+            String str = new SkrambiWT(this.context).execute(spellCheck).get();
+
+            if(str == null) {
+                return null;
+            }
+
             //Destroying duplicates of [ and ]
             str = str.substring(1, str.length()-1);
             str = str.substring(str.indexOf("[")+1,

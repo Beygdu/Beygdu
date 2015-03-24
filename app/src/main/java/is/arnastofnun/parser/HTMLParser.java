@@ -12,8 +12,8 @@ import java.util.regex.Pattern;
 
 /**
  * @author Arnar Jonsson
- * @since 18.11.2014
- * @version 0.6
+ * @since 24.01.2015
+ * @version 1.0
  *
  */
 public class HTMLParser {
@@ -28,6 +28,10 @@ public class HTMLParser {
 
     ArrayList<Element> selectedElements;
 
+    /**
+     * HTMLParser - Creates a Jsoup HTML document from the requested url
+     * @param url A string representation of an valid URL
+     */
     public HTMLParser(String url) {
 
         this.searchString = url;
@@ -36,6 +40,11 @@ public class HTMLParser {
 
     }
 
+    /**
+     * HTMLParser - Creates a jsoup document from the requested url
+     * @param url A string representation of an valid URL
+     * @param elements An array of HTML elements that will populate the Jsoup document
+     */
     public HTMLParser(String url, String[] elements) {
 
         this.searchString = url;
@@ -46,14 +55,16 @@ public class HTMLParser {
 
     }
 
-    /////
-    // Public Methods
-    /////
-
+    /**
+     * @return An Jsoup document containing the requested url
+     */
     public Document getDocument() {
         return this.doc;
     }
 
+    /**
+     * @return A string representation of the Jsoup document
+     */
     public String asString() {
 
         if(this.asString == null) {
@@ -65,6 +76,10 @@ public class HTMLParser {
 
     }
 
+    /**
+     * @param nodeName A string representation of a HTML tag
+     * @return True if the parsed document contains the tag
+     */
     public boolean containsClass(String nodeName) {
 
         Elements elements = this.body.getAllElements();
@@ -77,10 +92,17 @@ public class HTMLParser {
         return false;
     }
 
+    /**
+     * @param tag A string representation of a HTML tag
+     * @return Elements containing the requested tag
+     */
     public String getSpecificTextElement(String tag) {
         return this.doc.getElementsByTag(tag).text();
     }
 
+    /**
+     * @return A Jsoup document containing the specific elements given to the parser
+     */
     public ArrayList<Element> getSelectedElements() {
 
         if( this.elements == null ) {
@@ -119,6 +141,9 @@ public class HTMLParser {
 
     }
 
+    /**
+     * createDocument - creates a Jsoup document based on the parsers given url
+     */
     private void createDocument() {
 
         try {

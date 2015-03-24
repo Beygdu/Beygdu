@@ -4,24 +4,41 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 
+import is.arnastofnun.beygdu.MainActivity;
+import is.arnastofnun.beygdu.R;
+import is.arnastofnun.utils.NetworkStateListener;
+
 /**
- * Created by arnarjons on 13.3.2015.
+ * @author Arnar Jónsson
+ * @since 13.3.2015
+ * @version 1.0
  */
 public class BinThread extends AsyncTask<String, Void, WordResult> {
 
-    //private ProgressDialog processDialog;
+    private Context context;
+    ProgressDialog pDialog;
+    /**
+     * BinThread - An AsyncTask that uses the BinParser to fetch information about a given word
+     * Returns a WordResult object containing information about the search
+     */
 
     public BinThread(Context context) {
-        //this.processDialog = new ProgressDialog(context);
+        this.context = context;
     }
 
     protected void onPreExecute() {
-        //this.processDialog.setMessage("Saekji gogn");
-        //this.processDialog.setCancelable(false);
-        //this.processDialog.show();
+        this.pDialog = new ProgressDialog(context);
+        this.pDialog.setMessage(this.context.getString(R.string.progressdialog));
+        this.pDialog.setCancelable(false);
+        this.pDialog.show();
     }
 
     protected WordResult doInBackground(String... string) {
+
+        if(!new NetworkStateListener(this.context).isConnectionActive()) {
+            return null;
+        }
+
         String word = string[0];
 
         WordResult wR = new WordResult();
@@ -46,10 +63,7 @@ public class BinThread extends AsyncTask<String, Void, WordResult> {
     }
 
     protected void onPostExecute(WordResult wordResult) {
-       // if(this.processDialog.isShowing()){
-        //    this.processDialog.dismiss();
-       // }
+        this.pDialog.dismiss();
     }
-
 
 }

@@ -46,6 +46,9 @@
     <string name="PositiveButton">Áfram</string>
     <string name="NegativeButton">Hætta við</string>
 
+    <!-- NetworkErrorString -->
+    <string name="networkErrorString">Ekki náðist samband við gagnagrunn</string>
+
     <!-- Spinner -->
     <string name="progressdialog">Sæki gögn...</string>
 

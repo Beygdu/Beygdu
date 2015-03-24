@@ -10,32 +10,33 @@ import java.util.ArrayList;
  */
 public class Block implements Serializable {
 
-  private String title;
+    private String title;
   
-  private ArrayList<SubBlock> sb;
-  
-  /**
- * @param title Title of the Block
- * @param sb A list of SubBlocks belonging to the Block
- */
-public Block(String title, ArrayList<SubBlock> sb) {
-    this.title = title;
-    this.sb = sb;
-  }
-  
-  /**
- * @return Title of the Block
- */
-public String getTitle() {
-    return this.title;
-  }
-  
-  /**
- * @return A list of SubBlocks belonging to the Block
- */
-public ArrayList<SubBlock> getBlocks() {
-    return this.sb;
-  }
-  
+    private ArrayList<SubBlock> sb;
+
+    /**
+     * Block - Represents a collection of SubBlocks
+     * Contains a title and an ArrayList of SubBlocks
+     * @param title Title of the Block
+     * @param sb An ArrayList of SubBlocks
+     */
+    public Block(String title, ArrayList<SubBlock> sb) {
+        this.title = title;
+        this.sb = sb;
+    }
+
+    /**
+     * @return Title of the Block
+     */
+    public String getTitle() {
+        return this.title;
+    }
+
+    /**
+     * @return ArrayList of SubBlocks belonging to the Block
+     */
+    public ArrayList<SubBlock> getBlocks() {
+        return this.sb;
+    }
   
 }
