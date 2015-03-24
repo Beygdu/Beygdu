@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Map;
 
 import is.arnastofnun.parser.Block;
 import is.arnastofnun.parser.SubBlock;
@@ -22,6 +21,10 @@ import is.arnastofnun.parser.WordResult;
  * @since 14.02.15
  * @version 1.0
  *
+ * DBController is the controller for the apps database.
+ * It controlls the database by implementing the fetch and
+ * insert commands for the database.
+ *
  */
 public class DBController {
 
@@ -29,6 +32,9 @@ public class DBController {
     private SQLiteDatabase dB = null;
     private DBHelper dbHelper = null;
 
+    /**
+     * @param context the context the DBController is being used in.
+     */
     public DBController(Context context){
         this.context = context;
     }
@@ -44,7 +50,7 @@ public class DBController {
     }
 
     /**
-     * Increments the column which represents the wordtype.
+     * Increments the column which represents the wordtype in statistcs table.
      *
      * @param column the column to increment
      */
@@ -93,13 +99,18 @@ public class DBController {
         close();
     }
 
-    public void insert(WordResult result) {
-        if(!dbContains(result.getTitle())) {
+    /**
+     * Inserts the wordresult into the db.
+     *
+     * @param wordResult the wordresult
+     */
+    public void insert(WordResult wordResult) {
+        if(!dbContains(wordResult.getTitle())) {
             int rows = getTableSize(DBHelper.TABLE_WORDRESULT);
             if(rows >=  DBHelper.MAX_SIZE)  {
                 removeOldest();
             }
-            insertWordResult(result);
+            insertWordResult(wordResult);
         }
     }
 
@@ -175,7 +186,7 @@ public class DBController {
     /**
      *
      * @param title the title to be fetched
-     * @return the first occurance WordResult for the title in the table
+     * @return the first occurance for the title in the table
      */
     public WordResult fetch(String title) {
         WordResult newWordResult;
@@ -212,6 +223,10 @@ public class DBController {
         return newWordResult;
     }
 
+    /**
+     *
+     * @return all the titles of the words in the database.
+     */
     public ArrayList<String> fetchAllWords() {
         ArrayList<String> words= new ArrayList<String>();
         try {
@@ -259,6 +274,12 @@ public class DBController {
         return currentValue;
     }
 
+    /**
+     * Returns a HashMap of:
+     * key = the columnName (e.g. "Nafnorð")
+     * value = Integer representing the number of searches for that columnName
+     * @return a hashmap of all the stats in the database.
+     */
     public HashMap<String, Integer> fetchAllStats(){
         try {
             open();
@@ -284,6 +305,11 @@ public class DBController {
         return stats;
     }
 
+    /**
+     *
+     * @param title of the word
+     * @return title of the word is in the table, else null
+     */
     public String fetchObeygjanlegt(String title) {
         try {
             open();
@@ -365,6 +391,12 @@ public class DBController {
         return id;
     }
 
+    /**
+     *
+     * @param column the column to sort
+     * @param table the table to sort from
+     * @return the highest integer value in the column
+     */
     private int fetchMaxId(String column, String table) {
         int id = 0;
         final String MY_QUERY = "SELECT MAX("+ column +") FROM " + table;
@@ -380,6 +412,12 @@ public class DBController {
         return id;
     }
 
+    /**
+     *
+     * @param column the column to sort
+     * @param table the table to sort from
+     * @return the lowest integer value in the column.
+     */
     private int fetchMinId(String column, String table) {
         int id = 0;
         final String MY_QUERY = "SELECT MIN("+ column +") FROM " + table;
@@ -430,6 +468,12 @@ public class DBController {
         return contains;
     }
 
+    /**
+     * updates the date of the word.
+     *
+     * @param wordTitle the title of the word
+     * @param cursor the cursor containing the row to alter
+     */
     private void updateDate(String wordTitle, Cursor cursor) {
         String type = cursor.getString(1);
         String title = cursor.getString(2);
@@ -444,6 +488,11 @@ public class DBController {
         dB.update(DBHelper.TABLE_WORDRESULT, contentValues, DBHelper.TITLE + "='" + wordTitle+"'", null);
     }
 
+    /**
+     *
+     * @param table the name of the table
+     * @return the size of the table
+     */
     private int getTableSize(String table) {
         try {
             open();
@@ -462,6 +511,9 @@ public class DBController {
         return cursor.getInt(0);
     }
 
+    /**
+     * Removes the oldest word in the table
+     */
     private void removeOldest(){
         try {
             open();
@@ -473,6 +525,11 @@ public class DBController {
         close();
     }
 
+    /**
+     *
+     * @param arr the array of words
+     * @return a string in the form word1&word2$word3
+     */
     private String arrToString(Object[] arr){
         String result = "";
         for (int i = 0; i < arr.length; i++) {
@@ -481,6 +538,11 @@ public class DBController {
         return result;
     }
 
+    /**
+     *
+     * @param s a string in the form word1&word2$word3
+     * @return an array containing the words
+     */
     private String[] stringToArr(String s) {
         if (s.startsWith("&")) {
             s = s.substring(1, s.length());
