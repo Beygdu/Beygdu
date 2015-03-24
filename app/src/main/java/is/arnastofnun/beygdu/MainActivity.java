@@ -375,7 +375,7 @@ public class MainActivity extends NavDrawer implements CustomDialog.DialogListen
 			WordResult word = this.wR;
 			createNewActivity(word);
 		} else if (pr.equals("Miss")) {
-            SkrambiHelper sHelper = new SkrambiHelper();
+            SkrambiHelper sHelper = new SkrambiHelper(getApplicationContext());
             String[] correctedWords = sHelper.getSpellingCorrection(wR.getSearchWord());
             if( correctedWords == null || correctedWords[0].equals("")) {
                 DBController controller = new DBController(this);

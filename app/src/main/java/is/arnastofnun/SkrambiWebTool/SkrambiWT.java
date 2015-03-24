@@ -6,9 +6,16 @@ import android.os.AsyncTask;
 import is.arnastofnun.beygdu.MainActivity;
 
 /**
- * Created by arnarjons on 10.3.2015.
+ * @author Arnar Jonsson
+ * @since 10.3.2015
+ * @version 1.0
  */
 public class SkrambiWT extends AsyncTask<String, Void, String> {
+
+    /**
+     * SkrambiWT - An AsyncTask that fetches potential result from the
+     * Skrambi web services
+     */
 
     @Override
     protected  void onPreExecute() {
