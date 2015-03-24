@@ -258,6 +258,7 @@ public class MainActivity extends NavDrawer implements CustomDialog.DialogListen
             catch( Exception e ) {
                 this.wR = null;
             }
+
             if(this.wR != null) {
                 checkWordCount();
             }
