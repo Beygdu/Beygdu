@@ -251,7 +251,6 @@ public class MainActivity extends NavDrawer implements CustomDialog.DialogListen
             if(word.contains(" ")) {
                 word = replaceSpaces(word);
             }
-            word = convertToUTF8(word);
             BinHelper bHelper = new BinHelper(getApplicationContext());
             try {
                 setWordResult(bHelper.sendThread(word, 1));
