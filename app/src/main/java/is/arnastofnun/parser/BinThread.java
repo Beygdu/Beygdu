@@ -5,20 +5,23 @@ import android.content.Context;
 import android.os.AsyncTask;
 
 /**
- * Created by arnarjons on 13.3.2015.
+ * @author Arnar Jónsson
+ * @since 13.3.2015
+ * @version 1.0
  */
 public class BinThread extends AsyncTask<String, Void, WordResult> {
 
-    //private ProgressDialog processDialog;
-
+    /**
+     * BinThread - An AsyncTask that uses the BinParser to fetch information about a given word
+     * Returns a WordResult object containing information about the search
+     */
+    //TODO: remove context, processdialog has been moved closer to the UI thread
     public BinThread(Context context) {
-        //this.processDialog = new ProgressDialog(context);
+
     }
 
     protected void onPreExecute() {
-        //this.processDialog.setMessage("Saekji gogn");
-        //this.processDialog.setCancelable(false);
-        //this.processDialog.show();
+
     }
 
     protected WordResult doInBackground(String... string) {
@@ -46,10 +49,7 @@ public class BinThread extends AsyncTask<String, Void, WordResult> {
     }
 
     protected void onPostExecute(WordResult wordResult) {
-       // if(this.processDialog.isShowing()){
-        //    this.processDialog.dismiss();
-       // }
-    }
 
+    }
 
 }

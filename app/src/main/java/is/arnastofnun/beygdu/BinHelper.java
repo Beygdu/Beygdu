@@ -11,18 +11,31 @@ import is.arnastofnun.parser.BinThread;
 import is.arnastofnun.parser.WordResult;
 
 /**
- * Created by arnarjons on 13.3.2015.
+ * Created by Arnar Jónsson on 13.3.2015.
+ * Class BinHelper
+ * @version 0.2
  */
 public class BinHelper {
 
     private Context context;
 
+    /**
+     * BinHelper, a helper class for the BinParser
+     * Allows an application to call the BinThread
+     *
+     * @param context The context of the calling application
+     */
     public BinHelper(Context context) {
 
         this.context = context;
 
     }
 
+    /**
+     * @param word
+     * @return UTF-8 representation of word
+     * @throws java.io.UnsupportedEncodingException, returns word non-encoded
+     */
     private String convertToUTF8(String word) {
         try {
             word = URLEncoder.encode(word, "UTF-8");
@@ -33,6 +46,12 @@ public class BinHelper {
         }
     }
 
+    /**
+     * sendThread - a function that starts the BinThread
+     * @param string A string representing an icelandic word
+     * @param flag The degree of the search, 0 is quicksearch, 1 is advanced search
+     * @return WordResult containing details and content of the searched string
+     */
     public WordResult sendThread(String string, int flag) {
 
         try {

@@ -11,26 +11,46 @@ import java.util.regex.Pattern;
 
 /**
  * @author Arnar Jonsson
- * @since 20.11.2014
+ * @since 27.1.2015
  * @version 0.4
+ *
+ * WordResult is an application-unique class
  */
 public class WordResult implements Serializable {
 
     private String searchWord;
     private String description;
 
+    /**
+     * multiHitDescriptions : Array of Unicode representations of icelandic words that met the
+     * search word of the BinParser
+     * multiHitIds : Array of database ids correlating to icelandic words that met the
+     * search word of the BinParser
+     */
     private String[] multiHitDescriptions;
     private int[] multiHitIds;
 
     private String title;
     private String warning;
 
-
-
-
-
+    /**
+     * An ArrayList of Blocks
+     * If the search result of the HTMLParser returns a valid search the content of the
+     * callback is divided into 3 objects.
+     * The simplest one is called Tables. Each Tables contain a single table object filled with
+     * its unique results.
+     * The tables belong to a SubBlock object. A SubBlock is a Tables group, containing unique Tables
+     * of the same category.
+     * The SubBlocks belong to a Block object. A Block object is a SubBlock group, containing unique
+     * SubBlocks of similar category.
+     */
     private ArrayList<Block> result = new ArrayList<Block>();
 
+    /**
+     * WordResult - An object that stores and beautifies result from BinParsers (HTMLParser).
+     * It categorizes the results and readies them for display by the utilization fragments of the
+     * application
+     */
     public WordResult() {
 
     }
@@ -43,6 +63,9 @@ public class WordResult implements Serializable {
         this.description = dscrp;
     }
 
+    /**
+     * @return Alert-description of the Bin search results, if any
+     */
     public String getDescription() {
         return this.description;
     }
@@ -51,6 +74,9 @@ public class WordResult implements Serializable {
         this.searchWord = sWord;
     }
 
+    /**
+     * @return String representation of the Bin search word
+     */
     public String getSearchWord() {
         return this.searchWord;
     }
@@ -59,15 +85,23 @@ public class WordResult implements Serializable {
         this.multiHitDescriptions = multiHitDescriptions;
     }
 
+    /**
+     * @return String representations of the Bin search word, if any
+     */
     public String[] getMultiHitDescriptions() {
         return this.multiHitDescriptions;
     }
 
-
+    /**
+     * @return Ids correlating to the Bin search word, if any,
+     */
     public int[] getMultiHitIds() {
         return this.multiHitIds;
     }
 
+    /**
+     * @return Header of the search
+     */
     public String getTitle() {
         return this.title;
     }
@@ -81,7 +115,9 @@ public class WordResult implements Serializable {
         this.title = title;
     }
 
-
+    /**
+     * @return Warning message from the Bin search result, if any
+     */
     public String getWarning() {
         return this.warning;
     }
@@ -90,6 +126,9 @@ public class WordResult implements Serializable {
         this.warning = warning;
     }
 
+    /**
+     * @return The content of the result displaying activity, if any
+     */
     public ArrayList<Block> getBlocks() {
         return this.result;
     }
@@ -104,6 +143,13 @@ public class WordResult implements Serializable {
     // Public Methods
     /////
 
+    /**
+     * constructWordResult - Inflates the WordResult object.
+     * Fills out information from the Bin search
+     *
+     * @param parser The HTMLParser used in the search
+     * @param elements Elements needed from the resulting search
+     */
     public void constructWordResult(HTMLParser parser, String[] elements) {
 
         if( this.description.equals("MultiHit") ) {
@@ -121,6 +167,12 @@ public class WordResult implements Serializable {
     /////
     // Private Methods
     /////
+
+    /**
+     * @param a
+     * @return The leftmost successful constructed integer value in a.
+     * Returns 0 if a contains no valid integers
+     */
     private int constructInt(String a) {
 
         Pattern pattern = Pattern.compile("\\d+");
@@ -143,6 +195,9 @@ public class WordResult implements Serializable {
         return result;
     }
 
+    /**
+     * Populates multiHitIds[]
+     */
     private int[] manageMultipleIds(String[] a) {
 
         int[] returnValue = new int[a.length];
@@ -155,6 +210,9 @@ public class WordResult implements Serializable {
         return returnValue;
     }
 
+    /**
+     * Constructs the object if more than one valid result was found
+     */
     private void constructMultiHitResults(HTMLParser parser) {
 
         Document doc = parser.getDocument();
@@ -175,12 +233,18 @@ public class WordResult implements Serializable {
         this.multiHitIds = manageMultipleIds(tempId);
     }
 
+    /**
+     * @return A string containing everything after the first two whitespaces
+     */
     private String destroyPointers(String str) {
         String temp = str.substring(str.indexOf(" ")+1, str.length());
         temp = temp.substring(temp.indexOf(" ")+1, temp.length());
         return temp;
     }
 
+    /**
+     * @return A string containing everything after the first whitespace
+     */
     private String destroyPointer(String str) {
         return str.substring(str.indexOf(" ")+1, str.length());
     }
@@ -195,47 +259,7 @@ public class WordResult implements Serializable {
         return builder.toString();
 
     }
-    /*
-    public ArrayList<String> constructTableResults(String str) {
 
-      str = destroyPointers(str.substring(str.indexOf(" "), str.length()));
-
-      if( str.contains(".") ) {
-        str = destroyPointer(str);
-      }
-
-      ArrayList<String> returnList = new ArrayList<String>();
-
-      if(str.contains("/")) {
-        String[] split = str.split("");
-        for(int i = 1; i < split.length-1; i++) {
-      if( !split[i-1].equals("/") && split[i].equals(" ") && !split[i+1].equals("/") ) {
-        split[i] = "1234";
-      }
-        }
-        String[] temp = new String[split.length-1];
-        for( int i = 0; i < temp.length; i++ ) {
-      temp[i] = split[i+1];
-        }
-        String st = arrayToString(temp);
-        String[] tempT = st.split("1234");
-        for( int i = 0; i < tempT.length; i++ ) {
-      returnList.add(tempT[i]);
-
-        }
-
-      }
-      else {
-        String[] split = str.split("\\s+");
-        for( int i = 0; i < split.length; i++ ) {
-      returnList.add(split[i]);
-        }
-      }
-
-      return returnList;
-
-    }
-    */
     private boolean isNotVerb(String str) {
 
         String[] starters = { "ég", "við", "þú", "þið", "hann", "hún", "það", "þeir", "þær", "þau" };
@@ -548,6 +572,9 @@ public class WordResult implements Serializable {
         return new String[] { "", "" };
     }
 
+    /**
+     * Refers to Fornofn and Greinar
+     */
     private void constructExceptionBlock(ArrayList<String> rawData) {
 
         ArrayList<String> rawFirstTable = new ArrayList<String>();

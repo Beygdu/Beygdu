@@ -11,6 +11,8 @@ import java.util.ArrayList;
  * @since 18.11.2014
  * @version 0.4
  *
+ * DEPRICATED
+ *
  */
 public class ParserResult {
 

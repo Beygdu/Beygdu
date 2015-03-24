@@ -11,58 +11,58 @@ import java.util.ArrayList;
  */
 public class Tables implements Serializable {
 
-  private String title;
+    private String title;
   
-  private String[] columnNames;
-  
-  private String[] rowNames;
-  
-  private ArrayList<String> content;
-  
-  /**
- * @param title The title of the table
- * @param columnNames An array of column titles for the table
- * @param rowNames An array of row titles for the table
- * @param content A list of displayed content of the table
- */
-public Tables(String title, String[] columnNames, String[] rowNames, ArrayList<String> content) {
-  
-    this.title = title;
-    this.columnNames = columnNames;
-    this.rowNames = rowNames;
-    this.content = content;
-  
-  }
-  
-  
-  /**
- * @return The title of the table
- */
-public String getTitle() {
-    return this.title;
-  }
-  
+    private String[] columnNames;
 
-  /**
- * @return An array of the tables column titles
- */
-public String[] getColumnNames() {
-    return this.columnNames;
-  }
-  
-  /**
- * @return An array of the tables rows titles
- */
-  public String[] getRowNames() {
-    return this.rowNames;
-  }
-  
+    private String[] rowNames;
 
-  /**
- * @return An ArrayList of contents in the table
- */
-public ArrayList<String> getContent() {
-    return this.content;
-  }
+    private ArrayList<String> content;
+
+    /**
+     * Tables - A representation of a Table
+     * Contains a title, column names, row names and content
+     *
+     * @param title Title of the table
+     * @param columnNames Column names of the table
+     * @param rowNames Row names of the table
+     * @param content Content of the table
+     */
+    public Tables(String title, String[] columnNames, String[] rowNames, ArrayList<String> content) {
+  
+        this.title = title;
+        this.columnNames = columnNames;
+        this.rowNames = rowNames;
+        this.content = content;
+  
+    }
+
+    /**
+     * @return Title of the table
+     */
+    public String getTitle() {
+        return this.title;
+    }
+
+    /**
+     * @return Column names of the table
+     */
+    public String[] getColumnNames() {
+        return this.columnNames;
+    }
+
+    /**
+     * @return Row names of the table
+     */
+    public String[] getRowNames() {
+        return this.rowNames;
+    }
+
+    /**
+     * @return Content of the table
+     */
+    public ArrayList<String> getContent() {
+        return this.content;
+    }
 
 }
