@@ -6,6 +6,7 @@ import android.os.AsyncTask;
 
 import is.arnastofnun.beygdu.MainActivity;
 import is.arnastofnun.beygdu.R;
+import is.arnastofnun.utils.NetworkStateListener;
 
 /**
  * @author Arnar Jónsson
@@ -33,6 +34,11 @@ public class BinThread extends AsyncTask<String, Void, WordResult> {
     }
 
     protected WordResult doInBackground(String... string) {
+
+        if(!new NetworkStateListener(this.context).isConnectionActive()) {
+            return null;
+        }
+
         String word = string[0];
 
         WordResult wR = new WordResult();
