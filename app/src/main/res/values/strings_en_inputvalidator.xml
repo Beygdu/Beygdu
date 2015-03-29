@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+
+    <string name="ERROR_CODE_1">Registered input contains illegal meta characters</string>
+    <string name="ERROR_CODE_2">Registered input contains illegal whitespace/s</string>
+
+
+    <string name="SNIPPING_CODE_1">Registered input contained space at the beginning of the string</string>
+    <string name="SNIPPING_CODE_2">Registered input contained space at the end of the string</string>
+
+
+
+
+
+
+
+
+</resources>
