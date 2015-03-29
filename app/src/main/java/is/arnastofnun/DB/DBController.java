@@ -45,8 +45,11 @@ public class DBController {
         return this;
     }
 
-    private void close() {
+    private void close(Cursor cursor) {
         dbHelper.close();
+        if(cursor != null) {
+            cursor.close();
+        }
     }
 
     /**
@@ -96,7 +99,7 @@ public class DBController {
         }
         statsContent.put(foundCol, currentValue + 1);
         dB.update(DBHelper.TABLE_STATISTICS, statsContent, null, null);
-        close();
+        close(cursor);
     }
 
     /**
@@ -135,7 +138,7 @@ public class DBController {
         for(Block block : result.getBlocks()) {
             insertBlocks(block, wordResultID);
         }
-        close();
+        close(null);
     }
 
     private void insertBlocks(Block block, int wordResultId) {
@@ -219,7 +222,7 @@ public class DBController {
 
 
         updateDate(title, cursor);
-        close();
+        close(cursor);
         return newWordResult;
     }
 
@@ -228,7 +231,7 @@ public class DBController {
      * @return all the titles of the words in the database.
      */
     public ArrayList<String> fetchAllWords() {
-        ArrayList<String> words= new ArrayList<String>();
+        ArrayList<String> words= new ArrayList<>();
         try {
             open();
         } catch (SQLException e) {
@@ -247,7 +250,7 @@ public class DBController {
             words.add(tmp);
         }
 
-        close();
+        close(cursor);
         return words;
     }
 
@@ -270,7 +273,7 @@ public class DBController {
         cursor.moveToFirst();
 
         int currentValue = cursor.getInt(0);
-        close();
+        close(cursor);
         return currentValue;
     }
 
@@ -301,7 +304,7 @@ public class DBController {
             }
         }
 
-        close();
+        close(cursor);
         return stats;
     }
 
@@ -327,7 +330,7 @@ public class DBController {
         if(cursor.getCount() != 0) {
             result = cursor.getString(0);
         }
-        close();
+        close(cursor);
         return result;
     }
 
@@ -373,26 +376,6 @@ public class DBController {
 
     /**
      *
-     * @param word the title of the WordResult
-     * @return the id of the word in the database.
-     */
-    private int fetchWordId(String word) {
-        int id = 0;
-        final String MY_QUERY = "SELECT " +DBHelper.WORDID +" FROM " + DBHelper.TABLE_WORDRESULT + " WHERE " + DBHelper.TITLE + " = word";
-        Cursor mCursor = dB.rawQuery(MY_QUERY, null);
-        try {
-            if (mCursor.getCount() > 0) {
-                mCursor.moveToFirst();
-                id = mCursor.getInt(0);
-            }
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
-        return id;
-    }
-
-    /**
-     *
      * @param column the column to sort
      * @param table the table to sort from
      * @return the highest integer value in the column
@@ -430,6 +413,7 @@ public class DBController {
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
+        mCursor.close();
         return id;
     }
 
@@ -459,12 +443,12 @@ public class DBController {
                 contains = true;
                 updateDate(wordTitle, cursor);
 
-                close();
+                close(cursor);
                 return contains;
             }
         }
 
-        close();
+        close(cursor);
         return contains;
     }
 
@@ -507,8 +491,9 @@ public class DBController {
         if (cursor != null) {
             cursor.moveToFirst();
         }
-        close();
-        return cursor.getInt(0);
+        int value = cursor.getInt(0);
+        close(cursor);
+        return value;
     }
 
     /**
@@ -522,7 +507,7 @@ public class DBController {
         }
         int wordID = fetchMinId(DBHelper.WORDID, DBHelper.TABLE_WORDRESULT);
         dB.delete(DBHelper.TABLE_WORDRESULT, DBHelper.WORDID + "=" + wordID, null);
-        close();
+        close(null);
     }
 
     /**
