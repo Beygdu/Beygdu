@@ -120,6 +120,7 @@ public class InputValidator {
 
 
     private void handleWhitespaceException() {
+        //TODO: use replace to delete the single whitespace try/catch
         int whitespaceLocation = this.input.indexOf(" ");
         if( whitespaceLocation == 0 ) {
             this.INPUTVALIDATOR_SNIPPING_CODE = SNIPPING_CODE_1;
@@ -138,7 +139,7 @@ public class InputValidator {
     private void manageWhitespaceCharacters() {
         int whitespaceCount = 0;
         for(char i : this.input.toCharArray()) {
-            if( i == ' ') {
+            if( Character.isWhitespace(i) ) {
                 whitespaceCount++;
             }
         }
