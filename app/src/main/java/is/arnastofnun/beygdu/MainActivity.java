@@ -17,6 +17,7 @@ import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -47,7 +48,7 @@ import is.arnastofnun.utils.InputValidator;
  * and send an email to the creator of the database
  * 
  */
-public class MainActivity extends NavDrawer implements CustomDialog.DialogListener {
+public class MainActivity extends NavDrawer implements CustomDialog.DialogListener, View.OnKeyListener {
 
     /**
      * Progress dialog to be used in Async Task
@@ -131,6 +132,11 @@ public class MainActivity extends NavDrawer implements CustomDialog.DialogListen
          */
         headerText();
 
+        /**
+         * Set the key handler on the edit text box to capture the Enter key event
+         */
+        EditText editText = (EditText) findViewById(R.id.mainSearch);
+        editText.setOnKeyListener(this);
 
 	}
 
@@ -484,5 +490,11 @@ public class MainActivity extends NavDrawer implements CustomDialog.DialogListen
     @Override
     public void onNegativeButtonClick(String errorString) {
 
+    }
+
+    @Override
+    public boolean onKey(View v, int keyCode, KeyEvent event) {
+        btnOnClick(v);
+        return false;
     }
 }
