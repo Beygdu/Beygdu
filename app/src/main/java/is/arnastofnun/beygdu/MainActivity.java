@@ -34,6 +34,7 @@ import java.net.URLEncoder;
 import is.arnastofnun.DB.DBController;
 import is.arnastofnun.parser.WordResult;
 import is.arnastofnun.utils.CustomDialog;
+import is.arnastofnun.utils.InputValidator;
 
 
 /**
@@ -60,7 +61,19 @@ public class MainActivity extends NavDrawer implements CustomDialog.DialogListen
 
 	//public ParserResult pR = new ParserResult();
 
+    /**
+     *  Errorsymbols for the inputvalidator
+     */
+    private String INPUTVALIDATOR_ERRORSYMBOLS = "1234567890!@#$%^&*()_+=-[]{}|?><.,:;";
 
+    /**
+     * string containing the last searched word, removes the pain of NullPointerException handling
+     */
+    private String lastSearchedWord = "";
+
+    private void setLastSearchedWord(String str) {
+        this.lastSearchedWord = str;
+    }
     /**
      * The WordResult Document, containing all data on searched word
      */
@@ -68,6 +81,7 @@ public class MainActivity extends NavDrawer implements CustomDialog.DialogListen
 
 	public void setWordResult(WordResult wordResult) {
 		this.wR = wordResult;
+        checkWordCount();
 	}
 
     /**
@@ -260,27 +274,24 @@ public class MainActivity extends NavDrawer implements CustomDialog.DialogListen
 		if(word.isEmpty())  {
 			Toast.makeText(this, "Vinsamlegasta sláið inn orð í reitinn hér að ofan", Toast.LENGTH_SHORT).show();
 		}
-        else if(islegalInput(word)) {
-            if(word.contains(" ")) {
-                word = replaceSpaces(word);
-            }
-            BinHelper bHelper = new BinHelper(MainActivity.this);
-            try {
-                setWordResult(bHelper.sendThread(word, 1));
-            }
-            catch( Exception e ) {
-                this.wR = null;
-            }
-
-            if(this.wR != null) {
-                checkWordCount();
+        else {
+            setLastSearchedWord(word);
+            InputValidator iValidator = new InputValidator(word, INPUTVALIDATOR_ERRORSYMBOLS);
+            if(iValidator.isLegal()) {
+                try {
+                    BinHelper binHelper = new BinHelper(MainActivity.this);
+                    setWordResult(binHelper.sendThread(word, 1));
+                }
+                catch (Exception e) {
+                    setWordResult(null);
+                    //TODO : Errorhandling
+                    Toast.makeText(MainActivity.this, "Ekki tokst ad na sambandi vid bin", Toast.LENGTH_SHORT).show();
+                }
             }
             else {
-                Toast.makeText(getApplicationContext(), "Villa i btnclicked", Toast.LENGTH_SHORT).show();
+                //TODO : Errorhandling
+                Toast.makeText(MainActivity.this, iValidator.getErrorCode(), Toast.LENGTH_SHORT).show();
             }
-        }
-        else {
-            Toast.makeText(getApplicationContext(), "Einingis hægt að leita að einu orði í einu", Toast.LENGTH_SHORT).show();
         }
 
 
@@ -369,13 +380,22 @@ public class MainActivity extends NavDrawer implements CustomDialog.DialogListen
 	 */
 	private void checkWordCount() {
 
-		String pr = wR.getDescription();
+        if(this.wR == null) {
+            //TODO : Errorhandling
+            Toast.makeText(this, "WordResult is null", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
-		if (pr.equals("MultiHit")) {
+        String desc = this.wR.getDescription();
 
+        if(desc.equals("SingleHit")) {
+            WordResult word = this.wR;
+            createNewActivity(word);
+        }
+        else if(desc.equals("MultiHit")) {
             Bundle bundle = new Bundle();
             bundle.putInt("id", 0);
-            bundle.putString("title", getString(R.string.MultiHitDialog));
+            bundle.putString("title", wR.getMultiHitDescriptions().length + " " + getString(R.string.MultiHitDialog));
             bundle.putString("positiveButtonText", getString(R.string.PositiveButton));
             bundle.putString("negativeButtonText", getString(R.string.NegativeButton));
             bundle.putStringArray("descriptions", wR.getMultiHitDescriptions());
@@ -383,19 +403,20 @@ public class MainActivity extends NavDrawer implements CustomDialog.DialogListen
             android.app.DialogFragment multiDialog = new CustomDialog();
             multiDialog.setArguments(bundle);
             multiDialog.show(getFragmentManager(), "0");
-
-		} else if (pr.equals("SingleHit")) {
-			WordResult word = this.wR;
-			createNewActivity(word);
-		} else if (pr.equals("Miss")) {
+        }
+        else {
             SkrambiHelper sHelper = new SkrambiHelper(MainActivity.this);
             String[] correctedWords = sHelper.getSpellingCorrection(wR.getSearchWord());
             if( correctedWords == null || correctedWords[0].equals("")) {
-                DBController controller = new DBController(this);
-                if(controller.fetchObeygjanlegt(wR.getSearchWord()) != null){
-                    Toast.makeText(this, wR.getSearchWord() + " er óbeygjanlegt orð", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(this, "Engin leitarniðurstaða", Toast.LENGTH_SHORT).show();
+                DBController controller = new DBController(MainActivity.this);
+                if(controller.fetchObeygjanlegt(wR.getSearchWord()) != null) {
+                    //TODO : ErrorHandling
+                    Toast.makeText(this, wR.getSearchWord() + " er obegjanlegt ord", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                else {
+                    //TODO : Errorhandling
+                    Toast.makeText(this, "Engin leitarnidurstada fannst", Toast.LENGTH_SHORT).show();
                 }
             }
             else {
@@ -410,7 +431,8 @@ public class MainActivity extends NavDrawer implements CustomDialog.DialogListen
                 multiDialog.setArguments(bundle);
                 multiDialog.show(getFragmentManager(), "0");
             }
-		}
+        }
+
 	}
 
 	/**
@@ -452,11 +474,10 @@ public class MainActivity extends NavDrawer implements CustomDialog.DialogListen
         BinHelper binHelper = new BinHelper(MainActivity.this);
         try {
             setWordResult(binHelper.sendThread(selectedItem, 1));
-            checkWordCount();
         }
         catch (Exception e) {
             Log.w("Exception", e);
-            Toast.makeText(getApplicationContext(), "Engin leit fannst", Toast.LENGTH_SHORT).show();
+            Toast.makeText(MainActivity.this, "Engin leit fannst", Toast.LENGTH_SHORT).show();
         }
     }
 
