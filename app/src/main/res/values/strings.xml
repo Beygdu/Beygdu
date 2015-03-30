@@ -10,6 +10,7 @@
     <string name="aboutText">Upprunalegt markmið við gerð Beygingarlýsingar íslensks nútímamáls (BÍN) var að koma upp beygingarlýsingu á tölvutæku formi sem nýtast mætti til máltækniverkefna af ýmsu tagi, í orðabókargerð og við málfræðirannsóknir. Jafnframt var markmiðið að gera Beygingarlýsinguna aðgengilega fyrir almenning á vefnum.
 Þessi markmið stangast að nokkru leyti á. Í máltækni er lykilatriði að gögnin innihaldi öll málbrigði til þess að koma að fullum notum. Gögnin þurfa að duga til að greina hvað sem er, líka það sem ekki er talið gullaldarmál. Notendur BÍN á vefnum ætlast hins vegar oftar en ekki til þess að fá leiðbeiningar um rétt mál og rangt. Hér er á ferðinni munurinn á lýsandi og vísandi málfræði (forskriftarmálfræði) en eins og nafnið bendir til þá er BÍN í megindráttum lýsandi. Til þess að koma til móts við notendur vefsíðunnar sem vilja vanda mál sitt eru athugasemdir með leiðbeiningum og skýringum fyrir ofan beygingardæmin en í beygingarrammanum sjálfum birtast allar beygingarmyndirnar athugasemdalausar, þótt þeim sé oft og tíðum raðað eftir gildi. Nánar um BÍN í máltækni og beygingardæmin.</string>
     <string name="searchInput">Hvað viltu finna?</string>
+    <string name="allowed_characters">aábdðeéfghiíjklmnoóprstuúvxyýþæöAÁBDÐEÉFGHIÍJKLMNOÓPRSTUÚVXYÝÞÆÖwWzZcC</string>
     <string name="buttonSearch">Leita</string>
     <string name="title_activity_beygingar">eygingarmynd</string>
     <string name="title_activity_table_test">TableTest</string>
@@ -78,5 +79,7 @@
             <item>Tölfræði</item>
         </string-array>
     <string name="title_activity_maps">Map</string>
+
+
 
 </resources>

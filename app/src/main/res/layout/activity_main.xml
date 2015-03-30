@@ -48,6 +48,7 @@
                 android:textColor="@color/font_light"
                 android:textSize="24dp"
                 android:hint="@string/searchInput"
+                android:digits="@string/allowed_characters"
                 android:inputType="text"
                 android:paddingLeft="10dp"
                 android:layout_marginRight="10dp"/>
