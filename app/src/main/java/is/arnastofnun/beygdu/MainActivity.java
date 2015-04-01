@@ -33,6 +33,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
 import is.arnastofnun.DB.DBController;
+import is.arnastofnun.TutorialScreen.ScreenSlidePagerActivity;
 import is.arnastofnun.parser.WordResult;
 import is.arnastofnun.utils.CustomDialog;
 import is.arnastofnun.utils.InputValidator;
@@ -137,6 +138,16 @@ public class MainActivity extends NavDrawer implements CustomDialog.DialogListen
          */
         EditText editText = (EditText) findViewById(R.id.mainSearch);
         editText.setOnKeyListener(this);
+
+        Button tutButton = (Button) findViewById(R.id.tutorialButton);
+        tutButton.setOnClickListener(
+                new Button.OnClickListener() {
+                    public void onClick(View v) {
+                        Intent tutIntent = new Intent(MainActivity.this, ScreenSlidePagerActivity.class);
+                        startActivity(tutIntent);
+                    }
+                }
+        );
 
 	}
 
