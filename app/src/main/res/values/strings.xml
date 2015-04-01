@@ -56,6 +56,9 @@
     <!-- Cache -->
     <string name="title_activity_cache">Fyrri leitir</string>
 
+    <!-- TutorialTest -->
+    <string name="tutorialtest">BLALALSLSLDA</string>
+
     <!-- Statistics -->
     <string name="title_activity_statistics">Tölfræði</string>
     <string name="pieChart_Desc">Fjöldi leita eftir orðflokkum</string>
@@ -79,6 +82,10 @@
             <item>Tölfræði</item>
         </string-array>
     <string name="title_activity_maps">Map</string>
+
+<!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_screen_slide_pager">ScreenSlidePagerActivity</string>
 
 
 
