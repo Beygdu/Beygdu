@@ -14,7 +14,7 @@ import is.arnastofnun.beygdu.R;
 
 public class ScreenSlidePagerActivity extends FragmentActivity {
 
-    private static final int NUM_PAGES = 5;
+    private static final int NUM_PAGES = 3;
 
     private ViewPager mPager;
 
@@ -48,7 +48,13 @@ public class ScreenSlidePagerActivity extends FragmentActivity {
 
         @Override
         public Fragment getItem(int position) {
-            return new ScreenSlidePageFragment();
+            switch (position) {
+                case 0: return ScreenSlidePageFragment.newInstance(R.layout.fragment_tutorial_one);
+                case 1: return ScreenSlidePageFragment.newInstance(R.layout.fragment_tutorial_two);
+                case 2: return ScreenSlidePageFragment.newInstance(R.layout.fragment_tutorial_three);
+                //TODO : Add instance for every page for custome layouts
+                default : return ScreenSlidePageFragment.newInstance(R.layout.fragment_tutorial_one);
+            }
         }
 
         @Override

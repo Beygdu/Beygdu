@@ -3,7 +3,7 @@ package is.arnastofnun.TutorialScreen;
 import android.app.Activity;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,7 +11,19 @@ import android.view.ViewGroup;
 import is.arnastofnun.beygdu.R;
 
 
-public class ScreenSlidePageFragment extends Fragment {
+public class TutorialTwo extends Fragment {
+
+    public static TutorialTwo newInstance(int param1, String param2) {
+
+        TutorialTwo tTwo = new TutorialTwo();
+
+        Bundle args = new Bundle();
+        args.putInt("layoutId", param1);
+        args.putString("contentFlag", param2);
+        tTwo.setArguments(args);
+
+        return tTwo;
+    }
 
 
 
@@ -21,22 +33,12 @@ public class ScreenSlidePageFragment extends Fragment {
 
         Bundle bundle = getArguments();
         int layoutId = bundle.getInt("layoutId");
+        String contentFlag = bundle.getString("contentFlag");
 
         ViewGroup rootView = (ViewGroup) inflater.inflate(
                 layoutId, container, false);
 
         return rootView;
-    }
-
-    public static ScreenSlidePageFragment newInstance(int  id) {
-
-        ScreenSlidePageFragment sSPFragment = new ScreenSlidePageFragment();
-
-        Bundle bundle = new Bundle();
-        bundle.putInt("layoutId", id);
-        sSPFragment.setArguments(bundle);
-
-        return sSPFragment;
     }
 
 

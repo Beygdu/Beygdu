@@ -1,0 +1,14 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/context"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#a0db8e">
+
+    <TextView style="?android:textAppearanceMedium"
+        android:padding="16dp"
+        android:lineSpacingMultiplier="1.2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/tutorialtest" />
+
+</ScrollView>
