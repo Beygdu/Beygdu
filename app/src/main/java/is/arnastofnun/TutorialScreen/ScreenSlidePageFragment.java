@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,17 +21,31 @@ public class ScreenSlidePageFragment extends Fragment {
 
 
     Animation anim;
-
+    /*
     @Override
     public void onStart() {
         super.onStart();
         TextView tView = (TextView) getView().findViewById(R.id.animTV);
-    
+
         AnimatorSet firstSet = (AnimatorSet) AnimatorInflater.loadAnimator(
-                getActivity().getApplicationContext(), R.anim.slideup);
+                getActivity().getApplicationContext(), R.animator.slideup);
         firstSet.setTarget(tView);
         firstSet.start();
+        Animation firstAnimation = AnimationUtils.loadAnimation(getActivity().getApplicationContext(), R.animator.slideup);
+        tView.startAnimation(firstAnimation);
     }
+    */
+
+    @Override
+    public void onResume() {
+        super.onResume();
+            TextView tView = (TextView) getView().findViewById(R.id.animTV);
+            Animation firstAnimation = AnimationUtils.loadAnimation(getActivity(),
+                    R.animator.slideup);
+            tView.startAnimation(firstAnimation);
+
+    }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
