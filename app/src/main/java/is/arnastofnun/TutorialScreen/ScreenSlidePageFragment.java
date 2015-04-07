@@ -4,6 +4,7 @@ import android.animation.AnimatorInflater;
 import android.animation.AnimatorSet;
 import android.app.Activity;
 import android.content.Context;
+import android.content.res.Configuration;
 import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
@@ -25,15 +26,30 @@ import is.arnastofnun.beygdu.R;
 
 public class ScreenSlidePageFragment extends Fragment {
 
+    //private int layoutPortId;
+    //private int layoutLandId;
+    private View rootView;
+    private ViewGroup containter;
+    private LayoutInflater inflater;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
+        this.inflater = inflater;
+        this.containter = container;
+        int layoutId;
         Bundle bundle = getArguments();
-        int layoutId = bundle.getInt("layoutId");
 
-        View rootView = inflater.inflate(
+        if(getResources().getConfiguration().orientation == 1) {
+            layoutId = bundle.getInt("layoutPortId");
+        }
+        else {
+            layoutId = bundle.getInt("layoutLandId");
+        }
+
+
+        rootView = inflater.inflate(
                 layoutId, container, false);
 
 
@@ -49,14 +65,28 @@ public class ScreenSlidePageFragment extends Fragment {
 
         return rootView;
     }
+    /*
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        containter.removeAllViews();
+        switch (newConfig.orientation) {
+            case Configuration.ORIENTATION_PORTRAIT:
+                break;
+            case Configuration.ORIENTATION_LANDSCAPE:
+                break;
+        }
 
-    public static ScreenSlidePageFragment newInstance(int id, int imageId, int firstStringId,
+    }
+    */
+    public static ScreenSlidePageFragment newInstance(int oriPortId, int oriLandId,
+                                                      int imageId, int firstStringId,
                                                       int secondStringId) {
 
         ScreenSlidePageFragment sSPFragment = new ScreenSlidePageFragment();
 
         Bundle bundle = new Bundle();
-        bundle.putInt("layoutId", id);
+        bundle.putInt("layoutPortId", oriPortId);
+        bundle.putInt("layoutLandId", oriLandId);
         bundle.putInt("imageSource", imageId);
         bundle.putInt("firstInfoString", firstStringId);
         bundle.putInt("secondInfoString", secondStringId);

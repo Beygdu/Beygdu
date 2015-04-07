@@ -26,6 +26,8 @@ public class ScreenSlidePagerActivity extends FragmentActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
         setContentView(R.layout.activity_screen_slide);
 
         mPager = (ViewPager) findViewById(R.id.pager);
@@ -44,6 +46,14 @@ public class ScreenSlidePagerActivity extends FragmentActivity {
         }
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+
+        return true;
+    }
+
+
     private class ScreenSlidePagerAdapter extends FragmentStatePagerAdapter {
 
         public ScreenSlidePagerAdapter(FragmentManager fm) {
@@ -54,19 +64,23 @@ public class ScreenSlidePagerActivity extends FragmentActivity {
         public Fragment getItem(int position) {
             switch (position) {
                 case 0: return ScreenSlidePageFragment.newInstance(R.layout.fragment_tutorial_one,
+                        R.layout.fragment_tutorial_one_land,
                         R.drawable.placeholderimage,
                         R.string.placeHolderFragmentText,
                         R.string.placeHolderFragmentText);
                 case 1: return ScreenSlidePageFragment.newInstance(R.layout.fragment_tutorial_two,
+                        R.layout.fragment_tutorial_two_land,
                         R.drawable.placeholderimage,
                         R.string.placeHolderFragmentText,
                         R.string.placeHolderFragmentText);
                 case 2: return ScreenSlidePageFragment.newInstance(R.layout.fragment_tutorial_three,
+                        R.layout.fragment_tutorial_three_land,
                         R.drawable.placeholderimage,
                         R.string.placeHolderFragmentText,
                         R.string.placeHolderFragmentText);
                 //TODO : Add instance for every page for custome layouts
                 default : return ScreenSlidePageFragment.newInstance(R.layout.fragment_tutorial_one,
+                        R.layout.fragment_tutorial_one_land,
                         R.drawable.placeholderimage,
                         R.string.placeHolderFragmentText,
                         R.string.placeHolderFragmentText);
