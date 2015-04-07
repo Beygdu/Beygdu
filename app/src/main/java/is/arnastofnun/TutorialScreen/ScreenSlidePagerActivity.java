@@ -9,6 +9,9 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
 
 import is.arnastofnun.beygdu.R;
 
@@ -50,11 +53,23 @@ public class ScreenSlidePagerActivity extends FragmentActivity {
         @Override
         public Fragment getItem(int position) {
             switch (position) {
-                case 0: return ScreenSlidePageFragment.newInstance(R.layout.fragment_tutorial_one);
-                case 1: return ScreenSlidePageFragment.newInstance(R.layout.fragment_tutorial_two);
-                case 2: return ScreenSlidePageFragment.newInstance(R.layout.fragment_tutorial_three);
+                case 0: return ScreenSlidePageFragment.newInstance(R.layout.fragment_tutorial_one,
+                        R.drawable.placeholderimage,
+                        R.string.placeHolderFragmentText,
+                        R.string.placeHolderFragmentText);
+                case 1: return ScreenSlidePageFragment.newInstance(R.layout.fragment_tutorial_two,
+                        R.drawable.placeholderimage,
+                        R.string.placeHolderFragmentText,
+                        R.string.placeHolderFragmentText);
+                case 2: return ScreenSlidePageFragment.newInstance(R.layout.fragment_tutorial_three,
+                        R.drawable.placeholderimage,
+                        R.string.placeHolderFragmentText,
+                        R.string.placeHolderFragmentText);
                 //TODO : Add instance for every page for custome layouts
-                default : return ScreenSlidePageFragment.newInstance(R.layout.fragment_tutorial_one);
+                default : return ScreenSlidePageFragment.newInstance(R.layout.fragment_tutorial_one,
+                        R.drawable.placeholderimage,
+                        R.string.placeHolderFragmentText,
+                        R.string.placeHolderFragmentText);
             }
         }
 
@@ -62,6 +77,9 @@ public class ScreenSlidePagerActivity extends FragmentActivity {
         public int getCount() {
             return NUM_PAGES;
         }
+
+
+
     }
 
 
