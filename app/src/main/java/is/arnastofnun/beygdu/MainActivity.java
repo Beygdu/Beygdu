@@ -124,8 +124,6 @@ public class MainActivity extends NavDrawer implements CustomDialog.DialogListen
         mDrawerList.setItemChecked(position,true);
         setTitle(R.string.app_name);
 
-        getActionBar().setDisplayHomeAsUpEnabled(false);
-
 		checkNetworkState();
         /**
          * Animate header text and set it's size

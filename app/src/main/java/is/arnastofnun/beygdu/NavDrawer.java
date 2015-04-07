@@ -142,7 +142,7 @@ public class NavDrawer extends FragmentActivity{
                 super.onDrawerSlide(drawerView, slideOffset);
             }
         };
-        actionBarDrawerToggle.setDrawerIndicatorEnabled(true);
+//        actionBarDrawerToggle.setDrawerIndicatorEnabled(true);
         /**
          * TODO: Use .syncState() to properly display the 'hamburger' icon for the navDrawer
          * actionBarDrawerToggle.syncState();
@@ -239,13 +239,6 @@ public class NavDrawer extends FragmentActivity{
 
     @Override
     public void onBackPressed() {
-        /*
-        if(mDrawerLayout.isDrawerOpen(mDrawerList)){
-            mDrawerLayout.closeDrawer(mDrawerList);
-        } else {
-            mDrawerLayout.openDrawer(mDrawerList);
-        }
-        */
 
         super.onBackPressed();
     }
