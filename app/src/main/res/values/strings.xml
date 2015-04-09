@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="title">Beygingarlýsing íslensks nútímamáls</string>
+    <string name="title"><b><big>Beygingarlýsing</big></b>\n<small>íslensks nútímamáls</small></string>
     <string name="titleSmall">Stofnun Árna Magnússonar í íslenskum fræðum</string>
     <string name="background_desc">Bakgrunns bje</string>
     <string name="aboutTitle">Um beygðu</string>
@@ -77,9 +77,26 @@
             <item>Fyrri leitir</item>
             <item>Um Beygðu</item>
             <item>Tölfræði</item>
+            <item>Höfundar</item>
+            <item>Hvar erum við?</item>
         </string-array>
     <string name="title_activity_maps">Map</string>
+    <string name="title_activity_author">Author</string>
+    <string name="title_activity_authors">AuthorsActivity</string>
+
     <string name="alert_dialog_ok">Ok</string>
 
+    <!-- Authors of app -->
+    <string name="authors">Höfundar Beygðu</string>
+
+    <string name="arnar">Arnar Jónsson \n</string>
+    <string name="arnarDesc">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla volutpat feugiat hendrerit. Suspendisse pharetra ante laoreet purus sodales ultricies .</string>
+    <string name="daniel">Daníel Páll Jóhannsson</string>
+    <string name="danielDesc">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla volutpat feugiat hendrerit. Suspendisse pharetra ante laoreet purus sodales ultricies nec quis lectus. .</string>
+    <string name="jon">Jón Friðrik Jónatansson</string>
+    <string name="jonDesc">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla volutpat feugiat hendrerit. Suspendisse pharetra ante laoreet purus sodales ultricies nec quis lectus. Nulla facilisis eu lorem vel mollis. Pellentesque venenatis pulvinar volutpat. Vestibulum tempor fringilla quam. Mauris tincidunt quis odio id tempor. Vivamus .</string>
+    <string name="snaer">Snær Seljan Þóroddsson</string>
+    <string name="snaerDesc">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla volutpat feugiat hendrerit. Suspendisse pharetra ante laoreet purus sodales .</string>
+    <string name="title_activity_maps2">Map</string>
 
 </resources>
