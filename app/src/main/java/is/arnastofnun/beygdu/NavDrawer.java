@@ -195,6 +195,14 @@ public class NavDrawer extends FragmentActivity{
                 startActivity(new Intent(this, StatisticsActivity.class));
                 activityAnimationTransition();
                 break;
+            case 4:
+                startActivity(new Intent(this, AuthorActivity.class));
+                activityAnimationTransition();
+                break;
+            case 5:
+                startActivity(new Intent(this, MapsActivity.class));
+                activityAnimationTransition();
+                break;
         }
     }
 
