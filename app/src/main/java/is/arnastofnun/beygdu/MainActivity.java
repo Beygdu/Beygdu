@@ -35,11 +35,12 @@ import java.net.URLEncoder;
 import is.arnastofnun.DB.DBController;
 import is.arnastofnun.parser.WordResult;
 import is.arnastofnun.utils.CustomDialog;
+import is.arnastofnun.utils.CustomErrorDialog;
 import is.arnastofnun.utils.InputValidator;
 
 
 /**
- * @author Jón Friðrik, Arnar, Snær, Máni
+ * @author Jón Friðrik, Arnar, Snær, Máni, Daniel
  * @since 05.11.14
  * @version 1.0
  * 
@@ -182,6 +183,12 @@ public class MainActivity extends NavDrawer implements CustomDialog.DialogListen
         set.setTarget(header);
         set.start();
     }*/
+
+    public void showErrorDialog(){
+        // Create the fragment and display it as a dialog
+        CustomErrorDialog customErrorDialog = new CustomErrorDialog();
+        customErrorDialog.show(getFragmentManager(), "dialog");
+    }
 
     /**
      * This method converts device specific pixels to density independent pixels.
