@@ -16,6 +16,7 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.NavUtils;
+import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
@@ -26,6 +27,9 @@ import android.view.ViewGroup;
 import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.text.*;
+
+
 
 import java.util.ArrayList;
 
@@ -127,6 +131,12 @@ public class BeygingarActivity extends NavDrawer {
         // If it is possible to filter the word result, add a Navigation
         // Drawer Item at the second last position in the list
         navDrawerFilterableListItem();
+
+
+
+
+
+
 }
 
     /**
@@ -232,23 +242,23 @@ public class BeygingarActivity extends NavDrawer {
 	 */
 	private void initTables(){
 		//SetTitle
-		TextView titleDesc = new TextView(this);
-        titleDesc.setText(words.getTitle());
+        TextView titleDesc = (TextView)findViewById(R.id.search_result);
+        String[] titleArr = words.getTitle().split(" ", 2);
+        String firstWord = titleArr[0];
+        String theRest = titleArr[1];
+        titleDesc.setText(Html.fromHtml("<b><big>" + firstWord + "</big></b>" + "\n" + "<small>" + theRest + "</small>"));
+
         if (320 > width && width < 384) {
-            titleDesc.setTextSize(20);
+            titleDesc.setTextSize(35);
         }
         else if(384 > width && width < 600) {
-            titleDesc.setTextSize(32);
+            titleDesc.setTextSize(35);
         }
         else if(width > 600){
-            titleDesc.setTextSize(50);
+            titleDesc.setTextSize(35);
         }
-		titleDesc.setMinHeight(130);
-		titleDesc.setTypeface(LatoSemiBold);
+        titleDesc.setTypeface(LatoLight);
 
-        titleDesc.setTextColor(getResources().getColor(R.color.white));
-        tableLayout.addView(titleDesc);
-		
 		//SetNote
 		if(!words.getWarning().equals("")) {
 			TextView note = new TextView(this);

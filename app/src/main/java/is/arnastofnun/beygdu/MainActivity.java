@@ -25,9 +25,12 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.software.shell.fab.ActionButton;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -35,11 +38,12 @@ import java.net.URLEncoder;
 import is.arnastofnun.DB.DBController;
 import is.arnastofnun.parser.WordResult;
 import is.arnastofnun.utils.CustomDialog;
+import is.arnastofnun.utils.CustomErrorDialog;
 import is.arnastofnun.utils.InputValidator;
 
 
 /**
- * @author Jón Friðrik, Arnar, Snær, Máni
+ * @author Jón Friðrik, Arnar, Snær, Máni, Daniel
  * @since 05.11.14
  * @version 1.0
  * 
@@ -152,8 +156,10 @@ public class MainActivity extends NavDrawer implements CustomDialog.DialogListen
         LatoSemiBold = Typeface.createFromAsset(getAssets(), "fonts/Lato-Semibold.ttf");
         LatoLight = Typeface.createFromAsset(getAssets(), "fonts/Lato-Light.ttf");
 
+        ActionButton circlestar = (ActionButton) findViewById(R.id.circleStar);
         TextView header = (TextView)findViewById(R.id.title);
         TableRow rowSearch = (TableRow) findViewById(R.id.search_row);
+
 
         header.setTypeface(LatoLight);
         if (320 > width && width < 384) {
@@ -168,10 +174,10 @@ public class MainActivity extends NavDrawer implements CustomDialog.DialogListen
 
         Animation animateFromTop = AnimationUtils.loadAnimation(this, R.animator.animator);
         Animation fadeIn = AnimationUtils.loadAnimation(this, R.animator.fadein);
+        Animation openScale = AnimationUtils.loadAnimation(this, R.animator.activity_open_scale);
         rowSearch.startAnimation(fadeIn);
         header.startAnimation(animateFromTop);
-
-
+        circlestar.playShowAnimation();
     }
 
 
@@ -180,6 +186,12 @@ public class MainActivity extends NavDrawer implements CustomDialog.DialogListen
         set.setTarget(header);
         set.start();
     }*/
+
+    public void showErrorDialog(){
+        // Create the fragment and display it as a dialog
+        CustomErrorDialog customErrorDialog = new CustomErrorDialog();
+        customErrorDialog.show(getFragmentManager(), "dialog");
+    }
 
     /**
      * This method converts device specific pixels to density independent pixels.
@@ -317,6 +329,12 @@ public class MainActivity extends NavDrawer implements CustomDialog.DialogListen
         Intent intent = new Intent(MainActivity.this, MapsActivity.class);
         startActivity(intent);
     }
+
+    public void authorClick(@SuppressWarnings("unused")  View view) {
+        Intent intent = new Intent(MainActivity.this, AuthorActivity.class);
+        startActivity(intent);
+    }
+
 
 
 	
