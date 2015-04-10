@@ -13,21 +13,23 @@ import is.arnastofnun.beygdu.R;
  */
 public class CustomErrorDialog extends DialogFragment{
 
-    public static CustomErrorDialog newInstance(int title){
-        CustomErrorDialog customErrorDialog = new CustomErrorDialog();
-        Bundle bundle = new Bundle();
-        bundle.putInt("title",title);
-        customErrorDialog.setArguments(bundle);
-        return customErrorDialog;
-    }
+//    public static CustomErrorDialog newInstance(int title){
+//        CustomErrorDialog customErrorDialog = new CustomErrorDialog();
+//        Bundle bundle = new Bundle();
+//        bundle.putInt("title",title);
+//        customErrorDialog.setArguments(bundle);
+//        return customErrorDialog;
+//    }
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         int title = getArguments().getInt("title");
+        int message = getArguments().getInt("message");
 
         AlertDialog.Builder diagBuilder = new AlertDialog.Builder(getActivity());
 
         diagBuilder.setTitle(title);
+        diagBuilder.setMessage(message);
 
         diagBuilder.setNegativeButton(R.string.alert_dialog_ok,
                 new DialogInterface.OnClickListener() {

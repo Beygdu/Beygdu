@@ -140,6 +140,9 @@ public class MainActivity extends NavDrawer implements CustomDialog.DialogListen
         EditText editText = (EditText) findViewById(R.id.mainSearch);
         editText.setOnKeyListener(this);
 
+
+        showErrorDialog();
+
 	}
 
     /**
@@ -187,10 +190,21 @@ public class MainActivity extends NavDrawer implements CustomDialog.DialogListen
         set.start();
     }*/
 
+    /**
+     * Shows custom error dialog
+     * Daniel Pall
+     */
     public void showErrorDialog(){
         // Create the fragment and display it as a dialog
-        CustomErrorDialog customErrorDialog = new CustomErrorDialog();
-        customErrorDialog.show(getFragmentManager(), "dialog");
+
+        Bundle bundle = new Bundle();
+        bundle.putString("title", getString(R.string.error_dialog_test_title));
+        bundle.putString("message","Test Message");
+
+        CustomErrorDialog CEDialog = new CustomErrorDialog();
+
+        CEDialog.setArguments(bundle);
+        CEDialog.show(getFragmentManager(), "0");
     }
 
     /**
