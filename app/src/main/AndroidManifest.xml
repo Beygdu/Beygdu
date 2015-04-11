@@ -116,6 +116,10 @@
             android:name=".Maps2Activity"
             android:label="@string/title_activity_maps2" >
         </activity>
+        <activity
+            android:name="is.arnastofnun.BeygduTutorial.TutorialActivity"
+            android:label="@string/title_activity_tutorial" >
+        </activity>
     </application>
 
 </manifest>
