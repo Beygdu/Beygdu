@@ -27,10 +27,10 @@ public class BinThread extends AsyncTask<String, Void, WordResult> {
     }
 
     protected void onPreExecute() {
-        this.pDialog = new ProgressDialog(context);
-        this.pDialog.setMessage(this.context.getString(R.string.progressdialog));
-        this.pDialog.setCancelable(false);
-        this.pDialog.show();
+        //this.pDialog = new ProgressDialog(context);
+        //this.pDialog.setMessage(this.context.getString(R.string.progressdialog));
+        //this.pDialog.setCancelable(false);
+        //this.pDialog.show();
     }
 
     protected WordResult doInBackground(String... string) {
@@ -63,7 +63,7 @@ public class BinThread extends AsyncTask<String, Void, WordResult> {
     }
 
     protected void onPostExecute(WordResult wordResult) {
-        this.pDialog.dismiss();
+        //this.pDialog.dismiss();
     }
 
 }

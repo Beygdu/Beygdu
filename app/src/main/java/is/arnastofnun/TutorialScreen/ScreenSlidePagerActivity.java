@@ -1,5 +1,6 @@
 package is.arnastofnun.TutorialScreen;
 
+import android.app.ActionBar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -7,7 +8,9 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,6 +30,9 @@ public class ScreenSlidePagerActivity extends FragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        final ActionBar actionbar = getActionBar();
+        actionbar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+
 
         setContentView(R.layout.activity_screen_slide);
 
@@ -34,6 +40,8 @@ public class ScreenSlidePagerActivity extends FragmentActivity {
         mPagerAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager());
         mPager.setAdapter(mPagerAdapter);
         mPager.setPageTransformer(true, new AnimationTransformer());
+
+
     }
 
     @Override
@@ -48,9 +56,9 @@ public class ScreenSlidePagerActivity extends FragmentActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-
-
-        return true;
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_screen_slide_pager, menu);
+        return super.onCreateOptionsMenu(menu);
     }
 
 
@@ -94,7 +102,10 @@ public class ScreenSlidePagerActivity extends FragmentActivity {
 
 
 
+
     }
+
+
 
 
 }

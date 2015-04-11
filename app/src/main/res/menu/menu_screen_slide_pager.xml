@@ -1,7 +1,28 @@
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    tools:context="is.arnastofnun.TutorialScreen.ScreenSlidePagerActivity">
-    <item android:id="@+id/action_settings" android:title="@string/action_settings"
-        android:orderInCategory="100" app:showAsAction="never" />
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/menu_forward"
+        android:icon="@android:drawable/ic_menu_add"
+        android:title="@string/TutorialActionBarForward"
+        android:orderInCategory="1"
+        app:showAsAction="always"/>
+    <item
+        android:id="@+id/menu_backwards"
+        android:icon="@android:drawable/ic_menu_add"
+        android:title="@string/TutorialActionBarBackward"
+        app:showAsAction="always"/>
+
+    <item
+        android:id="@+id/menu_quit"
+        android:icon="@android:drawable/ic_menu_add"
+        android:title="@string/TutorialActionBarQuit"
+        app:showAsAction="always"/>
+
+
+
+
+
 </menu>

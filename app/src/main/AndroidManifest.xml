@@ -102,7 +102,7 @@
         </activity>
         <activity
             android:name="is.arnastofnun.TutorialScreen.ScreenSlidePagerActivity"
-            android:label="@string/title_activity_screen_slide_pager" >
+            android:label="" >
         </activity>
     </application>
 

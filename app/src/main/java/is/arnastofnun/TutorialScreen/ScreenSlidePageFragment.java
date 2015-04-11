@@ -12,6 +12,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.text.Layout;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
@@ -48,7 +50,6 @@ public class ScreenSlidePageFragment extends Fragment {
             layoutId = bundle.getInt("layoutLandId");
         }
 
-
         rootView = inflater.inflate(
                 layoutId, container, false);
 
@@ -62,6 +63,7 @@ public class ScreenSlidePageFragment extends Fragment {
         TextView textView1 = (TextView) rootView.findViewById(R.id.secondTextView);
         textView1.setText(bundle.getInt("secondInfoString"));
 
+        //setHasOptionsMenu(true);
 
         return rootView;
     }
@@ -78,6 +80,15 @@ public class ScreenSlidePageFragment extends Fragment {
 
     }
     */
+    /*
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_screen_slide_pager, menu);
+
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+    */
+
     public static ScreenSlidePageFragment newInstance(int oriPortId, int oriLandId,
                                                       int imageId, int firstStringId,
                                                       int secondStringId) {

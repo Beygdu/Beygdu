@@ -89,6 +89,8 @@
     <string name="placeHolderFragmentText">PLACEHOLDER PLACEHOLDER PLACEHOLDER PLACEHOLDER PLACEHOLDER PLACEHOLDER PLACEHOLDER PLACEHOLDER
     PLACEHOLDER PLACEHOLDER PLACEHOLDER PLACEHOLDER PLACEHOLDER PLACEHOLDER PLACEHOLDER
     PLACEHOLDER PLACEHOLDER PLACEHOLDER PLACEHOLDER PLACEHOLDER</string>
-
+    <string name="TutorialActionBarForward">Fletta afram</string>
+    <string name="TutorialActionBarBackward">Fletta afturabak</string>
+    <string name="TutorialActionBarQuit">Haetta</string>
 
 </resources>
