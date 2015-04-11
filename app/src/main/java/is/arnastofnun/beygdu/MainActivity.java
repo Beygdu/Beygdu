@@ -35,6 +35,7 @@ import com.software.shell.fab.ActionButton;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
+import is.arnastofnun.BeygduTutorial.TutorialActivity;
 import is.arnastofnun.DB.DBController;
 import is.arnastofnun.parser.WordResult;
 import is.arnastofnun.utils.CustomDialog;
@@ -140,6 +141,15 @@ public class MainActivity extends NavDrawer implements CustomDialog.DialogListen
          */
         EditText editText = (EditText) findViewById(R.id.mainSearch);
         editText.setOnKeyListener(this);
+
+        Button b = (Button) findViewById(R.id.tutbutton);
+        b.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), TutorialActivity.class);
+                startActivity(intent);
+            }
+        });
 
 	}
 

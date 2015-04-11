@@ -26,6 +26,9 @@ public class TutorialActivity extends ActionBarActivity {
         setContentView(R.layout.activity_tutorial);
 
         vPager = (ViewPager) findViewById(R.id.pager);
+        pAdapter = new ScreenSliderPagerAdapter(getSupportFragmentManager());
+        vPager.setAdapter(pAdapter);
+        vPager.setPageTransformer(true, new AnimationTransformer());
 
     }
 
@@ -62,23 +65,59 @@ public class TutorialActivity extends ActionBarActivity {
         public Fragment getItem(int pos) {
             switch (pos) {
                 case 0:
-                    return null;
+                    return ScreenSlidePageFragment.newInstance(R.layout.fragment_slide_portrait,
+                            R.layout.fragment_slide_landscape_one,
+                            R.drawable.smiley,
+                            R.string.TF01,
+                            R.string.TF02);
                 case 1:
-                    return null;
+                    return ScreenSlidePageFragment.newInstance(R.layout.fragment_slide_portrait,
+                            R.layout.fragment_slide_landscape_two,
+                            R.drawable.smiley,
+                            R.string.TF11,
+                            R.string.TF12);
                 case 2:
-                    return null;
+                    return ScreenSlidePageFragment.newInstance(R.layout.fragment_slide_portrait,
+                            R.layout.fragment_slide_landscape_three,
+                            R.drawable.smiley,
+                            R.string.TF21,
+                            R.string.TF22);
                 case 3:
-                    return null;
+                    return ScreenSlidePageFragment.newInstance(R.layout.fragment_slide_portrait,
+                            R.layout.fragment_slide_landscape_four,
+                            R.drawable.smiley,
+                            R.string.TF31,
+                            R.string.TF32);
                 case 4:
-                    return null;
+                    return ScreenSlidePageFragment.newInstance(R.layout.fragment_slide_portrait,
+                            R.layout.fragment_slide_landscape_one,
+                            R.drawable.smiley,
+                            R.string.TF41,
+                            R.string.TF42);
                 case 5:
-                    return null;
+                    return ScreenSlidePageFragment.newInstance(R.layout.fragment_slide_portrait,
+                            R.layout.fragment_slide_landscape_two,
+                            R.drawable.smiley,
+                            R.string.TF51,
+                            R.string.TF52);
                 case 6:
-                    return null;
+                    return ScreenSlidePageFragment.newInstance(R.layout.fragment_slide_portrait,
+                            R.layout.fragment_slide_landscape_three,
+                            R.drawable.smiley,
+                            R.string.TF61,
+                            R.string.TF62);
                 case 7:
-                    return null;
+                    return ScreenSlidePageFragment.newInstance(R.layout.fragment_slide_portrait,
+                            R.layout.fragment_slide_landscape_four,
+                            R.drawable.smiley,
+                            R.string.TF71,
+                            R.string.TF72);
                 default:
-                    return null;
+                    return ScreenSlidePageFragment.newInstance(R.layout.fragment_slide_portrait,
+                            R.layout.fragment_slide_landscape_one,
+                            R.drawable.smiley,
+                            R.string.TF01,
+                            R.string.TF02);
             }
         }
 

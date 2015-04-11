@@ -1,10 +1,12 @@
 package is.arnastofnun.BeygduTutorial;
 
-import android.app.Fragment;
+import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import is.arnastofnun.beygdu.R;
 
@@ -29,7 +31,34 @@ public class ScreenSlidePageFragment extends Fragment {
 
         View rootView = inflater.inflate(layoutId, container, false);
 
+        ImageView imageView = (ImageView) rootView.findViewById(R.id.imageContainer);
+        imageView.setImageResource(bundle.getInt("imageSource"));
+
+        TextView textView = (TextView) rootView.findViewById(R.id.firstTextView);
+        textView.setText(bundle.getInt("firstInfoString"));
+
+        TextView textView1 = (TextView) rootView.findViewById(R.id.secondTextView);
+        textView1.setText(bundle.getInt("secondInfoString"));
+
         return rootView;
+    }
+
+    public static ScreenSlidePageFragment newInstance(int oriPortId, int oriLandId,
+                                                      int imageId, int firstStringId,
+                                                      int secondStringId) {
+
+        ScreenSlidePageFragment sSPFragment = new ScreenSlidePageFragment();
+
+        Bundle bundle = new Bundle();
+        bundle.putInt("layoutPortId", oriPortId);
+        bundle.putInt("layoutLandId", oriLandId);
+        bundle.putInt("imageSource", imageId);
+        bundle.putInt("firstInfoString", firstStringId);
+        bundle.putInt("secondInfoString", secondStringId);
+
+        sSPFragment.setArguments(bundle);
+
+        return sSPFragment;
     }
 
 }

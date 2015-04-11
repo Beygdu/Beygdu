@@ -60,6 +60,11 @@
                 android:inputType="text"
                 android:paddingLeft="10dp"
                 android:layout_marginRight="10dp"/>
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="TutorialButton"
+                android:id="@+id/tutbutton"/>
             <ImageButton
                 android:id="@+id/commitSearch"
                 android:layout_height="50dp"
