@@ -97,5 +97,6 @@
     <string name="snaer">Snær Seljan Þóroddsson</string>
     <string name="snaerDesc">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla volutpat feugiat hendrerit. Suspendisse pharetra ante laoreet purus sodales .</string>
     <string name="title_activity_maps2">Map</string>
+    <string name="title_activity_tutorial">BeygduTutorial</string>
 
 </resources>
