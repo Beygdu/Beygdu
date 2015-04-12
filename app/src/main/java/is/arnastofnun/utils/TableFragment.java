@@ -7,6 +7,7 @@ import android.app.Fragment;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
@@ -18,9 +19,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.view.animation.DecelerateInterpolator;
+import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+
+import com.software.shell.fab.FloatingActionButton;
+import com.software.shell.fab.ActionButton;
 
 import java.lang.reflect.Array;
 
@@ -144,14 +153,17 @@ public class TableFragment extends Fragment {
 
             //Special case for nafnháttur
             if(sBlock.getTitle().equals("Nafnháttur")) {
+                // Text title
                 TextView nafnhatturTitle = new TextView(context);
                 nafnhatturTitle.setText(sBlock.getTitle());
                 nafnhatturTitle.setTextSize(subBlockTitleText);
                 nafnhatturTitle.setMinHeight(70);
                 nafnhatturTitle.setTypeface(LatoLight);
-                nafnhatturTitle.setPadding(0,80,0,20);
+                nafnhatturTitle.setPadding(0,20,20,20);
                 nafnhatturTitle.setTextColor(getResources().getColor(R.color.white));
                 tableLayout.addView(nafnhatturTitle);
+
+
                 TextView tableTitle = new TextView(context);
                 tableTitle.setText(sBlock.getTitle());
                 createTableSpecial(sBlock.getTables().get(0));
@@ -162,6 +174,9 @@ public class TableFragment extends Fragment {
             if(block.getTitle().toLowerCase().equals("lýsingarháttur nútíðar") ) {
                 TextView tableTitle = new TextView(context);
                 tableTitle.setText(sBlock.getTitle());
+
+                tableLayout.addView(tableTitle);
+
                 createTableSpecial(sBlock.getTables().get(0));
                 continue;
             }
@@ -169,24 +184,39 @@ public class TableFragment extends Fragment {
             // The rest of the tables
             if(!sBlock.getTitle().equals("")) {
                 TextView subBlockTitle = new TextView(context);
+                subBlockTitle.setLayoutParams(new TableRow.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT));
                 subBlockTitle.setText(sBlock.getTitle());
                 subBlockTitle.setTextSize(subBlockTitleText);
                 subBlockTitle.setMinHeight(70);
                 subBlockTitle.setTypeface(LatoLight);
                 subBlockTitle.setTextColor(getResources().getColor(R.color.white));
-                subBlockTitle.setPadding(0,80,0,20);
+                subBlockTitle.setPadding(0,80,20,20);
                 tableLayout.addView(subBlockTitle);
             }
             //Create the tables and set title
-            for (Tables tables : sBlock.getTables()) {
-                TextView tableTitle = new TextView(context);
+            for (final Tables tables : sBlock.getTables()) {
+                final TextView tableTitle = new TextView(context);
                 tableTitle.setText(tables.getTitle());
                 tableTitle.setTextSize(tableTitleText);
                 tableTitle.setMinHeight(80);
                 tableTitle.setTypeface(LatoLight);
                 tableTitle.setTextColor(getResources().getColor(R.color.white));
                 tableTitle.setBackgroundResource(R.drawable.top_border_orange);
-                tableTitle.setPadding(10, 10, 0, 10);
+                tableTitle.setPadding(10, 15, 0, 10);
+                tableTitle.setCompoundDrawablesWithIntrinsicBounds(0,0,R.drawable.ic_action_copy,0);
+
+                tableTitle.setOnClickListener(new View.OnClickListener() {
+                    private boolean copyState;
+                    public void onClick(View view) {
+                        if(copyState) {
+                            // reset background to default;
+                            tableTitle.setBackgroundResource(R.drawable.top_border_orange);
+                        } else {
+                            tableTitle.setBackgroundResource(R.drawable.top_border_yellow);
+                        }
+                        copyState = !copyState;
+                    }
+                });
                 tableLayout.addView(tableTitle);
                 createTable(tables);
             }
@@ -297,13 +327,46 @@ public class TableFragment extends Fragment {
         cell.setMinHeight(80);
         cell.setPadding(20,10,0,0);
         cell.setBackgroundResource(R.drawable.top_border_orange);
+
         cell.setTypeface(LatoLight);
         cell.setTextColor(getResources().getColor(R.color.white));
         cell.setClickable(true);
         cell.setOnLongClickListener(new XLongClickListener(context, cell));
         cell.setText(table.getContent().get(0));
+        cell.setCompoundDrawablesWithIntrinsicBounds(0,0,R.drawable.ic_action_copy,0);
+        cell.setOnClickListener(new View.OnClickListener() {
+            private boolean copyState;
+            public void onClick(View view) {
+                if(copyState) {
+                    // reset background to default;
+                    cell.setBackgroundResource(R.drawable.top_border_orange);
+                } else {
+                    cell.setBackgroundResource(R.drawable.top_border_yellow);
+                }
+                copyState = !copyState;
+            }
+        });
+
         tr.addView(cell);
         tableLayout.addView(tr);
     }
+
+    private void actionButtonProperties(ActionButton actionButton) {
+        // action button for pin it
+        actionButton.setType(ActionButton.Type.MINI);
+        actionButton.setButtonColor(getResources().getColor(R.color.d_yellow));
+        actionButton.setButtonColorPressed(getResources().getColor(R.color.d_Green));
+        actionButton.setImageDrawable(getResources().getDrawable(R.drawable.ic_action_copy));
+        actionButton.setImageResource(R.drawable.ic_action_copy);
+        actionButton.removeShadow();
+        actionButton.removeStroke();
+        actionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Hér gerir Jónki sína töfra
+            }
+        });
+    }
+
 
 }
