@@ -137,7 +137,6 @@ public class TableFragment extends Fragment {
                 nafnhatturTitle.setTextColor(getResources().getColor(R.color.white));
                 tableLayout.addView(nafnhatturTitle);
 
-
                 TextView tableTitle = new TextView(context);
                 tableTitle.setText(sBlock.getTitle());
                 createTableSpecial(sBlock.getTables().get(0));
@@ -178,7 +177,6 @@ public class TableFragment extends Fragment {
                 tableTitle.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_action_copy, 0);
                 tableTitle.setOnClickListener(new View.OnClickListener() {
                     private boolean copyState;
-
                     public void onClick(View view) {
                         if (copyState) {
                             // reset background to default;
@@ -296,7 +294,6 @@ public class TableFragment extends Fragment {
         cell.setMinHeight(80);
         cell.setPadding(20, 10, 0, 0);
         cell.setBackgroundResource(R.drawable.top_border_orange);
-
         cell.setTypeface(LatoLight);
         cell.setTextColor(getResources().getColor(R.color.white));
         cell.setClickable(true);
