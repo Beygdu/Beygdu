@@ -11,6 +11,9 @@ import java.util.ArrayList;
  */
 public class Tables implements Serializable {
 
+
+    private String header;
+
     private String title;
   
     private String[] columnNames;
@@ -38,10 +41,34 @@ public class Tables implements Serializable {
     }
 
     /**
+     * Tables - A representation of a Table
+     * Contains a headerTitle, title, column names, row names and content
+     *
+     * @param title Title of the table
+     * @param columnNames Column names of the table
+     * @param rowNames Row names of the table
+     * @param content Content of the table
+     */
+    public Tables(String header, String title, String[] columnNames, String[] rowNames, ArrayList<String> content) {
+        this.header = header;
+        this.title = title;
+        this.columnNames = columnNames;
+        this.rowNames = rowNames;
+        this.content = content;
+    }
+
+    /**
      * @return Title of the table
      */
     public String getTitle() {
         return this.title;
+    }
+
+    /**
+     * @return headerTitle of the table
+     */
+    public String getHeader() {
+        return header;
     }
 
     /**

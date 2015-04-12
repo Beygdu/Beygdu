@@ -36,6 +36,7 @@ import java.util.ArrayList;
 import is.arnastofnun.DB.DBController;
 import is.arnastofnun.parser.Block;
 import is.arnastofnun.parser.WordResult;
+import is.arnastofnun.utils.BeygduUtilities;
 import is.arnastofnun.utils.TableFragment;
 
 /**
@@ -100,8 +101,8 @@ public class BeygingarActivity extends NavDrawer {
         Display display = getWindowManager().getDefaultDisplay();
         Point size = new Point();
         display.getSize(size);
-        width = convertPixelsToDp(size.x);
-        height = convertPixelsToDp(size.y);
+        width = BeygduUtilities.convertPixelsToDp(size.x, this);
+        height = BeygduUtilities.convertPixelsToDp(size.y, this);
 
         //Set typeface for fonts
         LatoBold = Typeface.createFromAsset(getAssets(), "fonts/Lato-Bold.ttf");
@@ -214,28 +215,6 @@ public class BeygingarActivity extends NavDrawer {
         return firstWord;
     }
 
-
-    /**
-     * This method converts device specific pixels to density independent pixels.
-     * @param px A value in px (pixels) unit. Which we need to convert into db
-     * @return A float value to represent dp equivalent to px value
-     */
-    public float convertPixelsToDp(float px){
-        Resources resources = this.getResources();
-        DisplayMetrics metrics = resources.getDisplayMetrics();
-        float dp = px / (metrics.densityDpi / 160f);
-        return dp;
-    }
-
-    public int getScreenWidth() {
-        Display display = getWindowManager().getDefaultDisplay();
-        Point size = new Point();
-        display.getSize(size);
-        int width = size.x;
-        return width;
-    }
-
-	
 	/**
 	 * Constructs a TextView with the title of the word and possibly a TextView with a note about the word, if it exits, 
 	 * and puts them into the tableLayout. Then a TableFragment is constructed for each block in the word.
@@ -264,7 +243,7 @@ public class BeygingarActivity extends NavDrawer {
 			TextView note = new TextView(this);
 			note.setText(words.getWarning());
             note.setTypeface(LatoLight);
-            note.setMaxWidth(getScreenWidth());
+            note.setMaxWidth(BeygduUtilities.getScreenWidth(getWindowManager().getDefaultDisplay()));
 			note.setBackgroundResource(R.drawable.noteborder);
 			tableLayout.addView(note);
 		}

@@ -49,7 +49,10 @@ public class TableFragment extends Fragment {
     private Context context;
     private TableLayout tableLayout;
     private Block block;
+    private Tables table;
     private TextView title;
+
+    private boolean compareTableFragment = false;
 
     private long initTime = -1;
 
@@ -88,6 +91,25 @@ public class TableFragment extends Fragment {
     }
 
     /**
+     * @param context er contextið sem taflan mun birtast í.
+     * @param tableLayout - er layoutið sem taflan er sett í.
+     * @param table - er taflan
+     * @param title - er titilinn á töflunni
+     */
+    public TableFragment(Context context, TableLayout tableLayout, Tables table, TextView title) {
+        this.context = context;
+        this.tableLayout = tableLayout;
+        this.table = table;
+        this.title = title;
+        compareTableFragment = true;
+
+        // Fonts
+        LatoBold = Typeface.createFromAsset(context.getAssets(), "fonts/Lato-Bold.ttf");
+        LatoSemiBold = Typeface.createFromAsset(context.getAssets(), "fonts/Lato-Semibold.ttf");
+        LatoLight = Typeface.createFromAsset(context.getAssets(), "fonts/Lato-Light.ttf");
+    }
+
+    /**
      * @return the title of the table
      */
     public CharSequence getTitle() {
@@ -99,7 +121,11 @@ public class TableFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.table,
                 container, false);
-        createBlock();
+        if(compareTableFragment) {
+            createTable(table);
+        } else {
+            createBlock();
+        }
         return rootView;
         //Set typeface for fonts
 

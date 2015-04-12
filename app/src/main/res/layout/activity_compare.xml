@@ -1,12 +1,60 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    tools:context="is.arnastofnun.beygdu.CompareActivity">
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fab="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/d_black">
+    <TextView
+        android:id="@+id/search_result"
+        android:layout_width="fill_parent"
+        android:layout_height="60dp"
+        android:minHeight="150dp"
+        android:textColor="@color/white"
+        android:background="@color/d_blue"
+        android:paddingLeft="50dp"
+        android:paddingRight="50dp"
+        android:paddingTop="20dp"
+        android:paddingBottom="20dp"/>
+    <com.software.shell.fab.ActionButton
+        android:id="@+id/circlejon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="-30dp"
+        android:layout_marginRight="25dp"
+        android:layout_gravity="bottom|right"
+        fab:type="DEFAULT"
+        fab:button_color="#FF5722"
+        fab:image="@drawable/ic_action_star"
+        fab:image_size="28dp"
+        fab:shadow_color="#000000"
+        fab:shadow_radius="1.0dp"
+        fab:shadow_xOffset="0.5dp"
+        fab:shadow_yOffset="1.0dp"
+        fab:show_animation="@anim/fab_roll_from_down"
+        fab:hide_animation="@anim/fab_roll_to_down"/>
+    <ScrollView
+        android:id="@+id/scrollview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingBottom="10dp"
+        android:fillViewport="true"
+        android:background="@color/d_black"
+        android:scrollbars="horizontal|vertical">
+        <!--HorizontalScrollView
+            android:id="@+id/horizontalView"
+            android:layout_height="fill_parent"
+            android:layout_width="fill_parent"
+            android:fillViewport="true"
+            android:scrollbars="horizontal|vertical"-->
+        <TableLayout
+            android:id="@+id/data_table"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="10dp">
+        </TableLayout>
+        <!--/HorizontalScrollView-->
 
-    <TextView android:text="@string/hello_world" android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+    </ScrollView>
 
-</RelativeLayout>
+</LinearLayout>

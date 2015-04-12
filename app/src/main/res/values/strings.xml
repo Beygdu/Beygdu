@@ -79,14 +79,12 @@
             <item>Tölfræði</item>
             <item>Höfundar</item>
             <item>Hvar erum við?</item>
+            <item>Bera saman</item>
         </string-array>
     <string name="title_activity_maps">Map</string>
-<<<<<<< HEAD
     <string name="title_activity_compare">compareActivity</string>
-=======
     <string name="title_activity_author">Author</string>
     <string name="title_activity_authors">AuthorsActivity</string>
->>>>>>> develop
 
 
     <!-- Authors of app -->

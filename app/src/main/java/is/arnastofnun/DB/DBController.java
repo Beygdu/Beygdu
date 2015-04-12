@@ -102,6 +102,23 @@ public class DBController {
         close(cursor);
     }
 
+    public void insertCompareTable(String headerTitle, Tables table){
+        try {
+            open();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        ContentValues tableContent = new ContentValues();
+        tableContent.put(DBHelper.TITLE, table.getTitle());
+        tableContent.put(DBHelper.HEADERTITLE, headerTitle);
+        tableContent.put(DBHelper.COLHEADERS, arrToString(table.getColumnNames()));
+        tableContent.put(DBHelper.ROWHEADERS, arrToString(table.getRowNames()));
+        tableContent.put(DBHelper.CONTENT, arrToString(table.getContent().toArray()));
+        dB.insert(DBHelper.TABLE_COMPARETABLES, null, tableContent);
+        close(null);
+    }
+
     /**
      * Inserts the wordresult into the db.
      *
@@ -252,6 +269,35 @@ public class DBController {
 
         close(cursor);
         return words;
+    }
+
+    /**
+     *
+     * @return a ArrayList of all tables in the compareTable table in the database.
+     */
+    public ArrayList<Tables> fetchAllComparableWords() {
+        ArrayList<Tables> tables = new ArrayList<Tables>();
+        try {
+            open();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        final String myQuery = "SELECT * FROM " +
+                DBHelper.TABLE_COMPARETABLES;
+
+        Cursor cursor = dB.rawQuery(myQuery, null);
+
+        //Create Tables objects and place in ArrayList.
+        for (int i = 0; i < cursor.getCount(); i++) {
+            cursor.moveToPosition(i);
+            tables.add(new Tables(cursor.getString(1), cursor.getString(0), stringToArr(cursor.getString(2)),
+                        stringToArr(cursor.getString(3)), new ArrayList<String>(Arrays.asList(stringToArr(cursor.getString(4))))));
+        }
+
+
+
+        close(cursor);
+        return tables;
     }
 
     /**
