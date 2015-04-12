@@ -7,6 +7,7 @@ import android.app.Fragment;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
@@ -18,9 +19,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.view.animation.DecelerateInterpolator;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+
+import com.software.shell.fab.FloatingActionButton;
+import com.software.shell.fab.ActionButton;
 
 import java.lang.reflect.Array;
 
@@ -118,14 +125,34 @@ public class TableFragment extends Fragment {
 
             //Special case for nafnháttur
             if(sBlock.getTitle().equals("Nafnháttur")) {
+                //Create linearlayout to layout button to the right of text
+                LinearLayout linearWrapperN = new LinearLayout(context);
+                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+                lp.gravity = Gravity.CENTER;
+                linearWrapperN.setLayoutParams(lp);
+                linearWrapperN.setPadding(0,80,0,20);
+
+                // Text title
                 TextView nafnhatturTitle = new TextView(context);
                 nafnhatturTitle.setText(sBlock.getTitle());
                 nafnhatturTitle.setTextSize(subBlockTitleText);
                 nafnhatturTitle.setMinHeight(70);
                 nafnhatturTitle.setTypeface(LatoLight);
-                nafnhatturTitle.setPadding(0,80,0,20);
+                nafnhatturTitle.setPadding(0,20,20,20);
                 nafnhatturTitle.setTextColor(getResources().getColor(R.color.white));
-                tableLayout.addView(nafnhatturTitle);
+
+                // Create action button
+                ActionButton actionButton = new ActionButton(context);
+                actionButtonProperties(actionButton);
+
+                // Add to linearLayout
+                linearWrapperN.addView(nafnhatturTitle);
+                linearWrapperN.addView(actionButton);
+
+                // Add linearlayou to tablelayout
+                tableLayout.addView(linearWrapperN);
+
+
                 TextView tableTitle = new TextView(context);
                 tableTitle.setText(sBlock.getTitle());
                 createTableSpecial(sBlock.getTables().get(0));
@@ -134,22 +161,57 @@ public class TableFragment extends Fragment {
 
             //Special case for lýsingarháttur nútíðar
             if(block.getTitle().toLowerCase().equals("lýsingarháttur nútíðar") ) {
+                //Create linearlayout to layout button to the right of text
+                LinearLayout linearWrapperL = new LinearLayout(context);
+                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+                lp.gravity = Gravity.CENTER;
+                linearWrapperL.setLayoutParams(lp);
+                linearWrapperL.setPadding(0,80,0,20);
+
+
+
                 TextView tableTitle = new TextView(context);
                 tableTitle.setText(sBlock.getTitle());
+
+                ActionButton actionButton = new ActionButton(context);
+                actionButtonProperties(actionButton);
+
+                linearWrapperL.addView(tableTitle);
+                linearWrapperL.addView(actionButton);
+                tableLayout.addView(linearWrapperL);
+
                 createTableSpecial(sBlock.getTables().get(0));
                 continue;
             }
 
             // The rest of the tables
             if(!sBlock.getTitle().equals("")) {
+                LinearLayout linearWrapper = new LinearLayout(context);
+                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+                lp.gravity = Gravity.CENTER;
+                linearWrapper.setLayoutParams(lp);
+                linearWrapper.setPadding(0,80,0,20);
+
+
                 TextView subBlockTitle = new TextView(context);
+                subBlockTitle.setLayoutParams(new TableRow.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT));
                 subBlockTitle.setText(sBlock.getTitle());
                 subBlockTitle.setTextSize(subBlockTitleText);
                 subBlockTitle.setMinHeight(70);
                 subBlockTitle.setTypeface(LatoLight);
                 subBlockTitle.setTextColor(getResources().getColor(R.color.white));
-                subBlockTitle.setPadding(0,80,0,20);
-                tableLayout.addView(subBlockTitle);
+                subBlockTitle.setPadding(0,20,20,20);
+
+
+                ActionButton actionButton = new ActionButton(context);
+                actionButtonProperties(actionButton);
+
+                // add subblockTitle and copy action button
+                // to linearlayout and then linearlayout to tablelayout
+                linearWrapper.addView(subBlockTitle);
+                linearWrapper.addView(actionButton);
+                tableLayout.addView(linearWrapper);
+
             }
             //Create the tables and set title
             for (Tables tables : sBlock.getTables()) {
@@ -161,7 +223,13 @@ public class TableFragment extends Fragment {
                 tableTitle.setTextColor(getResources().getColor(R.color.white));
                 tableTitle.setBackgroundResource(R.drawable.top_border_orange);
                 tableTitle.setPadding(10, 10, 0, 10);
+
+
+                ActionButton actionButton = new ActionButton(context);
+                actionButtonProperties(actionButton);
+
                 tableLayout.addView(tableTitle);
+                tableLayout.addView(actionButton);
                 createTable(tables);
             }
         }
@@ -279,5 +347,23 @@ public class TableFragment extends Fragment {
         tr.addView(cell);
         tableLayout.addView(tr);
     }
+
+    private void actionButtonProperties(ActionButton actionButton) {
+        // action button for pin it
+        actionButton.setType(ActionButton.Type.MINI);
+        actionButton.setButtonColor(getResources().getColor(R.color.d_yellow));
+        actionButton.setButtonColorPressed(getResources().getColor(R.color.d_Green));
+        actionButton.setImageDrawable(getResources().getDrawable(R.drawable.ic_action_copy));
+        actionButton.setImageResource(R.drawable.ic_action_copy);
+        actionButton.removeShadow();
+        actionButton.removeStroke();
+        actionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Hér gerir Jónki sína töfra
+            }
+        });
+    }
+
 
 }
