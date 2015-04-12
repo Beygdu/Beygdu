@@ -15,7 +15,7 @@ public class MapsActivity extends NavDrawer {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_maps);
+        getLayoutInflater().inflate(R.layout.activity_maps, frameLayout);
         setUpMapIfNeeded();
     }
 
@@ -60,6 +60,10 @@ public class MapsActivity extends NavDrawer {
      * This should only be called once and when we are sure that {@link #mMap} is not null.
      */
     private void setUpMap() {
-        mMap.addMarker(new MarkerOptions().position(new LatLng(0, 0)).title("Marker"));
+        mMap.addMarker(
+                new MarkerOptions()
+                        .position(new LatLng(64.14330015, -21.96268916))
+                        .title("Árnastofnun")
+        );
     }
 }
