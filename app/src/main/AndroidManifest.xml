@@ -10,7 +10,6 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-
     <uses-permission
         android:name="android.permission.WRITE_EXTERNAL_STORAGE"
         android:maxSdkVersion="18" />
@@ -18,7 +17,6 @@
     <uses-permission
         android:name="android.permission.READ_EXTERNAL_STORAGE"
         android:maxSdkVersion="18" />
-
     <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
     <!--
  The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
@@ -36,19 +34,18 @@
             android:name=".MainActivity"
             android:configChanges="orientation"
             android:label="@string/app_name"
-            android:screenOrientation="portrait" 
-            android:launchMode="singleTask">
-<!--
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" >
 
+            <!--
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
--->
+            -->
 
         </activity>
-
         <activity
             android:name=".NavDrawer"
             android:configChanges="orientation"
@@ -59,47 +56,37 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
-
         <activity
             android:name=".BeygingarActivity"
             android:configChanges="orientation"
             android:label="@string/title_activity_beygingar"
-            android:screenOrientation="portrait"
             android:parentActivityName=".MainActivity"
-            >
+            android:screenOrientation="portrait" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity"
-                />
+                android:value=".MainActivity" />
         </activity>
-
         <activity
             android:name=".AboutActivity"
             android:configChanges="orientation"
             android:label="@string/title_activity_about"
-            android:screenOrientation="portrait"
             android:launchMode="singleTask"
-            >
+            android:screenOrientation="portrait" >
         </activity>
-
         <activity
             android:name=".Cache"
-            android:label="@string/title_activity_cache"
             android:configChanges="orientation"
-            android:screenOrientation="portrait"
+            android:label="@string/title_activity_cache"
             android:launchMode="singleTask"
-            >
+            android:screenOrientation="portrait" >
         </activity>
-
         <activity
             android:name=".StatisticsActivity"
             android:configChanges="orientation"
             android:label="@string/title_activity_statistics"
-            android:screenOrientation="portrait"
             android:launchMode="singleTask"
-            >
+            android:screenOrientation="portrait" >
         </activity>
 
         <meta-data
@@ -112,6 +99,10 @@
         <activity
             android:name=".MapsActivity"
             android:label="@string/title_activity_maps" >
+        </activity>
+        <activity
+            android:name=".CompareActivity"
+            android:label="@string/title_activity_compare" >
         </activity>
     </application>
 

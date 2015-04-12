@@ -47,6 +47,8 @@ public class DBHelper extends SQLiteOpenHelper{
     public static final String TABLE_TABLES = "tables";
     public static final String TABLE_STATISTICS = "statistics";
     public static final String TABLE_OBEYGJANLEG = "obeygjanleg";
+    public static final String TABLE_COMPARE = "compare";
+    public static final String TABLE_COMPARETABLES = "compareTables";
 
     // Table columns
     public static final String WORDID = "wordid";
