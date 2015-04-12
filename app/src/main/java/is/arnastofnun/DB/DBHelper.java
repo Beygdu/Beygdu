@@ -125,12 +125,12 @@ public class DBHelper extends SQLiteOpenHelper{
                     WORDID + " TEXT" +
                     ");";
     private static final String CREATE_COMPARETABLES_TABLE =
-            "CREATE TABLE " + TABLE_TABLES + " (" +
+            "CREATE TABLE " + TABLE_COMPARETABLES + " (" +
                     TITLE + " TEXT , " +
                     HEADERTITLE + " TEXT ," +
                     COLHEADERS + " TEXT , " +
                     ROWHEADERS + " TEXT , " +
-                    CONTENT + " TEXT" +
+                    CONTENT + " TEXT " +
                     ");";
 
 
