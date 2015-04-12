@@ -20,6 +20,8 @@ import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TableLayout;
@@ -125,13 +127,6 @@ public class TableFragment extends Fragment {
 
             //Special case for nafnháttur
             if(sBlock.getTitle().equals("Nafnháttur")) {
-                //Create linearlayout to layout button to the right of text
-                LinearLayout linearWrapperN = new LinearLayout(context);
-                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-                lp.gravity = Gravity.CENTER;
-                linearWrapperN.setLayoutParams(lp);
-                linearWrapperN.setPadding(0,80,0,20);
-
                 // Text title
                 TextView nafnhatturTitle = new TextView(context);
                 nafnhatturTitle.setText(sBlock.getTitle());
@@ -140,17 +135,7 @@ public class TableFragment extends Fragment {
                 nafnhatturTitle.setTypeface(LatoLight);
                 nafnhatturTitle.setPadding(0,20,20,20);
                 nafnhatturTitle.setTextColor(getResources().getColor(R.color.white));
-
-                // Create action button
-                ActionButton actionButton = new ActionButton(context);
-                actionButtonProperties(actionButton);
-
-                // Add to linearLayout
-                linearWrapperN.addView(nafnhatturTitle);
-                linearWrapperN.addView(actionButton);
-
-                // Add linearlayou to tablelayout
-                tableLayout.addView(linearWrapperN);
+                tableLayout.addView(nafnhatturTitle);
 
 
                 TextView tableTitle = new TextView(context);
@@ -161,24 +146,10 @@ public class TableFragment extends Fragment {
 
             //Special case for lýsingarháttur nútíðar
             if(block.getTitle().toLowerCase().equals("lýsingarháttur nútíðar") ) {
-                //Create linearlayout to layout button to the right of text
-                LinearLayout linearWrapperL = new LinearLayout(context);
-                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-                lp.gravity = Gravity.CENTER;
-                linearWrapperL.setLayoutParams(lp);
-                linearWrapperL.setPadding(0,80,0,20);
-
-
-
                 TextView tableTitle = new TextView(context);
                 tableTitle.setText(sBlock.getTitle());
 
-                ActionButton actionButton = new ActionButton(context);
-                actionButtonProperties(actionButton);
-
-                linearWrapperL.addView(tableTitle);
-                linearWrapperL.addView(actionButton);
-                tableLayout.addView(linearWrapperL);
+                tableLayout.addView(tableTitle);
 
                 createTableSpecial(sBlock.getTables().get(0));
                 continue;
@@ -186,13 +157,6 @@ public class TableFragment extends Fragment {
 
             // The rest of the tables
             if(!sBlock.getTitle().equals("")) {
-                LinearLayout linearWrapper = new LinearLayout(context);
-                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-                lp.gravity = Gravity.CENTER;
-                linearWrapper.setLayoutParams(lp);
-                linearWrapper.setPadding(0,80,0,20);
-
-
                 TextView subBlockTitle = new TextView(context);
                 subBlockTitle.setLayoutParams(new TableRow.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT));
                 subBlockTitle.setText(sBlock.getTitle());
@@ -200,36 +164,34 @@ public class TableFragment extends Fragment {
                 subBlockTitle.setMinHeight(70);
                 subBlockTitle.setTypeface(LatoLight);
                 subBlockTitle.setTextColor(getResources().getColor(R.color.white));
-                subBlockTitle.setPadding(0,20,20,20);
-
-
-                ActionButton actionButton = new ActionButton(context);
-                actionButtonProperties(actionButton);
-
-                // add subblockTitle and copy action button
-                // to linearlayout and then linearlayout to tablelayout
-                linearWrapper.addView(subBlockTitle);
-                linearWrapper.addView(actionButton);
-                tableLayout.addView(linearWrapper);
-
+                subBlockTitle.setPadding(0,80,20,20);
+                tableLayout.addView(subBlockTitle);
             }
             //Create the tables and set title
-            for (Tables tables : sBlock.getTables()) {
-                TextView tableTitle = new TextView(context);
+            for (final Tables tables : sBlock.getTables()) {
+                final TextView tableTitle = new TextView(context);
                 tableTitle.setText(tables.getTitle());
                 tableTitle.setTextSize(tableTitleText);
                 tableTitle.setMinHeight(80);
                 tableTitle.setTypeface(LatoLight);
                 tableTitle.setTextColor(getResources().getColor(R.color.white));
                 tableTitle.setBackgroundResource(R.drawable.top_border_orange);
-                tableTitle.setPadding(10, 10, 0, 10);
+                tableTitle.setPadding(10, 15, 0, 10);
+                tableTitle.setCompoundDrawablesWithIntrinsicBounds(0,0,R.drawable.ic_action_copy,0);
 
-
-                ActionButton actionButton = new ActionButton(context);
-                actionButtonProperties(actionButton);
-
+                tableTitle.setOnClickListener(new View.OnClickListener() {
+                    private boolean copyState;
+                    public void onClick(View view) {
+                        if(copyState) {
+                            // reset background to default;
+                            tableTitle.setBackgroundResource(R.drawable.top_border_orange);
+                        } else {
+                            tableTitle.setBackgroundResource(R.drawable.top_border_yellow);
+                        }
+                        copyState = !copyState;
+                    }
+                });
                 tableLayout.addView(tableTitle);
-                tableLayout.addView(actionButton);
                 createTable(tables);
             }
         }
@@ -339,11 +301,26 @@ public class TableFragment extends Fragment {
         cell.setMinHeight(80);
         cell.setPadding(20,10,0,0);
         cell.setBackgroundResource(R.drawable.top_border_orange);
+
         cell.setTypeface(LatoLight);
         cell.setTextColor(getResources().getColor(R.color.white));
         cell.setClickable(true);
         cell.setOnLongClickListener(new XLongClickListener(context, cell));
         cell.setText(table.getContent().get(0));
+        cell.setCompoundDrawablesWithIntrinsicBounds(0,0,R.drawable.ic_action_copy,0);
+        cell.setOnClickListener(new View.OnClickListener() {
+            private boolean copyState;
+            public void onClick(View view) {
+                if(copyState) {
+                    // reset background to default;
+                    cell.setBackgroundResource(R.drawable.top_border_orange);
+                } else {
+                    cell.setBackgroundResource(R.drawable.top_border_yellow);
+                }
+                copyState = !copyState;
+            }
+        });
+
         tr.addView(cell);
         tableLayout.addView(tr);
     }
