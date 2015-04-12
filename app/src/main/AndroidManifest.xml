@@ -118,7 +118,8 @@
         </activity>
         <activity
             android:name="is.arnastofnun.BeygduTutorial.TutorialActivity"
-            android:label="@string/title_activity_tutorial" >
+            android:label="@string/title_activity_tutorial"
+            android:theme="@style/Theme.AppCompat.Light">
         </activity>
     </application>
 
