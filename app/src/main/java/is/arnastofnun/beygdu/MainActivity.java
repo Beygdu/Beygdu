@@ -318,8 +318,12 @@ public class MainActivity extends NavDrawer implements CustomDialog.DialogListen
                 }
             }
             else {
-                //TODO : Errorhandling
-                Toast.makeText(MainActivity.this, iValidator.getErrorCode(), Toast.LENGTH_SHORT).show();
+                Bundle bundle = new Bundle();
+                bundle.putBoolean("isError", true);
+                bundle.putString("message", iValidator.getErrorCode());
+                android.app.DialogFragment errorDialog = new NotificationDialog();
+                errorDialog.setArguments(bundle);
+                errorDialog.show(getFragmentManager(), "0");
             }
         }
 

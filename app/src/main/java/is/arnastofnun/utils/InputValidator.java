@@ -28,8 +28,8 @@ public class InputValidator {
      * Illegal input error codes
      */
     private String INPUTVALIDATOR_ERRORCODE = "";
-    private String ERROR_CODE_1 = "IllegalMetaCharacters";
-    private String ERROR_CODE_2 = "IllegalWhiteSpaces";
+    private String ERROR_CODE_1 = "Ólögleg tákn í leitarstreng";
+    private String ERROR_CODE_2 = "Ólöglegt bil í leitarstreng";
 
     /**
      * InputValidator
@@ -129,6 +129,17 @@ public class InputValidator {
         else if( whitespaceLocation == this.input.length()-1) {
             this.INPUTVALIDATOR_SNIPPING_CODE = SNIPPING_CODE_2;
             this.input = removeBackWhiteSpace(this.input);
+        }
+        else {
+            this.INPUTVALIDATOR_ERRORCODE = ERROR_CODE_2;
+            this.isLegal = false;
+        }
+
+        if(this.input.indexOf(" ") == 0) {
+            this.input.replace(" ", "");
+        }
+        else if (this.input.indexOf(" ") == this.input.length()-1) {
+            this.input.replace(" ", "");
         }
         else {
             this.INPUTVALIDATOR_ERRORCODE = ERROR_CODE_2;
