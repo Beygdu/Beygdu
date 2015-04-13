@@ -18,6 +18,8 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import is.arnastofnun.BeygduTutorial.TutorialActivity;
+
 
 /**
  * @author Daniel Pall Johannsson
@@ -201,6 +203,10 @@ public class NavDrawer extends FragmentActivity{
                 break;
             case 5:
                 startActivity(new Intent(this, MapsActivity.class));
+                activityAnimationTransition();
+                break;
+            case 6:
+                startActivity(new Intent(this, TutorialActivity.class));
                 activityAnimationTransition();
                 break;
         }

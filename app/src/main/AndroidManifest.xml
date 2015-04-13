@@ -104,8 +104,9 @@
 
         <activity
             android:name="is.arnastofnun.BeygduTutorial.TutorialActivity"
-            android:label=""
-            android:theme="@style/TutorialActivityTheme">
+            android:label="Hljálp"
+            android:theme="@style/TutorialActivityTheme"
+            android:launchMode="singleTask">
         </activity>
 
     </application>
