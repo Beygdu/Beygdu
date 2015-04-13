@@ -72,20 +72,27 @@
 
 
     <!-- Items in Navigation Drawer -->
-        <string-array name="navdrawer_items">
-            <item>Beygðu</item>
-            <item>Fyrri leitir</item>
-            <item>Um Beygðu</item>
-            <item>Tölfræði</item>
-            <item>Höfundar</item>
-            <item>Hvar erum við?</item>
-            <item>Bera saman</item>
-        </string-array>
-    <string name="title_activity_maps">Map</string>
-    <string name="title_activity_compare">compareActivity</string>
-    <string name="title_activity_author">Author</string>
-    <string name="title_activity_authors">AuthorsActivity</string>
-
+    <string-array name="navdrawer_items">
+        <item>Beygðu</item>
+        <item>Fyrri leitir</item>
+        <item>Um Beygðu</item>
+        <item>Tölfræði</item>
+        <item>Höfundar</item>
+        <item>Hvar erum við?</item>
+        <item>Bera saman</item>
+    </string-array>
+    <!-- Keep them in order as the titles are in -->
+    <array name="nav_drawer_icons">
+        <item>@drawable/ic_action_call</item>
+        <item>@drawable/ic_action_call</item>
+        <item>@drawable/ic_action_call</item>
+        <item>@drawable/ic_action_call</item>
+        <item>@drawable/ic_action_call</item>
+        <item>@drawable/ic_action_menu</item>
+    </array>
+    <string name="title_activity_maps">Hér erum við</string>
+    <string name="title_activity_author">Höfundar</string>
+    <string name="title_activity_authors">Höfundar</string>
 
     <!-- Authors of app -->
     <string name="authors">Höfundar Beygðu</string>
@@ -99,5 +106,12 @@
     <string name="snaer">Snær Seljan Þóroddsson</string>
     <string name="snaerDesc">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla volutpat feugiat hendrerit. Suspendisse pharetra ante laoreet purus sodales .</string>
     <string name="title_activity_maps2">Map</string>
+
+
+
+    <!-- Footer -->
+    <!--Höfundarréttur © 2002-2015 Orðabók Háskólans / Stofnun Árna Magnússonar í íslenskum fræðum.
+    Öll afritun Beygingarlýsingarinnar er bönnuð án leyfis.-->
+    <string name="copyright">© 2015 Stofnun Árna Magnússonar \n í íslenskum fræðum</string>
 
 </resources>

@@ -13,8 +13,9 @@
         android:text="@string/title"
         android:textColor="@color/white"
         android:background="@color/d_blue"
-        android:paddingLeft="50dp"
-        android:paddingRight="50dp"
+        android:paddingLeft="25dp"
+        android:paddingRight="25dp"
+        android:textSize="30dp"
         android:paddingTop="20dp"/>
 
     <com.software.shell.fab.ActionButton
@@ -77,13 +78,12 @@
 
 
     </TableLayout>
-    <TableRow
-        android:layout_width="fill_parent"
+    <!--TableRow
+        android:id="@+id/footer"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="3sp"
-        android:gravity="center"
-        android:weightSum="2"
-        android:layout_alignParentBottom="true">
+        android:layout_alignParentBottom="true"
+        android:background="@color/d_black">
 
         <TextView
             android:layout_width="wrap_content"
@@ -119,17 +119,44 @@
             android:layout_weight="1"
             android:id="@+id/authors"
             android:onClick="authorClick"/>
-    </TableRow>
-
-    <!--TextView
-        android:id="@+id/titleSmall"
-        android:layout_width="wrap_content"
+    </TableRow-->
+    <RelativeLayout
+        android:id="@+id/footer"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/titleSmall"
-        android:textColor="@color/white"
         android:layout_alignParentBottom="true"
-        android:textSize="12sp"
-        android:gravity="center"/-->
+        android:background="@color/d_black"
+        android:padding="10dp"
+        android:gravity="left" >
+
+        <TextView
+            android:id="@+id/copyright"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:text="@string/copyright"
+            android:textColor="#FFF"
+            android:textSize="12sp" />
+        <ImageButton
+            android:id="@+id/mapBtn"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentRight="true"
+            android:onClick="googleClick"
+            android:textColor="#FFF"
+            android:background="@drawable/ic_launcher"/>
+        <ImageButton
+            android:id="@+id/statisticsBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentRight="true"
+            android:onClick="phoneClick"
+            android:background="@drawable/ic_action_call"
+            android:layout_marginRight="40dp"/>
+    </RelativeLayout>
+
 
 </RelativeLayout>
 
