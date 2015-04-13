@@ -101,18 +101,13 @@
             android:name=".AuthorActivity"
             android:label="@string/title_activity_author" >
         </activity>
-<<<<<<< HEAD
-        <activity
-            android:name=".Maps2Activity"
-            android:label="@string/title_activity_maps2" >
-        </activity>
+
         <activity
             android:name="is.arnastofnun.BeygduTutorial.TutorialActivity"
             android:label=""
             android:theme="@style/TutorialActivityTheme">
         </activity>
-=======
->>>>>>> 31f861a1d94913a3a4e23c4c201737472176b967
+
     </application>
 
 </manifest>
