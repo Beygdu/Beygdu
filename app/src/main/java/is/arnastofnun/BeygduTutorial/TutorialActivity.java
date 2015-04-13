@@ -1,5 +1,10 @@
 package is.arnastofnun.BeygduTutorial;
 
+import android.support.v7.app.ActionBar;
+import android.graphics.Canvas;
+import android.graphics.ColorFilter;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
@@ -7,8 +12,14 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import is.arnastofnun.beygdu.R;
 
@@ -23,16 +34,58 @@ public class TutorialActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        //this.supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
+        //this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
         setContentView(R.layout.activity_tutorial);
+
 
         vPager = (ViewPager) findViewById(R.id.pager);
         pAdapter = new ScreenSliderPagerAdapter(getSupportFragmentManager());
         vPager.setAdapter(pAdapter);
         vPager.setPageTransformer(true, new AnimationTransformer());
 
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(false);
+        actionBar.setDisplayShowTitleEnabled(false);
+
+        LayoutInflater layoutInflater = LayoutInflater.from(this);
+        View actionBarView = layoutInflater.inflate(R.layout.actionbar_tutorial, null);
+
+        ImageView forwardImage = (ImageView) actionBarView.findViewById(R.id.forwardImage);
+        forwardImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(vPager.getCurrentItem() < NUM_PAGES) vPager.setCurrentItem(vPager.getCurrentItem() + 1);
+            }
+        });
+
+        ImageView backwardImage = (ImageView) actionBarView.findViewById(R.id.backwardImage);
+        backwardImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(vPager.getCurrentItem() > 0) vPager.setCurrentItem(vPager.getCurrentItem() - 1);
+            }
+        });
+
+        TextView quitView = (TextView) actionBarView.findViewById(R.id.quitTextView);
+        quitView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
+        actionBar.setCustomView(actionBarView);
+        actionBar.setDisplayShowCustomEnabled(true);
+
+
+
+
     }
 
-
+    /*
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -42,19 +95,27 @@ public class TutorialActivity extends ActionBarActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        switch (item.getItemId()) {
+            case R.id.quitButton:
+                finish();
+            case R.id.backButton:
+                if(vPager.getCurrentItem() != 0)  {
+                    vPager.setCurrentItem(vPager.getCurrentItem() - 1);
+                    return true;
+                }
+                return super.onOptionsItemSelected(item);
+            case R.id.forwardButton:
+                if(vPager.getCurrentItem() < NUM_PAGES) {
+                    vPager.setCurrentItem(vPager.getCurrentItem() + 1);
+                    return true;
+                }
+                return super.onOptionsItemSelected(item);
+            default:
+                return super.onOptionsItemSelected(item);
         }
-
-        return super.onOptionsItemSelected(item);
     }
-
+*/
     private class ScreenSliderPagerAdapter extends FragmentStatePagerAdapter {
 
         public ScreenSliderPagerAdapter(FragmentManager fm) {
