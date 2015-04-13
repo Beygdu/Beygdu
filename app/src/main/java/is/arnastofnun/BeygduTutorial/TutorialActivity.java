@@ -128,55 +128,55 @@ public class TutorialActivity extends ActionBarActivity {
                 case 0:
                     return ScreenSlidePageFragment.newInstance(R.layout.fragment_slide_portrait,
                             R.layout.fragment_slide_landscape_one,
-                            R.drawable.smiley,
+                            R.drawable.tut_placement,
                             R.string.TF01,
                             R.string.TF02);
                 case 1:
                     return ScreenSlidePageFragment.newInstance(R.layout.fragment_slide_portrait,
                             R.layout.fragment_slide_landscape_two,
-                            R.drawable.smiley,
-                            R.string.TF11,
-                            R.string.TF12);
+                            R.drawable.tut_placement,
+                            R.string.TF01,
+                            R.string.TF02);
                 case 2:
                     return ScreenSlidePageFragment.newInstance(R.layout.fragment_slide_portrait,
                             R.layout.fragment_slide_landscape_three,
-                            R.drawable.smiley,
-                            R.string.TF21,
-                            R.string.TF22);
+                            R.drawable.tut_placement,
+                            R.string.TF01,
+                            R.string.TF02);
                 case 3:
                     return ScreenSlidePageFragment.newInstance(R.layout.fragment_slide_portrait,
-                            R.layout.fragment_slide_landscape_four,
-                            R.drawable.smiley,
-                            R.string.TF31,
-                            R.string.TF32);
+                            R.layout.fragment_slide_landscape_one,
+                            R.drawable.tut_placement,
+                            R.string.TF01,
+                            R.string.TF02);
                 case 4:
                     return ScreenSlidePageFragment.newInstance(R.layout.fragment_slide_portrait,
-                            R.layout.fragment_slide_landscape_one,
-                            R.drawable.smiley,
-                            R.string.TF41,
-                            R.string.TF42);
+                            R.layout.fragment_slide_landscape_two,
+                            R.drawable.tut_placement,
+                            R.string.TF01,
+                            R.string.TF02);
                 case 5:
                     return ScreenSlidePageFragment.newInstance(R.layout.fragment_slide_portrait,
-                            R.layout.fragment_slide_landscape_two,
-                            R.drawable.smiley,
-                            R.string.TF51,
-                            R.string.TF52);
+                            R.layout.fragment_slide_landscape_three,
+                            R.drawable.tut_placement,
+                            R.string.TF01,
+                            R.string.TF02);
                 case 6:
                     return ScreenSlidePageFragment.newInstance(R.layout.fragment_slide_portrait,
-                            R.layout.fragment_slide_landscape_three,
-                            R.drawable.smiley,
-                            R.string.TF61,
-                            R.string.TF62);
+                            R.layout.fragment_slide_landscape_one,
+                            R.drawable.tut_placement,
+                            R.string.TF01,
+                            R.string.TF02);
                 case 7:
                     return ScreenSlidePageFragment.newInstance(R.layout.fragment_slide_portrait,
-                            R.layout.fragment_slide_landscape_four,
-                            R.drawable.smiley,
-                            R.string.TF71,
-                            R.string.TF72);
+                            R.layout.fragment_slide_landscape_two,
+                            R.drawable.tut_placement,
+                            R.string.TF01,
+                            R.string.TF02);
                 default:
                     return ScreenSlidePageFragment.newInstance(R.layout.fragment_slide_portrait,
                             R.layout.fragment_slide_landscape_one,
-                            R.drawable.smiley,
+                            R.drawable.tut_placement,
                             R.string.TF01,
                             R.string.TF02);
             }
