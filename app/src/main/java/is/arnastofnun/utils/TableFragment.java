@@ -178,7 +178,7 @@ public class TableFragment extends Fragment {
                 tableTitle.setTypeface(LatoLight);
                 tableTitle.setTextColor(getResources().getColor(R.color.white));
                 tableTitle.setBackgroundResource(R.drawable.top_border_orange);
-                tableTitle.setPadding(10, 5, 0, 10);
+                tableTitle.setPadding(16, 5, 0, 10);
                 tableTitle.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_action_copy, 0);
                 tableTitle.setOnClickListener(new View.OnClickListener() {
                     private boolean copyState;
@@ -214,7 +214,7 @@ public class TableFragment extends Fragment {
         int counter = 0;
         for (int row = 0; row < rowNum; row++) {
             TableRow tr = new TableRow(context);
-            tr.setPadding(10, 10, 0, 10);
+            //tr.setPadding(20, 10, 0, 10);
 
             // For small tables like, nafnbót and sagnbót
             if (rowNum < 2) {
@@ -247,6 +247,7 @@ public class TableFragment extends Fragment {
                 cell.setGravity(Gravity.LEFT);
                 cell.setTypeface(LatoLight);
                 cell.setTextSize(cellText);
+                cell.setPadding(5,10,0,10);
 
                 if (!(row == 0 || col == 0)) {
                     cell.setClickable(true);

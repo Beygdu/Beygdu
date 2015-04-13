@@ -6,14 +6,18 @@ import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewTreeObserver;
+import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.UiSettings;
+
+import org.w3c.dom.Text;
 
 import java.util.logging.Handler;
 
@@ -25,6 +29,7 @@ public class MapsActivity extends NavDrawer {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getLayoutInflater().inflate(R.layout.activity_maps, frameLayout);
+        setTitle(R.string.title_activity_maps);
         setUpMapIfNeeded();
     }
 
@@ -59,7 +64,26 @@ public class MapsActivity extends NavDrawer {
             // Check if we were successful in obtaining the map.
             if (mMap != null) {
                 setUpMap();
-                //mMap.setInfoWindowAdapter(new GoogleMap());
+                mMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
+                    @Override
+                    public View getInfoWindow(Marker marker) {
+                        return null;
+                    }
+
+                    @Override
+                    public View getInfoContents(Marker marker) {
+                        View v = getLayoutInflater().inflate(R.layout.map_info_window, null);
+                        TextView info1 = (TextView) v.findViewById(R.id.info1);
+                        TextView info2 = (TextView) v.findViewById(R.id.info2);
+                        TextView info3 = (TextView) v.findViewById(R.id.info3);
+                        TextView info4 = (TextView) v.findViewById(R.id.info4);
+                        info1.setText("Árnastofnun");
+                        info2.setText("Sími. 525-4010");
+                        info3.setText("Netfang: arnastofnun@hi.is");
+                        info4.setText("Opnunartími: 9-12 og 13-15");
+                        return v;
+                    }
+                });
             }
         }
 
@@ -87,8 +111,9 @@ public class MapsActivity extends NavDrawer {
 
 
         CameraUpdate center = CameraUpdateFactory.newLatLng(new LatLng(64.14330015, -21.96268916));
-        mMap.moveCamera(center);
+
         mMap.animateCamera(CameraUpdateFactory.zoomTo(14), 4000, null);
+        mMap.moveCamera(center);
 
     }
 

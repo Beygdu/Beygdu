@@ -89,9 +89,9 @@
         <item>@drawable/ic_action_call</item>
         <item>@drawable/ic_action_menu</item>
     </array>
-    <string name="title_activity_maps">Map</string>
-    <string name="title_activity_author">Author</string>
-    <string name="title_activity_authors">AuthorsActivity</string>
+    <string name="title_activity_maps">Hér erum við</string>
+    <string name="title_activity_author">Höfundar</string>
+    <string name="title_activity_authors">Höfundar</string>
 
 
     <!-- Authors of app -->
@@ -110,6 +110,8 @@
 
 
     <!-- Footer -->
-    <string name="copyright">© Stofnun Árna Magnússonar \n í íslenskum fræðum</string>
+    <!--Höfundarréttur © 2002-2015 Orðabók Háskólans / Stofnun Árna Magnússonar í íslenskum fræðum.
+    Öll afritun Beygingarlýsingarinnar er bönnuð án leyfis.-->
+    <string name="copyright">© 2015 Stofnun Árna Magnússonar \n í íslenskum fræðum</string>
 
 </resources>
