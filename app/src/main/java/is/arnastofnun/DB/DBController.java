@@ -102,7 +102,7 @@ public class DBController {
         close(cursor);
     }
 
-    public void insertCompareTable(String headerTitle, Tables table){
+    public void insertCompareTable(String wordTitle, String blockTitle, String headerTitle, Tables table){
         try {
             open();
         } catch (SQLException e) {
@@ -110,8 +110,9 @@ public class DBController {
         }
 
         ContentValues tableContent = new ContentValues();
-        tableContent.put(DBHelper.TITLE, table.getTitle());
-        tableContent.put(DBHelper.HEADERTITLE, headerTitle);
+        tableContent.put(DBHelper.WORDTITLE, wordTitle);
+        tableContent.put(DBHelper.BLOCKTITLE, blockTitle);
+        tableContent.put(DBHelper.TABLETITLE, table.getTitle());
         tableContent.put(DBHelper.COLHEADERS, arrToString(table.getColumnNames()));
         tableContent.put(DBHelper.ROWHEADERS, arrToString(table.getRowNames()));
         tableContent.put(DBHelper.CONTENT, arrToString(table.getContent().toArray()));
@@ -290,8 +291,8 @@ public class DBController {
         //Create Tables objects and place in ArrayList.
         for (int i = 0; i < cursor.getCount(); i++) {
             cursor.moveToPosition(i);
-            tables.add(new Tables(cursor.getString(1), cursor.getString(0), stringToArr(cursor.getString(2)),
-                        stringToArr(cursor.getString(3)), new ArrayList<String>(Arrays.asList(stringToArr(cursor.getString(4))))));
+            tables.add(new Tables(cursor.getString(0), cursor.getString(1), cursor.getString(2), cursor.getString(2), stringToArr(cursor.getString(3)),
+                        stringToArr(cursor.getString(4)), new ArrayList<String>(Arrays.asList(stringToArr(cursor.getString(5))))));
         }
 
 
@@ -540,6 +541,23 @@ public class DBController {
         int value = cursor.getInt(0);
         close(cursor);
         return value;
+    }
+
+    /**
+     *
+     * @param wordTitle the wordTitle of the word to be removed in the table
+     */
+    public void removeCompareTable(String wordTitle, String blockTitle, String tableTitle) {
+        try {
+            open();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        String whereClause = DBHelper.WORDTITLE + " = '" + wordTitle + "' AND " +
+                             DBHelper.BLOCKTITLE+ " = '" + blockTitle + "' AND " +
+                             DBHelper.TABLETITLE + "= '" + tableTitle + "'";
+        dB.delete(DBHelper.TABLE_COMPARETABLES, whereClause, null);
+        close(null);
     }
 
     /**

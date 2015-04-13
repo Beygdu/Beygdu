@@ -12,7 +12,9 @@ import java.util.ArrayList;
 public class Tables implements Serializable {
 
 
-    private String header;
+    private String wordTitle;
+    private String blockTitle;
+    private String headerTitle;
 
     private String title;
   
@@ -49,8 +51,10 @@ public class Tables implements Serializable {
      * @param rowNames Row names of the table
      * @param content Content of the table
      */
-    public Tables(String header, String title, String[] columnNames, String[] rowNames, ArrayList<String> content) {
-        this.header = header;
+    public Tables(String wordTitle, String blockTitle, String headerTitle, String title, String[] columnNames, String[] rowNames, ArrayList<String> content) {
+        this.wordTitle = wordTitle;
+        this.blockTitle = blockTitle;
+        this.headerTitle = headerTitle;
         this.title = title;
         this.columnNames = columnNames;
         this.rowNames = rowNames;
@@ -64,11 +68,19 @@ public class Tables implements Serializable {
         return this.title;
     }
 
+    public String getWordTitle() {
+        return wordTitle;
+    }
+
+    public String getBlockTitle() {
+        return blockTitle;
+    }
+
     /**
      * @return headerTitle of the table
      */
     public String getHeader() {
-        return header;
+        return headerTitle;
     }
 
     /**

@@ -8,6 +8,7 @@ import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TableLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -65,6 +66,7 @@ public class CompareActivity extends NavDrawer {
 
         tableLayout = (TableLayout) findViewById(R.id.data_table);
 
+
         drawTables();
     }
 
@@ -72,23 +74,31 @@ public class CompareActivity extends NavDrawer {
         DBController controller = new DBController(this);
         ArrayList<Tables> compareTables = controller.fetchAllComparableWords();
 
-        for (Tables table : compareTables) {
-            TextView tableTitle = new TextView(this);
-            if (320 > width && width < 384) {
-                tableTitle.setTextSize(20);
-            } else if (384 > width && width < 600) {
-                tableTitle.setTextSize(28);
-            } else if (width > 600) {
-                tableTitle.setTextSize(42);
-            }
-            tableTitle.setMinHeight(100);
-            tableTitle.setText(table.getHeader());
-            tableTitle.setTypeface(LatoLight);
-            tableTitle.setTextColor(getResources().getColor(R.color.white));
-            tableTitle.setPadding(0, 10, 0, 10);
+        if(compareTables.size() > 2) {
+            for (Tables table : compareTables) {
+                TextView tableTitle = new TextView(this);
+                if (320 > width && width < 384) {
+                    tableTitle.setTextSize(20);
+                } else if (384 > width && width < 600) {
+                    tableTitle.setTextSize(28);
+                } else if (width > 600) {
+                    tableTitle.setTextSize(42);
+                }
+                tableTitle.setMinHeight(100);
+                tableTitle.setText(table.getHeader());
+                tableTitle.setTypeface(LatoLight);
+                tableTitle.setTextColor(getResources().getColor(R.color.white));
+                tableTitle.setPadding(0, 10, 0, 10);
 
-            TableFragment tFragment = new TableFragment(CompareActivity.this, tableLayout, table, tableTitle);
-            getFragmentManager().beginTransaction().add(tableLayout.getId(), tFragment).commit();
+                TableFragment tFragment = new TableFragment(CompareActivity.this, tableLayout, table, table.getTitle());
+                getFragmentManager().beginTransaction().add(tableLayout.getId(), tFragment).commit();
+            }
+        }
+        else {
+            TableRow tr = new TableRow(this);
+            final TextView cell = new TextView(this);
+            cell.setText("Ekkert til að bera saman");
+            tr.addView(tr);
         }
     }
 

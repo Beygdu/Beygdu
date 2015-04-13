@@ -32,7 +32,9 @@ import com.software.shell.fab.FloatingActionButton;
 import com.software.shell.fab.ActionButton;
 
 import java.lang.reflect.Array;
+import java.util.ArrayList;
 
+import is.arnastofnun.DB.DBController;
 import is.arnastofnun.beygdu.R;
 import is.arnastofnun.parser.Block;
 import is.arnastofnun.parser.SubBlock;
@@ -60,8 +62,12 @@ public class TableFragment extends Fragment {
     private Block block;
     private Tables table;
     private TextView title;
+    private String dBWordTitle;
+    private String dBBlockTitle;
 
+    private DBController controller;
     private boolean compareTableFragment = false;
+    private ArrayList<Tables> comparedTables;
 
     private long initTime = -1;
 
@@ -87,11 +93,14 @@ public class TableFragment extends Fragment {
      * @param block       - inniheldur raðar og column headerana og contentið á töflunni
      * @param title       - er titilinn á töflunni
      */
-    public TableFragment(Context context, TableLayout tableLayout, Block block, TextView title) {
+    public TableFragment(Context context, TableLayout tableLayout, Block block, TextView title, String wordTitle, String blockTitle) {
         this.context = context;
         this.tableLayout = tableLayout;
         this.block = block;
         this.title = title;
+
+        dBWordTitle = wordTitle;
+        dBBlockTitle = blockTitle;
 
         // Fonts
         LatoBold = Typeface.createFromAsset(context.getAssets(), "fonts/Lato-Bold.ttf");
@@ -103,13 +112,11 @@ public class TableFragment extends Fragment {
      * @param context er contextið sem taflan mun birtast í.
      * @param tableLayout - er layoutið sem taflan er sett í.
      * @param table - er taflan
-     * @param title - er titilinn á töflunni
      */
-    public TableFragment(Context context, TableLayout tableLayout, Tables table, TextView title) {
+    public TableFragment(Context context, TableLayout tableLayout, Tables table, String wordTitle) {
         this.context = context;
         this.tableLayout = tableLayout;
         this.table = table;
-        this.title = title;
         compareTableFragment = true;
 
         // Fonts
@@ -119,17 +126,16 @@ public class TableFragment extends Fragment {
     }
 
     /**
-     * @return the title of the table
+     * @return the title of the word
      */
-    public CharSequence getTitle() {
-        return title.getText();
+    public String getTitle() {
+        return title.getText().toString();
     }
-
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.table,
-                container, false);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View rootView = inflater.inflate(R.layout.table, container, false);
+        controller = new DBController(context);
+        comparedTables = controller.fetchAllComparableWords();
         if(compareTableFragment) {
             createTable(table);
         } else {
@@ -202,19 +208,14 @@ public class TableFragment extends Fragment {
                 tableTitle.setBackgroundResource(R.drawable.top_border_orange);
                 tableTitle.setPadding(10, 15, 0, 10);
                 tableTitle.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_action_copy, 0);
-                tableTitle.setOnClickListener(new View.OnClickListener() {
-                    private boolean copyState;
-
-                    public void onClick(View view) {
-                        if (copyState) {
-                            // reset background to default;
-                            tableTitle.setBackgroundResource(R.drawable.top_border_orange);
-                        } else {
-                            tableTitle.setBackgroundResource(R.drawable.top_border_yellow);
-                        }
-                        copyState = !copyState;
+                boolean dbContains = false;
+                for(Tables dBTable : comparedTables) {
+                    if (dBTable.getWordTitle().equals(dBWordTitle) && dBTable.getBlockTitle().equals(dBBlockTitle) && dBTable.getHeader().equals(tables.getTitle())){
+                        dbContains = true;
+                        tableTitle.setBackgroundResource(R.drawable.top_border_yellow);
                     }
-                });
+                }
+                tableTitle.setOnClickListener(getCompareClickListener(dBWordTitle, dBBlockTitle, tables.getTitle(), tableTitle, tables, dbContains));
                 tableLayout.addView(tableTitle);
                 createTable(tables);
             }
@@ -329,21 +330,36 @@ public class TableFragment extends Fragment {
         cell.setOnLongClickListener(new XLongClickListener(context, cell));
         cell.setText(table.getContent().get(0));
         cell.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_action_copy, 0);
-        cell.setOnClickListener(new View.OnClickListener() {
-            private boolean copyState;
+        boolean dbContains = false;
+        for(Tables dBTable : comparedTables) {
+            if (dBTable.getWordTitle().equals(dBWordTitle) && dBTable.getBlockTitle().equals(dBBlockTitle) && dBTable.getHeader().equals(table.getTitle())){
+                dbContains = true;
+                cell.setBackgroundResource(R.drawable.top_border_yellow);
+            }
+        }
+        cell.setOnClickListener(getCompareClickListener(dBWordTitle, dBBlockTitle, table.getTitle(), cell, table, dbContains));
+        dbContains = false;
+
+        tr.addView(cell);
+        tableLayout.addView(tr);
+    }
+
+    private View.OnClickListener getCompareClickListener(final String wordTitle, final String blockTitle, final String tableTitle, final TextView cell, final Tables tables, final boolean chosen) {
+        View.OnClickListener clickListener = new View.OnClickListener() {
+            private boolean copyState = chosen;
 
             public void onClick(View view) {
                 if (copyState) {
                     // reset background to default;
                     cell.setBackgroundResource(R.drawable.top_border_orange);
+                    controller.removeCompareTable(wordTitle,blockTitle, tableTitle);
                 } else {
                     cell.setBackgroundResource(R.drawable.top_border_yellow);
+                    controller.insertCompareTable(wordTitle, blockTitle, tableTitle, tables);
                 }
                 copyState = !copyState;
             }
-        });
-
-        tr.addView(cell);
-        tableLayout.addView(tr);
+        };
+        return clickListener;
     }
 }

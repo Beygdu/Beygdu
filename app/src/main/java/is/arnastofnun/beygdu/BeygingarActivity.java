@@ -1,35 +1,24 @@
 package is.arnastofnun.beygdu;
 
-import android.animation.AnimatorInflater;
-import android.animation.AnimatorSet;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.graphics.Point;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.DrawableRes;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.NavUtils;
-import android.text.TextUtils;
-import android.util.DisplayMetrics;
+import android.text.Html;
 import android.util.Log;
 import android.view.Display;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.ViewGroup;
 import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.text.*;
-
-
 
 import java.util.ArrayList;
 
@@ -269,7 +258,7 @@ public class BeygingarActivity extends NavDrawer {
                 blockTitle.setTextColor(getResources().getColor(R.color.white));
                 blockTitle.setPadding(0, 10, 0, 10);
 
-                TableFragment tFragment = new TableFragment(BeygingarActivity.this, tableLayout, block, blockTitle);
+                TableFragment tFragment = new TableFragment(BeygingarActivity.this, tableLayout, block, blockTitle, firstWord, block.getTitle());
 				getFragmentManager().beginTransaction().add(tableLayout.getId(), tFragment).commit();
 				tables.add(tFragment);				
 			}
