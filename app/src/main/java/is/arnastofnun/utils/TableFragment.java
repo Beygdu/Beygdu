@@ -173,7 +173,6 @@ public class TableFragment extends Fragment {
                 final TextView tableTitle = new TextView(context);
                 tableTitle.setText(tables.getTitle());
                 tableTitle.setTextSize(tableTitleText);
-                tableTitle.setHeight(50);
                 tableTitle.setTextSize(20);
                 tableTitle.setTypeface(LatoLight);
                 tableTitle.setTextColor(getResources().getColor(R.color.white));
