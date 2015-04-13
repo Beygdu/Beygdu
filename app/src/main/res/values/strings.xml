@@ -100,8 +100,8 @@
     <string name="title_activity_tutorial">BeygduTutorial</string>
 
     <!-- TutorialActivity Resources -->
-    <string name="TF01">First page material</string>
-    <string name="TF02">First page material</string>
+    <string name="TF01">Þakka ykkur fyrir að að velja Beygðu, snallforrit Beygingarlýsingar íslensks nútímamáls</string>
+    <string name="TF02">Flettið til hægri eða vinstri til að skiptja um skjái?</string>
 
     <string name="TF11">Second page material</string>
     <string name="TF12">Second page material</string>
