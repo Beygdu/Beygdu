@@ -79,6 +79,7 @@
         <item>Tölfræði</item>
         <item>Höfundar</item>
         <item>Hvar erum við?</item>
+        <item>Hjálp</item>
     </string-array>
     <!-- Keep them in order as the titles are in -->
     <array name="nav_drawer_icons">
@@ -106,6 +107,33 @@
     <string name="snaer">Snær Seljan Þóroddsson</string>
     <string name="snaerDesc">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla volutpat feugiat hendrerit. Suspendisse pharetra ante laoreet purus sodales .</string>
     <string name="title_activity_maps2">Map</string>
+    <string name="title_activity_tutorial">BeygduTutorial</string>
+
+    <!-- TutorialActivity Resources -->
+    <string name="TF01">Þakka ykkur fyrir að að velja Beygðu, snallforrit Beygingarlýsingar íslensks nútímamáls</string>
+    <string name="TF02">Flettið til hægri eða vinstri til að skiptja um skjái?</string>
+
+    <string name="TF11">Second page material</string>
+    <string name="TF12">Second page material</string>
+
+    <string name="TF21">Third page material</string>
+    <string name="TF22">Third page material</string>
+
+    <string name="TF31">Fourth page material</string>
+    <string name="TF32">Fourth page material</string>
+
+    <string name="TF41">Fifth page material</string>
+    <string name="TF42">Fifth page material</string>
+
+    <string name="TF51">Sixth page material</string>
+    <string name="TF52">Sixth page material</string>
+
+    <string name="TF61">Seventh page material</string>
+    <string name="TF62">Seventh page material</string>
+
+    <string name="TF71">Eighth page material</string>
+    <string name="TF72">Eighth page material</string>
+    <!-- TutorialActivity Resources -->
 
 
 

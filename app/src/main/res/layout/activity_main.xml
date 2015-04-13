@@ -61,6 +61,7 @@
                 android:inputType="text"
                 android:paddingLeft="10dp"
                 android:layout_marginRight="10dp"/>
+4
             <ImageButton
                 android:id="@+id/commitSearch"
                 android:layout_height="50dp"
