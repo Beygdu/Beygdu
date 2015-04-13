@@ -332,6 +332,15 @@ public class MainActivity extends NavDrawer implements CustomDialog.DialogListen
         startActivity(intent);
     }
 
+    public void phoneClick(@SuppressWarnings("unused")  View view) {
+        Intent callIntent = new Intent(Intent.ACTION_CALL);
+        callIntent.setData(Uri.parse("tel:8666665"));
+        startActivity(callIntent);
+    }
+
+
+
+
 
 
 	

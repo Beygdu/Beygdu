@@ -152,9 +152,9 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_alignParentRight="true"
-            android:onClick="statisticsClick"
+            android:onClick="phoneClick"
             android:background="@drawable/ic_action_call"
-            android:layout_marginRight="35dp"/>
+            android:layout_marginRight="40dp"/>
     </RelativeLayout>
 
 
