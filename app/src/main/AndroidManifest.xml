@@ -10,18 +10,10 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission
-        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
-        android:maxSdkVersion="18" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" android:maxSdkVersion="18" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <uses-permission
-        android:name="android.permission.READ_EXTERNAL_STORAGE"
-        android:maxSdkVersion="18" />
     <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
-    <!--
- The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
-         Google Maps Android API v2, but are recommended.
-    -->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
@@ -104,14 +96,12 @@
             android:name=".is.arnastofnun.beygdur.soonToBeAdded.Author"
             android:label="@string/title_activity_author" >
         </activity>
-        <activity
-            android:name=".AuthorsActivity"
-            android:label="@string/title_activity_authors" >
-        </activity>
+
         <activity
             android:name=".AuthorActivity"
             android:label="@string/title_activity_author" >
         </activity>
+<<<<<<< HEAD
         <activity
             android:name=".Maps2Activity"
             android:label="@string/title_activity_maps2" >
@@ -121,6 +111,8 @@
             android:label=""
             android:theme="@style/TutorialActivityTheme">
         </activity>
+=======
+>>>>>>> 31f861a1d94913a3a4e23c4c201737472176b967
     </application>
 
 </manifest>

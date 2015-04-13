@@ -7,6 +7,7 @@ import android.app.Fragment;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
@@ -18,9 +19,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.view.animation.DecelerateInterpolator;
+import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+
+import com.software.shell.fab.FloatingActionButton;
+import com.software.shell.fab.ActionButton;
 
 import java.lang.reflect.Array;
 
@@ -70,10 +79,10 @@ public class TableFragment extends Fragment {
     }
 
     /**
-     * @param context er contextið sem taflan mun birtast í.
+     * @param context     er contextið sem taflan mun birtast í.
      * @param tableLayout - er layoutið sem taflan er sett í.
-     * @param block - inniheldur raðar og column headerana og contentið á töflunni
-     * @param title - er titilinn á töflunni
+     * @param block       - inniheldur raðar og column headerana og contentið á töflunni
+     * @param title       - er titilinn á töflunni
      */
     public TableFragment(Context context, TableLayout tableLayout, Block block, TextView title) {
         this.context = context;
@@ -114,18 +123,20 @@ public class TableFragment extends Fragment {
     private void createBlock() {
         tableLayout.addView(title);
         //Iterate through sub-blocks and set title
-        for (SubBlock sBlock: block.getBlocks()){
+        for (SubBlock sBlock : block.getBlocks()) {
 
             //Special case for nafnháttur
-            if(sBlock.getTitle().equals("Nafnháttur")) {
+            if (sBlock.getTitle().equals("Nafnháttur")) {
+                // Text title
                 TextView nafnhatturTitle = new TextView(context);
                 nafnhatturTitle.setText(sBlock.getTitle());
                 nafnhatturTitle.setTextSize(subBlockTitleText);
                 nafnhatturTitle.setMinHeight(70);
                 nafnhatturTitle.setTypeface(LatoLight);
-                nafnhatturTitle.setPadding(0,80,0,20);
+                nafnhatturTitle.setPadding(0, 20, 20, 20);
                 nafnhatturTitle.setTextColor(getResources().getColor(R.color.white));
                 tableLayout.addView(nafnhatturTitle);
+
                 TextView tableTitle = new TextView(context);
                 tableTitle.setText(sBlock.getTitle());
                 createTableSpecial(sBlock.getTables().get(0));
@@ -133,34 +144,49 @@ public class TableFragment extends Fragment {
             }
 
             //Special case for lýsingarháttur nútíðar
-            if(block.getTitle().toLowerCase().equals("lýsingarháttur nútíðar") ) {
+            if (block.getTitle().toLowerCase().equals("lýsingarháttur nútíðar")) {
                 TextView tableTitle = new TextView(context);
                 tableTitle.setText(sBlock.getTitle());
+                tableLayout.addView(tableTitle);
                 createTableSpecial(sBlock.getTables().get(0));
                 continue;
             }
 
             // The rest of the tables
-            if(!sBlock.getTitle().equals("")) {
+            if (!sBlock.getTitle().equals("")) {
                 TextView subBlockTitle = new TextView(context);
+                subBlockTitle.setLayoutParams(new TableRow.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                 subBlockTitle.setText(sBlock.getTitle());
                 subBlockTitle.setTextSize(subBlockTitleText);
                 subBlockTitle.setMinHeight(70);
                 subBlockTitle.setTypeface(LatoLight);
                 subBlockTitle.setTextColor(getResources().getColor(R.color.white));
-                subBlockTitle.setPadding(0,80,0,20);
+                subBlockTitle.setPadding(0, 80, 20, 20);
                 tableLayout.addView(subBlockTitle);
             }
             //Create the tables and set title
-            for (Tables tables : sBlock.getTables()) {
-                TextView tableTitle = new TextView(context);
+            for (final Tables tables : sBlock.getTables()) {
+                final TextView tableTitle = new TextView(context);
                 tableTitle.setText(tables.getTitle());
                 tableTitle.setTextSize(tableTitleText);
                 tableTitle.setMinHeight(80);
                 tableTitle.setTypeface(LatoLight);
                 tableTitle.setTextColor(getResources().getColor(R.color.white));
                 tableTitle.setBackgroundResource(R.drawable.top_border_orange);
-                tableTitle.setPadding(10, 10, 0, 10);
+                tableTitle.setPadding(10, 15, 0, 10);
+                tableTitle.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_action_copy, 0);
+                tableTitle.setOnClickListener(new View.OnClickListener() {
+                    private boolean copyState;
+                    public void onClick(View view) {
+                        if (copyState) {
+                            // reset background to default;
+                            tableTitle.setBackgroundResource(R.drawable.top_border_orange);
+                        } else {
+                            tableTitle.setBackgroundResource(R.drawable.top_border_yellow);
+                        }
+                        copyState = !copyState;
+                    }
+                });
                 tableLayout.addView(tableTitle);
                 createTable(tables);
             }
@@ -168,11 +194,11 @@ public class TableFragment extends Fragment {
     }
 
     /**
-     * @author Snær Seljan, Jón Friðrik
-     * @since 20.03.15
-     * @version 2.0
      * @param table the table which is to be built
-     * Makes a tableTow for each row which contains TextView for each column.
+     *              Makes a tableTow for each row which contains TextView for each column.
+     * @author Snær Seljan, Jón Friðrik
+     * @version 2.0
+     * @since 20.03.15
      */
     private void createTable(Tables table) {
         final int rowNum = table.getRowNames().length;
@@ -183,10 +209,10 @@ public class TableFragment extends Fragment {
         int counter = 0;
         for (int row = 0; row < rowNum; row++) {
             TableRow tr = new TableRow(context);
-            tr.setMinimumHeight(80);
+            tr.setPadding(10, 20, 0, 20);
 
             // For small tables like, nafnbót and sagnbót
-            if(rowNum < 2) {
+            if (rowNum < 2) {
                 tr.setBackgroundResource(R.drawable.bottom_top_border_blue);
             }
 
@@ -197,36 +223,33 @@ public class TableFragment extends Fragment {
 
 
             // Odd numbers and not last row
-            else if( (row % 1 == 0) && (row != rowLast) ) {
+            else if ((row % 1 == 0) && (row != rowLast)) {
                 tr.setBackgroundResource(R.drawable.top_border_white);
             }
 
             // Last row
-            else if (row == rowLast){
-                if(row % 2 == 0) {
+            else if (row == rowLast) {
+                if (row % 2 == 0) {
                     tr.setBackgroundResource(R.drawable.bottom_top_border_blue);
-                }
-                else {
+                } else {
                     tr.setBackgroundResource(R.drawable.bottom_top_border_white);
                 }
             }
 
             for (int col = 0; col < colNum; col++) {
                 final TextView cell = new TextView(context);
-                if(!(row == 0 || col == 0)) {
+                if (!(row == 0 || col == 0)) {
                     cell.setClickable(true);
                     cell.setOnLongClickListener(new XLongClickListener(context, cell));
                 }
-
-                cell.setLayoutParams(new TableRow.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT, 1f));
-                cell.setMinHeight(100);
-                cell.setGravity(Gravity.CENTER);
+                cell.setLayoutParams(new TableRow.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f));
+                cell.setGravity(Gravity.LEFT);
                 cell.setTypeface(LatoLight);
                 cell.setTextSize(cellText);
+
                 if (row % 2 == 0) {
                     cell.setTextColor(getResources().getColor(R.color.font_default));
-                }
-                else {
+                } else {
                     cell.setTextColor(getResources().getColor(R.color.font_default));
                 }
 
@@ -240,13 +263,12 @@ public class TableFragment extends Fragment {
                 } else {
                     if (col == 0) {
                         cell.setText(table.getRowNames()[row]);
-                    }  else {
+                    } else {
                         String cellString = table.getContent().get(contentIndex++);
                         if (cellString.contains("/")) {
                             String firstLine = cellString.split("/")[0];
                             String secondLine = cellString.split("/")[1];
-                            cellString = firstLine + "/" + System.getProperty ("line.separator") + secondLine;
-                            cell.setMinHeight(180);
+                            cellString = firstLine + "/" + System.getProperty("line.separator") + secondLine;
                         }
                         cell.setText(cellString);
 
@@ -257,27 +279,42 @@ public class TableFragment extends Fragment {
             tableLayout.addView(tr);
         }
     }
+
     /**
-     * @author Snær Seljan
-     * @since 20.03.15
-     * @version 2.0
      * @param table the table which is to be built
-     * Makes a textview for a single table cell like nafnhattur, lysingarhattur þt.
+     *              Makes a textview for a single table cell like nafnhattur, lysingarhattur þt.
+     * @author Snær Seljan
+     * @version 2.0
+     * @since 20.03.15
      */
     private void createTableSpecial(Tables table) {
         TableRow tr = new TableRow(context);
         final TextView cell = new TextView(context);
         cell.setLayoutParams(new TableRow.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, 1f));
         cell.setMinHeight(80);
-        cell.setPadding(20,10,0,0);
+        cell.setPadding(20, 10, 0, 0);
         cell.setBackgroundResource(R.drawable.top_border_orange);
         cell.setTypeface(LatoLight);
         cell.setTextColor(getResources().getColor(R.color.white));
         cell.setClickable(true);
         cell.setOnLongClickListener(new XLongClickListener(context, cell));
         cell.setText(table.getContent().get(0));
+        cell.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_action_copy, 0);
+        cell.setOnClickListener(new View.OnClickListener() {
+            private boolean copyState;
+
+            public void onClick(View view) {
+                if (copyState) {
+                    // reset background to default;
+                    cell.setBackgroundResource(R.drawable.top_border_orange);
+                } else {
+                    cell.setBackgroundResource(R.drawable.top_border_yellow);
+                }
+                copyState = !copyState;
+            }
+        });
+
         tr.addView(cell);
         tableLayout.addView(tr);
     }
-
 }

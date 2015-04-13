@@ -72,14 +72,14 @@
 
 
     <!-- Items in Navigation Drawer -->
-        <string-array name="navdrawer_items">
-            <item>Beygðu</item>
-            <item>Fyrri leitir</item>
-            <item>Um Beygðu</item>
-            <item>Tölfræði</item>
-            <item>Höfundar</item>
-            <item>Hvar erum við?</item>
-        </string-array>
+    <string-array name="navdrawer_items">
+        <item>Beygðu</item>
+        <item>Fyrri leitir</item>
+        <item>Um Beygðu</item>
+        <item>Tölfræði</item>
+        <item>Höfundar</item>
+        <item>Hvar erum við?</item>
+    </string-array>
     <string name="title_activity_maps">Map</string>
     <string name="title_activity_author">Author</string>
     <string name="title_activity_authors">AuthorsActivity</string>

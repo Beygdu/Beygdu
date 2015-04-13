@@ -14,6 +14,8 @@
     <color name="d_blue_border">#addcff</color>
     <color name="d_blue_text">#257fd9</color>
     <color name="d_black">#2b2b2b</color>
+    <color name="d_yellow">#ffbb33</color>
+
 
 
     <color name="tableColor1">#f6f6f6</color>
@@ -28,6 +30,7 @@
 
     <color name="d_Grey">#585858</color>
     <color name="d_GreenDark">#118C4E</color>
+    <color name="d_Green">#669900</color>
     <color name="d_GreenLight">#C1E1A6</color>
     <color name="d_Orange">#FF5722</color>
 
