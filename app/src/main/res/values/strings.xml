@@ -80,6 +80,15 @@
         <item>Höfundar</item>
         <item>Hvar erum við?</item>
     </string-array>
+    <!-- Keep them in order as the titles are in -->
+    <array name="nav_drawer_icons">
+        <item>@drawable/ic_action_call</item>
+        <item>@drawable/ic_action_call</item>
+        <item>@drawable/ic_action_call</item>
+        <item>@drawable/ic_action_call</item>
+        <item>@drawable/ic_action_call</item>
+        <item>@drawable/ic_action_menu</item>
+    </array>
     <string name="title_activity_maps">Map</string>
     <string name="title_activity_author">Author</string>
     <string name="title_activity_authors">AuthorsActivity</string>
@@ -97,5 +106,10 @@
     <string name="snaer">Snær Seljan Þóroddsson</string>
     <string name="snaerDesc">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla volutpat feugiat hendrerit. Suspendisse pharetra ante laoreet purus sodales .</string>
     <string name="title_activity_maps2">Map</string>
+
+
+
+    <!-- Footer -->
+    <string name="copyright">© Stofnun Árna Magnússonar \n í íslenskum fræðum</string>
 
 </resources>

@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.graphics.Point;
 import android.graphics.Typeface;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -17,6 +18,7 @@ import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Display;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -153,25 +155,17 @@ public class MainActivity extends NavDrawer implements CustomDialog.DialogListen
 
     public void headerText() {
         //Set typeface for fonts
-        LatoBold = Typeface.createFromAsset(getAssets(), "fonts/Lato-Bold.ttf");
-        LatoSemiBold = Typeface.createFromAsset(getAssets(), "fonts/Lato-Semibold.ttf");
         LatoLight = Typeface.createFromAsset(getAssets(), "fonts/Lato-Light.ttf");
 
         ActionButton circlestar = (ActionButton) findViewById(R.id.circleStar);
         TextView header = (TextView)findViewById(R.id.title);
         TableRow rowSearch = (TableRow) findViewById(R.id.search_row);
 
+        TextView copyright = (TextView)findViewById(R.id.copyright);
+        copyright.setTypeface(LatoLight);
 
         header.setTypeface(LatoLight);
-        if (320 > width && width < 384) {
-            header.setTextSize(30);
-        }
-        else if(384 > width && width < 600) {
-            header.setTextSize(50);
-        }
-        else if(width > 600){
-            header.setTextSize(50);
-        }
+
 
         Animation animateFromTop = AnimationUtils.loadAnimation(this, R.animator.animator);
         Animation fadeIn = AnimationUtils.loadAnimation(this, R.animator.fadein);
@@ -201,6 +195,14 @@ public class MainActivity extends NavDrawer implements CustomDialog.DialogListen
         return dp;
     }
 
+
+    public int getScreenWidth() {
+        Display display = getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        int width = size.x;
+        return width;
+    }
 
 	/**
 	 * Checks if the user is connected to a network.

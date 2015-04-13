@@ -47,6 +47,7 @@ public class Cache extends NavDrawer {
         listView = (ListView) findViewById(R.id.list_view);
         listView.setEmptyView(findViewById(R.id.empty));
 
+
         controller = new DBController(this);
         words = controller.fetchAllWords();
 

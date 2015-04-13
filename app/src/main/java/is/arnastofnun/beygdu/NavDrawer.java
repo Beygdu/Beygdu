@@ -13,6 +13,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -165,6 +166,7 @@ public class NavDrawer extends FragmentActivity{
             isLaunch = false;
             openActivity(0);
         }
+
     }
 
 

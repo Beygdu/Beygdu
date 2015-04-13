@@ -1,12 +1,21 @@
 package is.arnastofnun.beygdu;
 
+
+import android.location.Location;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.view.ViewTreeObserver;
 
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.UiSettings;
+
+import java.util.logging.Handler;
 
 public class MapsActivity extends NavDrawer {
 
@@ -46,11 +55,15 @@ public class MapsActivity extends NavDrawer {
             // Try to obtain the map from the SupportMapFragment.
             mMap = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map))
                     .getMap();
+
             // Check if we were successful in obtaining the map.
             if (mMap != null) {
                 setUpMap();
+                //mMap.setInfoWindowAdapter(new GoogleMap());
             }
         }
+
+
     }
 
     /**
@@ -65,5 +78,18 @@ public class MapsActivity extends NavDrawer {
                         .position(new LatLng(64.14330015, -21.96268916))
                         .title("Árnastofnun")
         );
+        mMap.animateCamera(CameraUpdateFactory.zoomBy(13));
+        mMap.animateCamera(CameraUpdateFactory.zoomIn());
+        mMap.animateCamera( CameraUpdateFactory.zoomTo( 20.0f ) );
+
+        mMap.getUiSettings().setZoomControlsEnabled(true);
+        mMap.getUiSettings().setCompassEnabled(true);
+
+
+        CameraUpdate center = CameraUpdateFactory.newLatLng(new LatLng(64.14330015, -21.96268916));
+        mMap.moveCamera(center);
+        mMap.animateCamera(CameraUpdateFactory.zoomTo(14), 4000, null);
+
     }
+
 }

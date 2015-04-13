@@ -12,6 +12,10 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.text.Html;
+import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
+import android.text.style.ForegroundColorSpan;
 import android.util.Property;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -169,11 +173,12 @@ public class TableFragment extends Fragment {
                 final TextView tableTitle = new TextView(context);
                 tableTitle.setText(tables.getTitle());
                 tableTitle.setTextSize(tableTitleText);
-                tableTitle.setMinHeight(80);
+                tableTitle.setHeight(50);
+                tableTitle.setTextSize(20);
                 tableTitle.setTypeface(LatoLight);
                 tableTitle.setTextColor(getResources().getColor(R.color.white));
                 tableTitle.setBackgroundResource(R.drawable.top_border_orange);
-                tableTitle.setPadding(10, 15, 0, 10);
+                tableTitle.setPadding(10, 5, 0, 10);
                 tableTitle.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_action_copy, 0);
                 tableTitle.setOnClickListener(new View.OnClickListener() {
                     private boolean copyState;
@@ -209,7 +214,7 @@ public class TableFragment extends Fragment {
         int counter = 0;
         for (int row = 0; row < rowNum; row++) {
             TableRow tr = new TableRow(context);
-            tr.setPadding(10, 20, 0, 20);
+            tr.setPadding(10, 10, 0, 10);
 
             // For small tables like, nafnbót and sagnbót
             if (rowNum < 2) {
@@ -238,14 +243,15 @@ public class TableFragment extends Fragment {
 
             for (int col = 0; col < colNum; col++) {
                 final TextView cell = new TextView(context);
-                if (!(row == 0 || col == 0)) {
-                    cell.setClickable(true);
-                    cell.setOnLongClickListener(new XLongClickListener(context, cell));
-                }
                 cell.setLayoutParams(new TableRow.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f));
                 cell.setGravity(Gravity.LEFT);
                 cell.setTypeface(LatoLight);
                 cell.setTextSize(cellText);
+
+                if (!(row == 0 || col == 0)) {
+                    cell.setClickable(true);
+                    cell.setOnLongClickListener(new XLongClickListener(context, cell));
+                }
 
                 if (row % 2 == 0) {
                     cell.setTextColor(getResources().getColor(R.color.font_default));
@@ -255,6 +261,9 @@ public class TableFragment extends Fragment {
 
 
                 if (row == 0) {
+                    if( col == 0) {
+                        cell.setLayoutParams(new TableRow.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 0.6f));
+                    }
                     if (table.getContent().size() == 1) {
                         cell.setText(table.getContent().get(row));
                     } else {
@@ -263,14 +272,34 @@ public class TableFragment extends Fragment {
                 } else {
                     if (col == 0) {
                         cell.setText(table.getRowNames()[row]);
+                        cell.setLayoutParams(new TableRow.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 0.6f));
                     } else {
                         String cellString = table.getContent().get(contentIndex++);
+
                         if (cellString.contains("/")) {
                             String firstLine = cellString.split("/")[0];
                             String secondLine = cellString.split("/")[1];
                             cellString = firstLine + "/" + System.getProperty("line.separator") + secondLine;
                         }
-                        cell.setText(cellString);
+
+                        int whiteSpaceCount = cellString.length() - cellString.replaceAll(" ", "").length();
+                        String lastWord = "";
+                        String allButLast = "";
+
+                        if(whiteSpaceCount > 0) {
+                            String[] allWords = cellString.split(" ");
+                            lastWord = allWords[allWords.length - 1];
+                            for(int i = 0;i < allWords.length-1; i++) {
+                                allButLast += allWords[i] + " ";
+                            }
+                        }
+
+                        if(whiteSpaceCount > 0) {
+                            cell.setText(Html.fromHtml(allButLast +  "<b>" + lastWord + "</b>"));
+                        }
+                        else {
+                            cell.setText(cellString);
+                        }
 
                     }
                 }
@@ -291,8 +320,9 @@ public class TableFragment extends Fragment {
         TableRow tr = new TableRow(context);
         final TextView cell = new TextView(context);
         cell.setLayoutParams(new TableRow.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, 1f));
-        cell.setMinHeight(80);
-        cell.setPadding(20, 10, 0, 0);
+        cell.setHeight(50);
+        cell.setPadding(20, 5, 0, 0);
+        cell.setTextSize(20);
         cell.setBackgroundResource(R.drawable.top_border_orange);
         cell.setTypeface(LatoLight);
         cell.setTextColor(getResources().getColor(R.color.white));
