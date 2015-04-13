@@ -40,6 +40,8 @@ import is.arnastofnun.DB.DBController;
 import is.arnastofnun.parser.WordResult;
 import is.arnastofnun.utils.CustomDialog;
 import is.arnastofnun.utils.InputValidator;
+import is.arnastofnun.utils.NetworkStateListener;
+import is.arnastofnun.utils.NotificationDialog;
 
 
 /**
@@ -141,7 +143,7 @@ public class MainActivity extends NavDrawer implements CustomDialog.DialogListen
          */
         EditText editText = (EditText) findViewById(R.id.mainSearch);
         editText.setOnKeyListener(this);
-
+        /*
         Button b = (Button) findViewById(R.id.tutbutton);
         b.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -150,7 +152,7 @@ public class MainActivity extends NavDrawer implements CustomDialog.DialogListen
                 startActivity(intent);
             }
         });
-
+        */
 	}
 
     /**
@@ -293,7 +295,13 @@ public class MainActivity extends NavDrawer implements CustomDialog.DialogListen
 		String word = editText.getText().toString();
 		
 		if(word.isEmpty())  {
-			Toast.makeText(this, "Vinsamlegasta sláið inn orð í reitinn hér að ofan", Toast.LENGTH_SHORT).show();
+			//Toast.makeText(this, "Vinsamlegasta sláið inn orð í reitinn hér að ofan", Toast.LENGTH_SHORT).show();
+            Bundle bundle = new Bundle();
+            bundle.putBoolean("isError", true);
+            bundle.putString("message", "Vinsamlegasta sláið inn leitarorð");
+            android.app.DialogFragment errorDialog = new NotificationDialog();
+            errorDialog.setArguments(bundle);
+            errorDialog.show(getFragmentManager(), "0");
 		}
         else {
             setLastSearchedWord(word);
@@ -305,7 +313,7 @@ public class MainActivity extends NavDrawer implements CustomDialog.DialogListen
                 }
                 catch (Exception e) {
                     setWordResult(null);
-                    //TODO : Errorhandling
+                    //TODO : Errorhandling, Edit : taken care of in checkWordCount
                     Toast.makeText(MainActivity.this, "Ekki tokst ad na sambandi vid bin", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -408,10 +416,42 @@ public class MainActivity extends NavDrawer implements CustomDialog.DialogListen
 	private void checkWordCount() {
 
         if(this.wR == null) {
-            //TODO : Errorhandling
-            Toast.makeText(this, "WordResult is null", Toast.LENGTH_SHORT).show();
+            if(!new NetworkStateListener(this).isConnectionActive()) {
+                Bundle bundle = new Bundle();
+                bundle.putBoolean("isError", true);
+                bundle.putString("message", "Beygðu nær ekki sambandi við veraldarvefinn");
+                android.app.DialogFragment errorDialog = new NotificationDialog();
+                errorDialog.setArguments(bundle);
+                errorDialog.show(getFragmentManager(), "0");
+            }
+            else {
+                Bundle bundle = new Bundle();
+                bundle.putBoolean("isError", true);
+                bundle.putString("message", "Beygðu nær ekki sambandi við gagnagrunn Árnastofnunnar");
+                android.app.DialogFragment errorDialog = new NotificationDialog();
+                errorDialog.setArguments(bundle);
+                errorDialog.show(getFragmentManager(), "0");
+            }
             return;
         }
+
+        try {
+            DBController controller = new DBController(MainActivity.this);
+            if(controller.fetchObeygjanlegt(wR.getSearchWord()) != null) {
+                Bundle bundle = new Bundle();
+                bundle.putBoolean("isError", false);
+                bundle.putString("message", "Orðið " + wR.getSearchWord() + " er óbeygjanlegt");
+                android.app.DialogFragment notiDialog = new NotificationDialog();
+                notiDialog.setArguments(bundle);
+                notiDialog.show(getFragmentManager(), "0");
+                return;
+            }
+
+        }
+        catch (Exception e) {
+            // Do Nothing
+        }
+
 
         String desc = this.wR.getDescription();
 
@@ -435,16 +475,12 @@ public class MainActivity extends NavDrawer implements CustomDialog.DialogListen
             SkrambiHelper sHelper = new SkrambiHelper(MainActivity.this);
             String[] correctedWords = sHelper.getSpellingCorrection(wR.getSearchWord());
             if( correctedWords == null || correctedWords[0].equals("")) {
-                DBController controller = new DBController(MainActivity.this);
-                if(controller.fetchObeygjanlegt(wR.getSearchWord()) != null) {
-                    //TODO : ErrorHandling
-                    Toast.makeText(this, wR.getSearchWord() + " er obegjanlegt ord", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                else {
-                    //TODO : Errorhandling
-                    Toast.makeText(this, "Engin leitarnidurstada fannst", Toast.LENGTH_SHORT).show();
-                }
+                Bundle bundle = new Bundle();
+                bundle.putBoolean("isError", false);
+                bundle.putString("message", "Engar leitarniðurstöður fundust");
+                android.app.DialogFragment notiDialog = new NotificationDialog();
+                notiDialog.setArguments(bundle);
+                notiDialog.show(getFragmentManager(), "0");
             }
             else {
                 Bundle bundle = new Bundle();
