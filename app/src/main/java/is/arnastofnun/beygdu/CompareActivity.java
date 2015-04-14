@@ -21,6 +21,17 @@ import is.arnastofnun.parser.Tables;
 import is.arnastofnun.utils.BeygduUtilities;
 import is.arnastofnun.utils.TableFragment;
 
+/**
+ * @author Jón Friðrik
+ * @since 13.04.15
+ * @version 1.0
+ *
+ * An activity the shows tables which the user has selected to compare. If the user has
+ * selected less than 2 tables it shows a textview telling the user to select more tables
+ * to see them in the activty. The Activity has one button for clearing the compered tables
+ * and also a TableLayout to put the tableFragments in.
+ *
+ */
 public class CompareActivity extends NavDrawer {
 
     private TableLayout tableLayout;
@@ -104,7 +115,11 @@ public class CompareActivity extends NavDrawer {
         }
     }
 
-
+    /**
+     * cleares the compareTables list and calls removeAllFromCompareTable method in DBController.
+     *
+     * @param view
+     */
     public void clearBtnOnClick(@SuppressWarnings("unused") View view){
         DBController controller = new DBController(this);
         controller.removeAllFromCompareTable();

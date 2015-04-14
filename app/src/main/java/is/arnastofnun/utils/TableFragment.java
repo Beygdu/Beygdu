@@ -389,6 +389,17 @@ public class TableFragment extends Fragment {
         createTable(table);
     }
 
+    /**
+     * Creates a clicklistener
+     *
+     * @param wordTitle the title of the word
+     * @param blockTitle the title of the block
+     * @param tableTitle the title of the table
+     * @param cell the cell on which the listener is placed.
+     * @param tables the table
+     * @param chosen true if the table is already chosen
+     * @return the clickListener
+     */
     private View.OnClickListener getCompareClickListener(final String wordTitle, final String blockTitle, final String tableTitle, final TextView cell, final Tables tables, final boolean chosen) {
         View.OnClickListener clickListener = new View.OnClickListener() {
             private boolean copyState = chosen;

@@ -102,6 +102,14 @@ public class DBController {
         close(cursor);
     }
 
+    /**
+     *  inserts the table into the comparetable table in the db
+     *
+     * @param wordTitle the title of the word
+     * @param blockTitle the title of the block
+     * @param headerTitle the title of the table
+     * @param table the table
+     */
     public void insertCompareTable(String wordTitle, String blockTitle, String headerTitle, Tables table){
         try {
             open();
