@@ -320,7 +320,6 @@ public class TableFragment extends Fragment {
         TableRow tr = new TableRow(context);
         final TextView cell = new TextView(context);
         cell.setLayoutParams(new TableRow.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, 1f));
-        cell.setHeight(50);
         cell.setPadding(20, 5, 0, 0);
         cell.setTextSize(20);
         cell.setBackgroundResource(R.drawable.top_border_orange);
