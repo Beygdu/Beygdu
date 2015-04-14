@@ -1,7 +1,9 @@
 package is.arnastofnun.utils;
 
 /**
- * Created by arnarjons on 14.4.2015.
+ * @author Arnar Jonsson
+ * @version 0.1
+ * @since  14.4.2015.
  */
 public class OutputValidator {
 
@@ -10,16 +12,21 @@ public class OutputValidator {
     ///
     private boolean isError = false;
     private String errorString = null;
-    public static final String OUTPUTVALIDATOR_ERROR_1 = "";
-    public static final String OUTPUTVALIDATOR_ERROR_2 = "";
 
     ///
     // Validators variables
     ///
-    private String inputString;
+    private Object input;
+    private Object output;
 
-    public OutputValidator(String inputString) {
-        this.inputString = inputString;
+    /**
+     * OutputValidator
+     * A zero logic outputvalidator with errorhandling
+     * @param input
+     */
+    
+    public OutputValidator(Object input) {
+        this.input = input;
 
 
     }
@@ -28,6 +35,35 @@ public class OutputValidator {
     // Get/Set Methods
     ///
 
+    /**
+     * Resets the validators input
+     * @param input
+     */
+    public void setInput(Object input) {
+        this.input = input;
+    }
+
+    /**
+     * @return The validators inputString
+     */
+    public Object getInput() {
+        return this.input;
+    }
+
+    /**
+     * @return The validators latest error message, if any
+     */
+    public String getErrorMessage() {
+        return this.errorString;
+    }
+
+    /**
+     * @return Validity of the input
+     */
+    public boolean isLegal() {
+        return this.isError;
+    }
+
     ///
     // Validators inner logic
     ///
@@ -35,4 +71,12 @@ public class OutputValidator {
     ///
     // Result Handling
     ///
+
+    /**
+     * @return The validators output, if any
+     */
+    public Object getOutput() {
+        if(!isError) return this.output;
+        return null;
+    }
 }
