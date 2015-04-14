@@ -207,4 +207,8 @@ public class SkrambiValidator {
         return true;
     }
 
+    public String asString() {
+        return null;
+    }
+
 }
