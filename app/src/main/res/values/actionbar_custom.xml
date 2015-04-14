@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- the theme applied to the application or activity -->
+    <style
+        name="TutorialActivityTheme"
+        parent="@style/Theme.AppCompat.Light.DarkActionBar">
+
+        <item name="android:actionBarStyle">@style/TutorialActionBar</item>
+        <item name="actionBarStyle">@style/TutorialActionBar</item>
+
+    </style>
+
+    <!-- ActionBar styles -->
+    <style
+        name="TutorialActionBar"
+        parent="@style/Widget.AppCompat.Light.ActionBar.Solid.Inverse">
+        <item name="android:background">@color/d_blue</item>
+        <item name="background">@color/d_blue</item>
+
+    </style>
+</resources>

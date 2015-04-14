@@ -1,66 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fab="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@drawable/blurredbackground">
+    android:background="@color/d_black">
+        <TextView
+            android:id="@+id/search_result"
+            android:layout_width="fill_parent"
+            android:layout_height="150dp"
+            android:minHeight="150dp"
+            android:textColor="@color/white"
+            android:background="@color/d_blue"
+            android:paddingLeft="25dp"
+            android:paddingRight="25dp"
+            android:paddingTop="20dp"
+            android:paddingBottom="20dp"/>
+        <com.software.shell.fab.ActionButton
+            android:id="@+id/circlejon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="-30dp"
+            android:layout_marginRight="25dp"
+            android:layout_gravity="bottom|right"
+            fab:type="DEFAULT"
+            fab:button_color="#FF5722"
+            fab:image="@drawable/ic_action_star"
+            fab:image_size="28dp"
+            fab:shadow_color="#000000"
+            fab:shadow_radius="1.0dp"
+            fab:shadow_xOffset="0.5dp"
+            fab:shadow_yOffset="1.0dp"
+            fab:show_animation="@anim/fab_roll_from_down"
+            fab:hide_animation="@anim/fab_roll_to_down"/>
     <ScrollView
         android:id="@+id/scrollview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingLeft="10dp"
-        android:paddingTop="10dp"
         android:paddingBottom="10dp"
         android:fillViewport="true"
-        android:scrollbarStyle="outsideInset"
-        android:background="@drawable/gradient_image"
+        android:background="@color/d_black"
         android:scrollbars="horizontal|vertical">
-        <HorizontalScrollView
+        <!--HorizontalScrollView
             android:id="@+id/horizontalView"
             android:layout_height="fill_parent"
-            android:layout_width="match_parent"
+            android:layout_width="fill_parent"
             android:fillViewport="true"
-            android:scrollbars="horizontal|vertical"
-            android:layout_marginTop="5dip">
-
+            android:scrollbars="horizontal|vertical"-->
             <TableLayout
                 android:id="@+id/data_table"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
-                <!--TableRow>
-                    <Button
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/green_light"
-                        android:background="@color/d_GreenLight"
-                        android:text="Green"/>
-                    <Button
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/blue"
-                        android:background="@color/d_blue"
-                        android:text="Blue"/>
-                    <Button
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/red"
-                        android:background="@color/red"
-                        android:text="Red"/>
-                    <Button
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/orange"
-                        android:background="@color/d_Orange"
-                        android:text="Orange"/>
-                    <Button
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/green"
-                        android:background="@color/d_GreenDark"
-                        android:text="Green"/>
-                </TableRow-->
-            </TableLayout>
-        </HorizontalScrollView>
+                android:layout_height="match_parent"
+                android:layout_margin="10dp">
+             </TableLayout>
+        <!--/HorizontalScrollView-->
 
     </ScrollView>
 

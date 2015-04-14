@@ -1,28 +1,21 @@
 package is.arnastofnun.beygdu;
 
-import android.animation.AnimatorInflater;
-import android.animation.AnimatorSet;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.graphics.Point;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.DrawableRes;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.NavUtils;
-import android.util.DisplayMetrics;
+import android.text.Html;
 import android.util.Log;
 import android.view.Display;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.ViewGroup;
 import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -32,6 +25,7 @@ import java.util.ArrayList;
 import is.arnastofnun.DB.DBController;
 import is.arnastofnun.parser.Block;
 import is.arnastofnun.parser.WordResult;
+import is.arnastofnun.utils.BeygduUtilities;
 import is.arnastofnun.utils.TableFragment;
 
 /**
@@ -96,8 +90,8 @@ public class BeygingarActivity extends NavDrawer {
         Display display = getWindowManager().getDefaultDisplay();
         Point size = new Point();
         display.getSize(size);
-        width = convertPixelsToDp(size.x);
-        height = convertPixelsToDp(size.y);
+        width = BeygduUtilities.convertPixelsToDp(size.x, this);
+        height = BeygduUtilities.convertPixelsToDp(size.y, this);
 
         //Set typeface for fonts
         LatoBold = Typeface.createFromAsset(getAssets(), "fonts/Lato-Bold.ttf");
@@ -204,57 +198,35 @@ public class BeygingarActivity extends NavDrawer {
         return firstWord;
     }
 
-
-    /**
-     * This method converts device specific pixels to density independent pixels.
-     * @param px A value in px (pixels) unit. Which we need to convert into db
-     * @return A float value to represent dp equivalent to px value
-     */
-    public float convertPixelsToDp(float px){
-        Resources resources = this.getResources();
-        DisplayMetrics metrics = resources.getDisplayMetrics();
-        float dp = px / (metrics.densityDpi / 160f);
-        return dp;
-    }
-
-    public int getScreenWidth() {
-        Display display = getWindowManager().getDefaultDisplay();
-        Point size = new Point();
-        display.getSize(size);
-        int width = size.x;
-        return width;
-    }
-
-	
 	/**
 	 * Constructs a TextView with the title of the word and possibly a TextView with a note about the word, if it exits, 
 	 * and puts them into the tableLayout. Then a TableFragment is constructed for each block in the word.
 	 */
 	private void initTables(){
 		//SetTitle
-		TextView titleDesc = new TextView(this);
-        titleDesc.setText(words.getTitle());
+        TextView titleDesc = (TextView)findViewById(R.id.search_result);
+        String[] titleArr = words.getTitle().split(" ", 2);
+        String firstWord = titleArr[0];
+        String theRest = titleArr[1];
+        titleDesc.setText(Html.fromHtml("<b><big>" + firstWord + "</big></b>" + "\n" + "<small>" + theRest + "</small>"));
+
         if (320 > width && width < 384) {
-            titleDesc.setTextSize(20);
+            titleDesc.setTextSize(35);
         }
         else if(384 > width && width < 600) {
-            titleDesc.setTextSize(32);
+            titleDesc.setTextSize(35);
         }
         else if(width > 600){
-            titleDesc.setTextSize(50);
+            titleDesc.setTextSize(35);
         }
-		titleDesc.setMinHeight(130);
-		titleDesc.setTypeface(LatoSemiBold);
+        titleDesc.setTypeface(LatoLight);
 
-        titleDesc.setTextColor(getResources().getColor(R.color.white));
-        tableLayout.addView(titleDesc);
-		
 		//SetNote
 		if(!words.getWarning().equals("")) {
 			TextView note = new TextView(this);
 			note.setText(words.getWarning());
             note.setTypeface(LatoLight);
-            note.setMaxWidth(getScreenWidth());
+            note.setMaxWidth(BeygduUtilities.getScreenWidth(getWindowManager().getDefaultDisplay()));
 			note.setBackgroundResource(R.drawable.noteborder);
 			tableLayout.addView(note);
 		}
@@ -280,7 +252,7 @@ public class BeygingarActivity extends NavDrawer {
                 blockTitle.setTextColor(getResources().getColor(R.color.white));
                 blockTitle.setPadding(0, 10, 0, 10);
 
-                TableFragment tFragment = new TableFragment(BeygingarActivity.this, tableLayout, block, blockTitle);
+                TableFragment tFragment = new TableFragment(BeygingarActivity.this, tableLayout, block, blockTitle, firstWord, block.getTitle());
 				getFragmentManager().beginTransaction().add(tableLayout.getId(), tFragment).commit();
 				tables.add(tFragment);				
 			}

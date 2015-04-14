@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.graphics.Point;
 import android.graphics.Typeface;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -17,6 +18,7 @@ import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Display;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -25,17 +27,25 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.software.shell.fab.ActionButton;
+
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
+import is.arnastofnun.AsyncTasks.BinAsyncTask;
+import is.arnastofnun.AsyncTasks.SkrambiAsyncTask;
+import is.arnastofnun.BeygduTutorial.TutorialActivity;
 import is.arnastofnun.DB.DBController;
 import is.arnastofnun.parser.WordResult;
 import is.arnastofnun.utils.CustomDialog;
 import is.arnastofnun.utils.InputValidator;
+import is.arnastofnun.utils.NetworkStateListener;
+import is.arnastofnun.utils.NotificationDialog;
 
 
 /**
@@ -137,7 +147,16 @@ public class MainActivity extends NavDrawer implements CustomDialog.DialogListen
          */
         EditText editText = (EditText) findViewById(R.id.mainSearch);
         editText.setOnKeyListener(this);
-
+        /*
+        Button b = (Button) findViewById(R.id.tutbutton);
+        b.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), TutorialActivity.class);
+                startActivity(intent);
+            }
+        });
+        */
 	}
 
     /**
@@ -150,30 +169,24 @@ public class MainActivity extends NavDrawer implements CustomDialog.DialogListen
 
     public void headerText() {
         //Set typeface for fonts
-        LatoBold = Typeface.createFromAsset(getAssets(), "fonts/Lato-Bold.ttf");
-        LatoSemiBold = Typeface.createFromAsset(getAssets(), "fonts/Lato-Semibold.ttf");
         LatoLight = Typeface.createFromAsset(getAssets(), "fonts/Lato-Light.ttf");
 
+        ActionButton circlestar = (ActionButton) findViewById(R.id.circleStar);
         TextView header = (TextView)findViewById(R.id.title);
         TableRow rowSearch = (TableRow) findViewById(R.id.search_row);
 
+        TextView copyright = (TextView)findViewById(R.id.copyright);
+        copyright.setTypeface(LatoLight);
+
         header.setTypeface(LatoLight);
-        if (320 > width && width < 384) {
-            header.setTextSize(30);
-        }
-        else if(384 > width && width < 600) {
-            header.setTextSize(50);
-        }
-        else if(width > 600){
-            header.setTextSize(50);
-        }
+
 
         Animation animateFromTop = AnimationUtils.loadAnimation(this, R.animator.animator);
         Animation fadeIn = AnimationUtils.loadAnimation(this, R.animator.fadein);
+        Animation openScale = AnimationUtils.loadAnimation(this, R.animator.activity_open_scale);
         rowSearch.startAnimation(fadeIn);
         header.startAnimation(animateFromTop);
-
-
+        circlestar.playShowAnimation();
     }
 
 
@@ -196,6 +209,14 @@ public class MainActivity extends NavDrawer implements CustomDialog.DialogListen
         return dp;
     }
 
+
+    public int getScreenWidth() {
+        Display display = getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        int width = size.x;
+        return width;
+    }
 
 	/**
 	 * Checks if the user is connected to a network.
@@ -278,25 +299,36 @@ public class MainActivity extends NavDrawer implements CustomDialog.DialogListen
 		String word = editText.getText().toString();
 		
 		if(word.isEmpty())  {
-			Toast.makeText(this, "Vinsamlegasta sláið inn orð í reitinn hér að ofan", Toast.LENGTH_SHORT).show();
+			//Toast.makeText(this, "Vinsamlegasta sláið inn orð í reitinn hér að ofan", Toast.LENGTH_SHORT).show();
+            Bundle bundle = new Bundle();
+            bundle.putBoolean("isError", true);
+            bundle.putString("message", "Vinsamlegasta sláið inn leitarorð");
+            android.app.DialogFragment errorDialog = new NotificationDialog();
+            errorDialog.setArguments(bundle);
+            errorDialog.show(getFragmentManager(), "0");
 		}
         else {
             setLastSearchedWord(word);
             InputValidator iValidator = new InputValidator(word, INPUTVALIDATOR_ERRORSYMBOLS);
             if(iValidator.isLegal()) {
                 try {
-                    BinHelper binHelper = new BinHelper(MainActivity.this);
-                    setWordResult(binHelper.sendThread(word, 1));
+                    setWordResult(new BinAsyncTask(MainActivity.this)
+                            .execute(word, "1").get());
+
                 }
                 catch (Exception e) {
                     setWordResult(null);
-                    //TODO : Errorhandling
-                    Toast.makeText(MainActivity.this, "Ekki tokst ad na sambandi vid bin", Toast.LENGTH_SHORT).show();
+                    //TODO : Errorhandling, Edit : taken care of in checkWordCount
+                    //Toast.makeText(MainActivity.this, "Ekki tokst ad na sambandi vid bin", Toast.LENGTH_SHORT).show();
                 }
             }
             else {
-                //TODO : Errorhandling
-                Toast.makeText(MainActivity.this, iValidator.getErrorCode(), Toast.LENGTH_SHORT).show();
+                Bundle bundle = new Bundle();
+                bundle.putBoolean("isError", true);
+                bundle.putString("message", iValidator.getErrorCode());
+                android.app.DialogFragment errorDialog = new NotificationDialog();
+                errorDialog.setArguments(bundle);
+                errorDialog.show(getFragmentManager(), "0");
             }
         }
 
@@ -319,6 +351,21 @@ public class MainActivity extends NavDrawer implements CustomDialog.DialogListen
         Intent intent = new Intent(MainActivity.this, MapsActivity.class);
         startActivity(intent);
     }
+
+    public void authorClick(@SuppressWarnings("unused")  View view) {
+        Intent intent = new Intent(MainActivity.this, AuthorActivity.class);
+        startActivity(intent);
+    }
+
+    public void phoneClick(@SuppressWarnings("unused")  View view) {
+        Intent callIntent = new Intent(Intent.ACTION_CALL);
+        callIntent.setData(Uri.parse("tel:8666665"));
+        startActivity(callIntent);
+    }
+
+
+
+
 
 
 	
@@ -387,16 +434,49 @@ public class MainActivity extends NavDrawer implements CustomDialog.DialogListen
 	private void checkWordCount() {
 
         if(this.wR == null) {
-            //TODO : Errorhandling
-            Toast.makeText(this, "WordResult is null", Toast.LENGTH_SHORT).show();
+            if(!new NetworkStateListener(this).isConnectionActive()) {
+                Bundle bundle = new Bundle();
+                bundle.putBoolean("isError", true);
+                bundle.putString("message", "Beygðu nær ekki sambandi við veraldarvefinn");
+                android.app.DialogFragment errorDialog = new NotificationDialog();
+                errorDialog.setArguments(bundle);
+                errorDialog.show(getFragmentManager(), "0");
+            }
+            else {
+                Bundle bundle = new Bundle();
+                bundle.putBoolean("isError", true);
+                bundle.putString("message", "Beygðu nær ekki sambandi við gagnagrunn Árnastofnunnar");
+                android.app.DialogFragment errorDialog = new NotificationDialog();
+                errorDialog.setArguments(bundle);
+                errorDialog.show(getFragmentManager(), "0");
+            }
             return;
         }
+
+        try {
+            DBController controller = new DBController(MainActivity.this);
+            if(controller.fetchObeygjanlegt(wR.getSearchWord()) != null) {
+                Bundle bundle = new Bundle();
+                bundle.putBoolean("isError", false);
+                bundle.putString("message", "Orðið " + wR.getSearchWord() + " er óbeygjanlegt");
+                android.app.DialogFragment notiDialog = new NotificationDialog();
+                notiDialog.setArguments(bundle);
+                notiDialog.show(getFragmentManager(), "0");
+                return;
+            }
+
+        }
+        catch (Exception e) {
+            // Do Nothing
+        }
+
 
         String desc = this.wR.getDescription();
 
         if(desc.equals("SingleHit")) {
             WordResult word = this.wR;
             createNewActivity(word);
+            return;
         }
         else if(desc.equals("MultiHit")) {
             Bundle bundle = new Bundle();
@@ -409,34 +489,46 @@ public class MainActivity extends NavDrawer implements CustomDialog.DialogListen
             android.app.DialogFragment multiDialog = new CustomDialog();
             multiDialog.setArguments(bundle);
             multiDialog.show(getFragmentManager(), "0");
+            return;
         }
         else {
-            SkrambiHelper sHelper = new SkrambiHelper(MainActivity.this);
-            String[] correctedWords = sHelper.getSpellingCorrection(wR.getSearchWord());
-            if( correctedWords == null || correctedWords[0].equals("")) {
-                DBController controller = new DBController(MainActivity.this);
-                if(controller.fetchObeygjanlegt(wR.getSearchWord()) != null) {
-                    //TODO : ErrorHandling
-                    Toast.makeText(this, wR.getSearchWord() + " er obegjanlegt ord", Toast.LENGTH_SHORT).show();
+            String[] correctedWords;
+            try {
+                correctedWords = new SkrambiAsyncTask(this).execute(wR.getSearchWord()).get();
+                if( correctedWords[0] != null ) {
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("id", 1);
+                    bundle.putString("title", getString(R.string.SkrambiDialog));
+                    bundle.putString("positiveButtonText", getString(R.string.PositiveButton));
+                    bundle.putString("negativeButtonText", getString(R.string.NegativeButton));
+                    bundle.putStringArray("descriptions", correctedWords);
+                    bundle.putStringArray("descriptionActions", correctedWords);
+                    android.app.DialogFragment multiDialog = new CustomDialog();
+                    multiDialog.setArguments(bundle);
+                    multiDialog.show(getFragmentManager(), "0");
                     return;
                 }
+                // TODO : REMOVE DEBUG STATEMENT
                 else {
-                    //TODO : Errorhandling
-                    Toast.makeText(this, "Engin leitarnidurstada fannst", Toast.LENGTH_SHORT).show();
+                    Bundle bundle = new Bundle();
+                    bundle.putBoolean("isError", true);
+                    bundle.putString("message", correctedWords[0]);
+                    android.app.DialogFragment notiDialog = new NotificationDialog();
+                    notiDialog.setArguments(bundle);
+                    notiDialog.show(getFragmentManager(), "0");
+                    return;
                 }
             }
-            else {
+            catch (Exception e) {
                 Bundle bundle = new Bundle();
-                bundle.putInt("id", 1);
-                bundle.putString("title", getString(R.string.SkrambiDialog));
-                bundle.putString("positiveButtonText", getString(R.string.PositiveButton));
-                bundle.putString("negativeButtonText", getString(R.string.NegativeButton));
-                bundle.putStringArray("descriptions", correctedWords);
-                bundle.putStringArray("descriptionActions", correctedWords);
-                android.app.DialogFragment multiDialog = new CustomDialog();
-                multiDialog.setArguments(bundle);
-                multiDialog.show(getFragmentManager(), "0");
+                bundle.putBoolean("isError", false);
+                bundle.putString("message", "Engar leitarniðurstöður fundust");
+                android.app.DialogFragment notiDialog = new NotificationDialog();
+                notiDialog.setArguments(bundle);
+                notiDialog.show(getFragmentManager(), "0");
+                return;
             }
+
         }
 
 	}
@@ -477,6 +569,27 @@ public class MainActivity extends NavDrawer implements CustomDialog.DialogListen
     // INTERFACE HANDLER FOR CUSTOMDIALOG RESULTS
     @Override
     public void onPositiveButtonClick(String selectedItem, int id) {
+
+        switch (id) {
+            case 0:
+                try {
+                    setWordResult(new BinAsyncTask(MainActivity.this).execute(selectedItem, "0").get());
+                }
+                catch (Exception e) {
+                    setWordResult(null);
+                }
+            case 1:
+                try {
+                    setWordResult(new BinAsyncTask(MainActivity.this).execute(selectedItem, "1").get());
+                }
+                catch (Exception f) {
+                    setWordResult(null);
+                }
+            default:
+                // Do Nothing
+
+        }
+
         BinHelper binHelper = new BinHelper(MainActivity.this);
         try {
             setWordResult(binHelper.sendThread(selectedItem, 1));

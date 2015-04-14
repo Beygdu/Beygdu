@@ -1,6 +1,7 @@
 package is.arnastofnun.beygdu;
 
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -26,6 +27,8 @@ import is.arnastofnun.DB.DBController;
  */
 
 public class StatisticsActivity extends NavDrawer {
+
+    private Typeface LatoLight;
 
     /**
      * Creates the activity and fetches statistics from the database. Then constructs a pieChart
@@ -77,12 +80,19 @@ public class StatisticsActivity extends NavDrawer {
             }
         }
 
+        LatoLight = Typeface.createFromAsset(getAssets(), "fonts/Lato-Light.ttf");
+
         PieDataSet data = new PieDataSet(entries, "");
 
-        data.setColors(new int[]{Color.parseColor("#428bca"), Color.parseColor("#5cb85c"), Color.parseColor("#d9534f"), Color.parseColor("#5bc0de"), Color.parseColor("#f0ad4e")});
+        data.setColors(new int[]{Color.parseColor("#669900"), Color.parseColor("#FF5722"), Color.parseColor("#2196F3"), Color.parseColor("#5bc0de"), Color.parseColor("#f0ad4e")});
+        data.setValueTextSize(15);
+
+        data.setValueTypeface(LatoLight);
         chart.setData(new PieData(labels, data));
         chart.setCenterText("Orðflokkar");
         chart.setDescription("Fjöldi leita: " + sum);
+        chart.setCenterTextSize(30);
+        chart.setCenterTextTypeface(LatoLight);
         chart.invalidate();
         chart.animateY(1500);
 
@@ -103,12 +113,6 @@ public class StatisticsActivity extends NavDrawer {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
         return super.onOptionsItemSelected(item);
     }
 }

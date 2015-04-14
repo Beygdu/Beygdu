@@ -1,0 +1,181 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fab="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    tools:context="is.arnastofnun.beygdu.AuthorActivity">
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="fill_parent"
+            android:layout_height="150dp"
+            android:textColor="@color/white"
+            android:background="@color/d_blue"
+            android:paddingLeft="50dp"
+            android:paddingRight="50dp"
+            android:paddingTop="20dp"/>
+        <com.software.shell.fab.ActionButton
+            android:id="@+id/circleStar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/title"
+            android:layout_alignRight="@+id/title"
+            android:layout_marginBottom="-30dp"
+            android:layout_marginRight="25dp"
+            fab:type="DEFAULT"
+            fab:button_color="#FF5722"
+            fab:image="@drawable/ic_action_user"
+            fab:image_size="28dp"
+            fab:shadow_color="#757575"
+            fab:shadow_radius="1.0dp"
+            fab:shadow_xOffset="0.5dp"
+            fab:shadow_yOffset="1.0dp"
+            fab:show_animation="@anim/fab_roll_from_down"
+            fab:hide_animation="@anim/fab_roll_to_down"
+            />
+
+    <ScrollView
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:layout_marginTop="190dp">
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+
+            <!-- ARNAR -->
+            <TableRow
+                android:layout_height="wrap_content"
+                android:layout_width="fill_parent"
+                android:layout_margin="15dp">
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        xmlns:app="http://schemas.android.com/apk/res-auto"
+                        android:id="@+id/arnarImg"
+                        android:layout_width="96dp"
+                        android:layout_height="96dp"
+                        android:src="@drawable/arnar2"
+                        android:layout_marginRight="10dp"/>
+
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical" android:gravity="center_vertical">
+
+                    <TextView android:id="@+id/arnarTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textStyle="bold"
+                        android:text="@string/daniel"/>
+
+                    <TextView android:id="@+id/arnarDesc"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textStyle="normal"
+                        android:text="@string/danielDesc" />
+                </LinearLayout>
+            </TableRow>
+
+
+            <!-- Daniel -->
+            <TableRow
+                android:layout_height="wrap_content"
+                android:layout_width="fill_parent"
+                android:layout_margin="15dp">
+                <de.hdodenhof.circleimageview.CircleImageView
+                    xmlns:app="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/danielImg"
+                    android:layout_width="96dp"
+                    android:layout_height="96dp"
+                    android:src="@drawable/daniel2"
+                    android:layout_marginRight="10dp"/>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical" android:gravity="center_vertical">
+
+                    <TextView android:id="@+id/danielTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textStyle="bold"
+                        android:text="@string/daniel"/>
+
+                    <TextView android:id="@+id/danielDesc"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textStyle="normal"
+                        android:text="@string/danielDesc" />
+                </LinearLayout>
+            </TableRow>
+
+
+            <!-- Jon -->
+            <TableRow
+                android:layout_height="wrap_content"
+                android:layout_width="fill_parent"
+                android:layout_margin="15dp">
+                <de.hdodenhof.circleimageview.CircleImageView
+                    xmlns:app="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/jonImg"
+                    android:layout_width="96dp"
+                    android:layout_height="96dp"
+                    android:src="@drawable/jon"
+                    android:layout_marginRight="10dp"/>
+
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical" android:gravity="center_vertical">
+
+                    <TextView android:id="@+id/jonTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textStyle="bold"
+                        android:text="@string/jon"/>
+
+                    <TextView android:id="@+id/jonDesc"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textStyle="normal"
+                        android:text="@string/danielDesc" />
+                </LinearLayout>
+            </TableRow>
+
+            <!-- Snaer -->
+            <TableRow
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_margin="15dp">
+                <de.hdodenhof.circleimageview.CircleImageView
+                    xmlns:app="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/snaerImg"
+                    android:layout_width="96dp"
+                    android:layout_height="96dp"
+                    android:src="@drawable/snaer2"
+                    android:layout_marginRight="10dp"/>
+
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical" android:gravity="center_vertical">
+
+                    <TextView android:id="@+id/snaerTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textStyle="bold"
+                        android:text="@string/snaer"/>
+
+                    <TextView android:id="@+id/snaerDesc"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textStyle="normal"
+                        android:text="@string/snaerDesc" />
+                </LinearLayout>
+            </TableRow>
+        </TableLayout>
+    </ScrollView>
+
+</RelativeLayout>

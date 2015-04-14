@@ -15,6 +15,7 @@ import is.arnastofnun.SkrambiWebTool.SkrambiWT;
  * @author Arnar Jonsson
  * @since 19.3.2015
  * @version 1.0
+ * @deprecated since 14.04.2015
  */
 public class SkrambiHelper {
 

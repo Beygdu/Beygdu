@@ -13,10 +13,13 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Collections;
+
+import is.arnastofnun.BeygduTutorial.TutorialActivity;
 
 
 /**
@@ -165,6 +168,7 @@ public class NavDrawer extends FragmentActivity{
             isLaunch = false;
             openActivity(0);
         }
+
     }
 
 
@@ -193,6 +197,22 @@ public class NavDrawer extends FragmentActivity{
                 break;
             case 3:
                 startActivity(new Intent(this, StatisticsActivity.class));
+                activityAnimationTransition();
+                break;
+            case 4:
+                startActivity(new Intent(this, AuthorActivity.class));
+                activityAnimationTransition();
+                break;
+            case 5:
+                startActivity(new Intent(this, MapsActivity.class));
+                activityAnimationTransition();
+                break;
+            case 6:
+                startActivity(new Intent(this, CompareActivity.class));
+                activityAnimationTransition();
+                break;
+            case 7:
+                startActivity(new Intent(this, TutorialActivity.class));
                 activityAnimationTransition();
                 break;
         }
