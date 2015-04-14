@@ -1,42 +1,24 @@
 package is.arnastofnun.utils;
 
-import android.animation.ArgbEvaluator;
-import android.animation.ObjectAnimator;
-import android.animation.ValueAnimator;
 import android.app.Fragment;
-import android.content.ClipData;
-import android.content.ClipboardManager;
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.Color;
+import android.content.Intent;
 import android.graphics.Typeface;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.text.Html;
-import android.text.SpannableString;
-import android.text.SpannableStringBuilder;
-import android.text.style.ForegroundColorSpan;
-import android.util.Property;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewGroup.LayoutParams;
-import android.view.animation.DecelerateInterpolator;
-import android.widget.Button;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
-import com.software.shell.fab.FloatingActionButton;
-import com.software.shell.fab.ActionButton;
+import java.util.ArrayList;
 
-import java.lang.reflect.Array;
-
+import is.arnastofnun.DB.DBController;
+import is.arnastofnun.beygdu.BeygingarActivity;
+import is.arnastofnun.beygdu.CompareActivity;
 import is.arnastofnun.beygdu.R;
 import is.arnastofnun.parser.Block;
 import is.arnastofnun.parser.SubBlock;
@@ -62,7 +44,14 @@ public class TableFragment extends Fragment {
     private Context context;
     private TableLayout tableLayout;
     private Block block;
+    private Tables table;
     private TextView title;
+    private String dBWordTitle;
+    private String dBBlockTitle;
+
+    private DBController controller;
+    private boolean compareTableFragment = false;
+    private ArrayList<Tables> comparedTables;
 
     private long initTime = -1;
 
@@ -88,11 +77,14 @@ public class TableFragment extends Fragment {
      * @param block       - inniheldur raðar og column headerana og contentið á töflunni
      * @param title       - er titilinn á töflunni
      */
-    public TableFragment(Context context, TableLayout tableLayout, Block block, TextView title) {
+    public TableFragment(Context context, TableLayout tableLayout, Block block, TextView title, String wordTitle, String blockTitle) {
         this.context = context;
         this.tableLayout = tableLayout;
         this.block = block;
         this.title = title;
+
+        dBWordTitle = wordTitle;
+        dBBlockTitle = blockTitle;
 
         // Fonts
         LatoBold = Typeface.createFromAsset(context.getAssets(), "fonts/Lato-Bold.ttf");
@@ -101,18 +93,38 @@ public class TableFragment extends Fragment {
     }
 
     /**
-     * @return the title of the table
+     * @param context er contextið sem taflan mun birtast í.
+     * @param tableLayout - er layoutið sem taflan er sett í.
+     * @param table - er taflan
      */
-    public CharSequence getTitle() {
-        return title.getText();
+    public TableFragment(Context context, TableLayout tableLayout, Tables table, String wordTitle) {
+        this.context = context;
+        this.tableLayout = tableLayout;
+        this.table = table;
+        compareTableFragment = true;
+
+        // Fonts
+        LatoBold = Typeface.createFromAsset(context.getAssets(), "fonts/Lato-Bold.ttf");
+        LatoSemiBold = Typeface.createFromAsset(context.getAssets(), "fonts/Lato-Semibold.ttf");
+        LatoLight = Typeface.createFromAsset(context.getAssets(), "fonts/Lato-Light.ttf");
     }
 
+    /**
+     * @return the title of the word
+     */
+    public String getTitle() {
+        return title.getText().toString();
+    }
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.table,
-                container, false);
-        createBlock();
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View rootView = inflater.inflate(R.layout.table, container, false);
+        controller = new DBController(context);
+        comparedTables = controller.fetchAllComparableWords();
+        if(compareTableFragment) {
+            createCompareTable(table);
+        } else {
+            createBlock();
+        }
         return rootView;
         //Set typeface for fonts
 
@@ -183,18 +195,14 @@ public class TableFragment extends Fragment {
                 tableTitle.setBackgroundResource(R.drawable.top_border_orange);
                 tableTitle.setPadding(16, 10, 0, 10);
                 tableTitle.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_action_copy, 0);
-                tableTitle.setOnClickListener(new View.OnClickListener() {
-                    private boolean copyState;
-                    public void onClick(View view) {
-                        if (copyState) {
-                            // reset background to default;
-                            tableTitle.setBackgroundResource(R.drawable.top_border_orange);
-                        } else {
-                            tableTitle.setBackgroundResource(R.drawable.top_border_yellow);
-                        }
-                        copyState = !copyState;
+                boolean dbContains = false;
+                for(Tables dBTable : comparedTables) {
+                    if (dBTable.getWordTitle().equals(dBWordTitle) && dBTable.getBlockTitle().equals(dBBlockTitle) && dBTable.getHeader().equals(tables.getTitle())){
+                        dbContains = true;
+                        tableTitle.setBackgroundResource(R.drawable.top_border_yellow);
                     }
-                });
+                }
+                tableTitle.setOnClickListener(getCompareClickListener(dBWordTitle, dBBlockTitle, tables.getTitle(), tableTitle, tables, dbContains));
                 tableLayout.addView(tableTitle);
                 createTable(tables);
             }
@@ -340,21 +348,78 @@ public class TableFragment extends Fragment {
         cell.setOnLongClickListener(new XLongClickListener(context, cell));
         cell.setText(table.getContent().get(0));
         cell.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_action_copy, 0);
-        cell.setOnClickListener(new View.OnClickListener() {
-            private boolean copyState;
+        boolean dbContains = false;
+        for(Tables dBTable : comparedTables) {
+            if (dBTable.getWordTitle().equals(dBWordTitle) && dBTable.getBlockTitle().equals(dBBlockTitle) && dBTable.getHeader().equals(table.getTitle())){
+                dbContains = true;
+                cell.setBackgroundResource(R.drawable.top_border_yellow);
+            }
+        }
+        cell.setOnClickListener(getCompareClickListener(dBWordTitle, dBBlockTitle, table.getTitle(), cell, table, dbContains));
+        dbContains = false;
+
+        tr.addView(cell);
+        tableLayout.addView(tr);
+    }
+
+    private void createCompareTable(Tables table) {
+        TextView tableTitle = new TextView(context);
+        tableTitle.setLayoutParams(new TableRow.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+
+        String label = table.getWordTitle();
+        if (!table.getBlockTitle().equals("")) {
+           label = label + " - " + table.getBlockTitle();
+        }
+        label = label + " - " + table.getHeader();
+        tableTitle.setText(label);
+        tableTitle.setTextSize(subBlockTitleText);
+        tableTitle.setMinHeight(70);
+        tableTitle.setTypeface(LatoLight);
+        tableTitle.setTextColor(getResources().getColor(R.color.white));
+        tableTitle.setPadding(0, 80, 20, 20);
+        tableLayout.addView(tableTitle);
+
+        final TextView tableName = new TextView(context);
+        tableName.setText(table.getTitle());
+        tableName.setTextSize(tableTitleText);
+        tableName.setTextSize(20);
+        tableName.setTypeface(LatoLight);
+        tableName.setTextColor(getResources().getColor(R.color.white));
+        tableName.setBackgroundResource(R.drawable.top_border_orange);
+        tableName.setPadding(16, 5, 0, 10);
+        tableName.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_action_copy, 0);
+        boolean dbContains = false;
+        for(Tables dBTable : comparedTables) {
+            if (dBTable.getWordTitle().equals(table.getWordTitle()) && dBTable.getBlockTitle().equals(table.getBlockTitle()) && dBTable.getHeader().equals(table.getTitle())){
+                dbContains = true;
+                tableName.setBackgroundResource(R.drawable.top_border_yellow);
+            }
+        }
+        tableName.setOnClickListener(getCompareClickListener(table.getWordTitle(), table.getBlockTitle(), table.getTitle(), tableName, table, dbContains));
+        tableLayout.addView(tableName);
+        createTable(table);
+    }
+
+    private View.OnClickListener getCompareClickListener(final String wordTitle, final String blockTitle, final String tableTitle, final TextView cell, final Tables tables, final boolean chosen) {
+        View.OnClickListener clickListener = new View.OnClickListener() {
+            private boolean copyState = chosen;
 
             public void onClick(View view) {
                 if (copyState) {
                     // reset background to default;
                     cell.setBackgroundResource(R.drawable.top_border_orange);
+                    controller.removeCompareTable(wordTitle,blockTitle, tableTitle);
+                    if(context.getClass().getSimpleName().equals(CompareActivity.class.getSimpleName())) {
+                        Intent intent = new Intent(context, CompareActivity.class);
+                        startActivity(intent);
+                    }
                 } else {
                     cell.setBackgroundResource(R.drawable.top_border_yellow);
+                    controller.insertCompareTable(wordTitle, blockTitle, tableTitle, tables);
                 }
                 copyState = !copyState;
             }
-        });
-
-        tr.addView(cell);
-        tableLayout.addView(tr);
+        };
+        return clickListener;
     }
 }

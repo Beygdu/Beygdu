@@ -4,7 +4,13 @@ import android.support.v4.view.ViewPager;
 import android.view.View;
 
 /**
- * Created by arnarjons on 11.4.2015.
+ * @author Arnar Jonsson
+ * @version 0.2
+ * @since  11.4.2015.
+ * Refactored since 5.4.2015, Arnar Jonsson, Daniel Pall Johannson
+ * AnimationTransformer
+ * Handles the animation of TutorialActivity's ViewPager fragment switching
+ * Owns one animation, which is played backwards on a 'back'-swipe
  */
 public class AnimationTransformer implements ViewPager.PageTransformer {
 

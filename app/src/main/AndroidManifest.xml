@@ -93,8 +93,8 @@
             android:label="@string/title_activity_maps" >
         </activity>
         <activity
-            android:name=".is.arnastofnun.beygdur.soonToBeAdded.Author"
-            android:label="@string/title_activity_author" >
+            android:name=".CompareActivity"
+            android:label="@string/title_activity_compare" >
         </activity>
 
         <activity

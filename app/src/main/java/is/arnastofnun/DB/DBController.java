@@ -102,6 +102,24 @@ public class DBController {
         close(cursor);
     }
 
+    public void insertCompareTable(String wordTitle, String blockTitle, String headerTitle, Tables table){
+        try {
+            open();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        ContentValues tableContent = new ContentValues();
+        tableContent.put(DBHelper.WORDTITLE, wordTitle);
+        tableContent.put(DBHelper.BLOCKTITLE, blockTitle);
+        tableContent.put(DBHelper.TABLETITLE, table.getTitle());
+        tableContent.put(DBHelper.COLHEADERS, arrToString(table.getColumnNames()));
+        tableContent.put(DBHelper.ROWHEADERS, arrToString(table.getRowNames()));
+        tableContent.put(DBHelper.CONTENT, arrToString(table.getContent().toArray()));
+        dB.insert(DBHelper.TABLE_COMPARETABLES, null, tableContent);
+        close(null);
+    }
+
     /**
      * Inserts the wordresult into the db.
      *
@@ -252,6 +270,35 @@ public class DBController {
 
         close(cursor);
         return words;
+    }
+
+    /**
+     *
+     * @return a ArrayList of all tables in the compareTable table in the database.
+     */
+    public ArrayList<Tables> fetchAllComparableWords() {
+        ArrayList<Tables> tables = new ArrayList<Tables>();
+        try {
+            open();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        final String myQuery = "SELECT * FROM " +
+                DBHelper.TABLE_COMPARETABLES;
+
+        Cursor cursor = dB.rawQuery(myQuery, null);
+
+        //Create Tables objects and place in ArrayList.
+        for (int i = 0; i < cursor.getCount(); i++) {
+            cursor.moveToPosition(i);
+            tables.add(new Tables(cursor.getString(0), cursor.getString(1), cursor.getString(2), cursor.getString(2), stringToArr(cursor.getString(3)),
+                        stringToArr(cursor.getString(4)), new ArrayList<String>(Arrays.asList(stringToArr(cursor.getString(5))))));
+        }
+
+
+
+        close(cursor);
+        return tables;
     }
 
     /**
@@ -494,6 +541,36 @@ public class DBController {
         int value = cursor.getInt(0);
         close(cursor);
         return value;
+    }
+
+    /**
+     *
+     * @param wordTitle the wordTitle of the word to be removed in the table
+     */
+    public void removeCompareTable(String wordTitle, String blockTitle, String tableTitle) {
+        try {
+            open();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        String whereClause = DBHelper.WORDTITLE + " = '" + wordTitle + "' AND " +
+                             DBHelper.BLOCKTITLE+ " = '" + blockTitle + "' AND " +
+                             DBHelper.TABLETITLE + "= '" + tableTitle + "'";
+        dB.delete(DBHelper.TABLE_COMPARETABLES, whereClause, null);
+        close(null);
+    }
+
+    /**
+     * Removes all rows from compareTable table
+     */
+    public void removeAllFromCompareTable() {
+        try {
+            open();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        dB.delete(DBHelper.TABLE_COMPARETABLES, null, null);
+        close(null);
     }
 
     /**

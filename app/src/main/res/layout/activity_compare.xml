@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fab="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/d_black">
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Hreinsa"
+        android:onClick="clearBtnOnClick"
+        android:id="@+id/clearBtn" />
+
+    <ScrollView
+        android:id="@+id/scrollview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingBottom="10dp"
+        android:fillViewport="true"
+        android:background="@color/d_black"
+        android:scrollbars="horizontal|vertical">
+        <!--HorizontalScrollView
+            android:id="@+id/horizontalView"
+            android:layout_height="fill_parent"
+            android:layout_width="fill_parent"
+            android:fillViewport="true"
+            android:scrollbars="horizontal|vertical"-->
+        <TableLayout
+            android:id="@+id/data_table"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="10dp">
+        </TableLayout>
+        <!--/HorizontalScrollView-->
+
+    </ScrollView>
+
+</LinearLayout>

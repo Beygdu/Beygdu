@@ -4,11 +4,15 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
+import android.app.FragmentManager;
 import android.content.DialogInterface;
 import android.os.Bundle;
 
 /**
- * Created by arnarjons on 19.3.2015.
+ * @author Arnar Jonsson
+ * @version 0.2
+ * @since  19.3.2015.
+ * A Simple AlertDialog
  */
 public class CustomDialog extends DialogFragment {
 
@@ -40,7 +44,7 @@ public class CustomDialog extends DialogFragment {
              * a listener for the cancel button, nothing happens except the dialog closes
              */
             public void onClick(DialogInterface dialog, int id) {
-                // Do nothing
+                dialog.dismiss();
             }
         });
 
@@ -75,6 +79,13 @@ public class CustomDialog extends DialogFragment {
     public interface DialogListener {
         public void onPositiveButtonClick(String selectedItem, int id);
         public void onNegativeButtonClick(String errorString);
+    }
+
+    @Override
+    public void show(FragmentManager manager, String tag) {
+        if (manager.findFragmentByTag(tag) == null) {
+            super.show(manager, tag);
+        }
     }
 
 }

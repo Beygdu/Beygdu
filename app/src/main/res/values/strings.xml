@@ -79,7 +79,9 @@
         <item>Tölfræði</item>
         <item>Höfundar</item>
         <item>Hvar erum við?</item>
+        <item>Bera saman</item>
         <item>Hjálp</item>
+
     </string-array>
     <!-- Keep them in order as the titles are in -->
     <array name="nav_drawer_icons">
@@ -93,7 +95,7 @@
     <string name="title_activity_maps">Hér erum við</string>
     <string name="title_activity_author">Höfundar</string>
     <string name="title_activity_authors">Höfundar</string>
-
+    <string name="title_activity_compare">Bera saman</string>
 
     <!-- Authors of app -->
     <string name="authors">Höfundar Beygðu</string>

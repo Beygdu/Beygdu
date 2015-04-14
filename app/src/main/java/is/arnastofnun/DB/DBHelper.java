@@ -47,6 +47,7 @@ public class DBHelper extends SQLiteOpenHelper{
     public static final String TABLE_TABLES = "tables";
     public static final String TABLE_STATISTICS = "statistics";
     public static final String TABLE_OBEYGJANLEG = "obeygjanleg";
+    public static final String TABLE_COMPARETABLES = "compareTables";
 
     // Table columns
     public static final String WORDID = "wordid";
@@ -57,6 +58,9 @@ public class DBHelper extends SQLiteOpenHelper{
     public static final String DATE = "date";
     public static final String TYPE = "type";
     public static final String TITLE = "title";
+    public static final String WORDTITLE = "wordtitle";
+    public static final String BLOCKTITLE = "blocktitle";
+    public static final String TABLETITLE = "headertitle";
     public static final String NOTE = "note";
     public static final String COLHEADERS = "colheaders";
     public static final String ROWHEADERS = "rowheaders";
@@ -118,10 +122,18 @@ public class DBHelper extends SQLiteOpenHelper{
                     STAT_FN + " INTEGER, " +
                     STAT_OTHER + " INTEGER " +
                     ");";
-
     private static final String CREATE_OBEYGJANLEG_TABLE =
             "CREATE TABLE " + TABLE_OBEYGJANLEG + " (" +
                     WORDID + " TEXT" +
+                    ");";
+    private static final String CREATE_COMPARETABLES_TABLE =
+            "CREATE TABLE " + TABLE_COMPARETABLES + " (" +
+                    WORDTITLE + " TEXT , " +
+                    BLOCKTITLE + " TEXT , " +
+                    TABLETITLE + " TEXT , " +
+                    COLHEADERS + " TEXT , " +
+                    ROWHEADERS + " TEXT , " +
+                    CONTENT + " TEXT " +
                     ");";
 
 
@@ -155,6 +167,7 @@ public class DBHelper extends SQLiteOpenHelper{
         db.execSQL(CREATE_TABLES_TABLE);
         db.execSQL(CREATE_STATISTICS_TABLE);
         db.execSQL(CREATE_OBEYGJANLEG_TABLE);
+        db.execSQL(CREATE_COMPARETABLES_TABLE);
         insertIntoObeygjanlegTable(db);
     }
 

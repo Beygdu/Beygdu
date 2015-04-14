@@ -11,7 +11,19 @@ import android.widget.TextView;
 import is.arnastofnun.beygdu.R;
 
 /**
- * Created by arnarjons on 11.4.2015.
+ * @author Arnar Jonsson
+ * @version 0.2
+ * @since  11.4.2015.
+ * Refactored since 5.4.2015, Arnar Jonsson, Daniel Pall Johannson
+ * ScreenSlidePageFragment
+ * A fragment design to fit TutorialActivity's Viewpager
+ * Called with :
+ *          ScreenSlidePageFragment.newInstance(PORTRAIT_FRAGMENT id,
+ *           LANDSCAPE_FRAGMENT id (may be the same fragment as portrait),
+ *           IMAGE id,
+ *           STRING id,
+ *           STRING id);
+ *           id == R.X.X
  */
 public class ScreenSlidePageFragment extends Fragment {
 
@@ -43,6 +55,16 @@ public class ScreenSlidePageFragment extends Fragment {
         return rootView;
     }
 
+    /**
+     *
+     * @param oriPortId R.layout.PORTRAITLAYOUT
+     * @param oriLandId R.layout.LANDSCAPELAYOUT
+     * @param imageId R.drawable.IMAGE
+     * @param firstStringId R.strings.MAIN STRING
+     * @param secondStringId R.strings.SECONDARY STRING
+     * @return A new fragment with a portrait and a lanscape layout, containing
+     *                  1 Image and 2 Textfields with content
+     */
     public static ScreenSlidePageFragment newInstance(int oriPortId, int oriLandId,
                                                       int imageId, int firstStringId,
                                                       int secondStringId) {

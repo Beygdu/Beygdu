@@ -23,6 +23,23 @@ import android.widget.TextView;
 
 import is.arnastofnun.beygdu.R;
 
+/**
+ * @author Arnar Jonsson
+ * @version 0.2
+ * @since 11.4.2015
+ * Refactored since 5.4.2015, Arnar Jonsson, Daniel Pall Johannson
+ * TutorialActivity
+ * A standalone activity that contains a ViewPager and a custom made Actionbar
+ * (because the default ones are shit)
+ * The ViewPager holds fragments that show users a tutorial on how to use
+ * the application.
+ * The fragment design is ancient, a new instance of it is created every time you swipe,
+ * so the parameters need to change for every swipe position switch, so the newinstance takes all
+ * information it needs as parameters>
+ *          R.layout ids for portrait and landscape layouts
+ *          R.drawable id for the image displayed
+ *          R.string ids for textfield information displaying
+ */
 public class TutorialActivity extends ActionBarActivity {
 
     private static final int NUM_PAGES = 8;
@@ -35,9 +52,6 @@ public class TutorialActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        //this.supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
-        //this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-
         setContentView(R.layout.activity_tutorial);
 
 
@@ -46,6 +60,9 @@ public class TutorialActivity extends ActionBarActivity {
         vPager.setAdapter(pAdapter);
         vPager.setPageTransformer(true, new AnimationTransformer());
 
+        /**
+         * Implementation of the custom action bar, and its actions
+         */
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(false);
         actionBar.setDisplayShowTitleEnabled(false);
@@ -81,41 +98,12 @@ public class TutorialActivity extends ActionBarActivity {
         actionBar.setDisplayShowCustomEnabled(true);
 
 
-
-
     }
 
-    /*
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_tutorial, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-
-        switch (item.getItemId()) {
-            case R.id.quitButton:
-                finish();
-            case R.id.backButton:
-                if(vPager.getCurrentItem() != 0)  {
-                    vPager.setCurrentItem(vPager.getCurrentItem() - 1);
-                    return true;
-                }
-                return super.onOptionsItemSelected(item);
-            case R.id.forwardButton:
-                if(vPager.getCurrentItem() < NUM_PAGES) {
-                    vPager.setCurrentItem(vPager.getCurrentItem() + 1);
-                    return true;
-                }
-                return super.onOptionsItemSelected(item);
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
-*/
+    /**
+     * A PagerAdapter thad handles the ViewPagers logic
+     * New instances of the ViewPagers fragments should only be created here
+     */
     private class ScreenSliderPagerAdapter extends FragmentStatePagerAdapter {
 
         public ScreenSliderPagerAdapter(FragmentManager fm) {
@@ -124,6 +112,7 @@ public class TutorialActivity extends ActionBarActivity {
 
         @Override
         public Fragment getItem(int pos) {
+            //TODO : Create content
             switch (pos) {
                 case 0:
                     return ScreenSlidePageFragment.newInstance(R.layout.fragment_slide_portrait,

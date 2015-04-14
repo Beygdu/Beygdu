@@ -3,18 +3,22 @@ package is.arnastofnun.utils;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
+import android.app.FragmentManager;
 import android.content.DialogInterface;
 import android.os.Bundle;
 
 import is.arnastofnun.beygdu.R;
 
 /**
- * Created by arnarjons on 13.4.2015.
+ * @author Arnar Jonsson
+ * @version 0.1
+ * @since  13.4.2015.
+ * A simple popup Alert dialog
  */
 public class NotificationDialog extends DialogFragment {
 
-    private String notificationTitle = "Beygdu";
-    private String errorTitle = "Villa!";
+    private final String notificationTitle = "Beygdu";
+    private final String errorTitle = "Villa!";
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -32,10 +36,17 @@ public class NotificationDialog extends DialogFragment {
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        //Do Nothing
+                        dialog.dismiss();
                     }
                 });
 
         return builder.create();
+    }
+
+    @Override
+    public void show(FragmentManager manager, String tag) {
+        if (manager.findFragmentByTag(tag) == null) {
+            super.show(manager, tag);
+        }
     }
 }
