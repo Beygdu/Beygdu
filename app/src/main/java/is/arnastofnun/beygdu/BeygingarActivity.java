@@ -121,12 +121,6 @@ public class BeygingarActivity extends NavDrawer {
         // If it is possible to filter the word result, add a Navigation
         // Drawer Item at the second last position in the list
         navDrawerFilterableListItem();
-
-
-
-
-
-
 }
 
     /**

@@ -1,44 +1,24 @@
 package is.arnastofnun.utils;
 
-import android.animation.ArgbEvaluator;
-import android.animation.ObjectAnimator;
-import android.animation.ValueAnimator;
 import android.app.Fragment;
-import android.content.ClipData;
-import android.content.ClipboardManager;
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.Color;
+import android.content.Intent;
 import android.graphics.Typeface;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.text.Html;
-import android.text.SpannableString;
-import android.text.SpannableStringBuilder;
-import android.text.style.ForegroundColorSpan;
-import android.util.Property;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewGroup.LayoutParams;
-import android.view.animation.DecelerateInterpolator;
-import android.widget.Button;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
-import com.software.shell.fab.FloatingActionButton;
-import com.software.shell.fab.ActionButton;
-
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 import is.arnastofnun.DB.DBController;
+import is.arnastofnun.beygdu.BeygingarActivity;
+import is.arnastofnun.beygdu.CompareActivity;
 import is.arnastofnun.beygdu.R;
 import is.arnastofnun.parser.Block;
 import is.arnastofnun.parser.SubBlock;
@@ -141,7 +121,7 @@ public class TableFragment extends Fragment {
         controller = new DBController(context);
         comparedTables = controller.fetchAllComparableWords();
         if(compareTableFragment) {
-            createTable(table);
+            createCompareTable(table);
         } else {
             createBlock();
         }
@@ -373,6 +353,39 @@ public class TableFragment extends Fragment {
         tableLayout.addView(tr);
     }
 
+    private void createCompareTable(Tables table) {
+        TextView tableTitle = new TextView(context);
+        tableTitle.setLayoutParams(new TableRow.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        String label = table.getWordTitle() + " - " + table.getBlockTitle() + " - " + table.getHeader();
+        tableTitle.setText(label);
+        tableTitle.setTextSize(subBlockTitleText);
+        tableTitle.setMinHeight(70);
+        tableTitle.setTypeface(LatoLight);
+        tableTitle.setTextColor(getResources().getColor(R.color.white));
+        tableTitle.setPadding(0, 80, 20, 20);
+        tableLayout.addView(tableTitle);
+
+        final TextView tableName = new TextView(context);
+        tableName.setText(table.getTitle());
+        tableName.setTextSize(tableTitleText);
+        tableName.setTextSize(20);
+        tableName.setTypeface(LatoLight);
+        tableName.setTextColor(getResources().getColor(R.color.white));
+        tableName.setBackgroundResource(R.drawable.top_border_orange);
+        tableName.setPadding(16, 5, 0, 10);
+        tableName.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_action_copy, 0);
+        boolean dbContains = false;
+        for(Tables dBTable : comparedTables) {
+            if (dBTable.getWordTitle().equals(table.getWordTitle()) && dBTable.getBlockTitle().equals(table.getBlockTitle()) && dBTable.getHeader().equals(table.getTitle())){
+                dbContains = true;
+                tableName.setBackgroundResource(R.drawable.top_border_yellow);
+            }
+        }
+        tableName.setOnClickListener(getCompareClickListener(table.getWordTitle(), table.getBlockTitle(), table.getTitle(), tableName, table, dbContains));
+        tableLayout.addView(tableName);
+        createTable(table);
+    }
+
     private View.OnClickListener getCompareClickListener(final String wordTitle, final String blockTitle, final String tableTitle, final TextView cell, final Tables tables, final boolean chosen) {
         View.OnClickListener clickListener = new View.OnClickListener() {
             private boolean copyState = chosen;
@@ -382,6 +395,10 @@ public class TableFragment extends Fragment {
                     // reset background to default;
                     cell.setBackgroundResource(R.drawable.top_border_orange);
                     controller.removeCompareTable(wordTitle,blockTitle, tableTitle);
+                    if(context.getClass().getSimpleName().equals(CompareActivity.class.getSimpleName())) {
+                        Intent intent = new Intent(context, CompareActivity.class);
+                        startActivity(intent);
+                    }
                 } else {
                     cell.setBackgroundResource(R.drawable.top_border_yellow);
                     controller.insertCompareTable(wordTitle, blockTitle, tableTitle, tables);

@@ -74,7 +74,7 @@ public class CompareActivity extends NavDrawer {
         DBController controller = new DBController(this);
         ArrayList<Tables> compareTables = controller.fetchAllComparableWords();
 
-        if(compareTables.size() > 2) {
+        if(compareTables.size() >= 2) {
             for (Tables table : compareTables) {
                 TextView tableTitle = new TextView(this);
                 if (320 > width && width < 384) {
@@ -98,7 +98,8 @@ public class CompareActivity extends NavDrawer {
             TableRow tr = new TableRow(this);
             final TextView cell = new TextView(this);
             cell.setText("Ekkert til að bera saman");
-            tr.addView(tr);
+            tr.addView(cell);
+            tableLayout.addView(tr);
         }
     }
 
