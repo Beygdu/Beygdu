@@ -37,6 +37,7 @@ import com.software.shell.fab.ActionButton;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
+import is.arnastofnun.AsyncTasks.BinAsyncTask;
 import is.arnastofnun.AsyncTasks.SkrambiAsyncTask;
 import is.arnastofnun.BeygduTutorial.TutorialActivity;
 import is.arnastofnun.DB.DBController;
@@ -311,13 +312,14 @@ public class MainActivity extends NavDrawer implements CustomDialog.DialogListen
             InputValidator iValidator = new InputValidator(word, INPUTVALIDATOR_ERRORSYMBOLS);
             if(iValidator.isLegal()) {
                 try {
-                    BinHelper binHelper = new BinHelper(MainActivity.this);
-                    setWordResult(binHelper.sendThread(word, 1));
+                    setWordResult(new BinAsyncTask(MainActivity.this)
+                            .execute(word, "1").get());
+
                 }
                 catch (Exception e) {
                     setWordResult(null);
                     //TODO : Errorhandling, Edit : taken care of in checkWordCount
-                    Toast.makeText(MainActivity.this, "Ekki tokst ad na sambandi vid bin", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(MainActivity.this, "Ekki tokst ad na sambandi vid bin", Toast.LENGTH_SHORT).show();
                 }
             }
             else {
@@ -562,6 +564,27 @@ public class MainActivity extends NavDrawer implements CustomDialog.DialogListen
     // INTERFACE HANDLER FOR CUSTOMDIALOG RESULTS
     @Override
     public void onPositiveButtonClick(String selectedItem, int id) {
+
+        switch (id) {
+            case 0:
+                try {
+                    setWordResult(new BinAsyncTask(MainActivity.this).execute(selectedItem, "0").get());
+                }
+                catch (Exception e) {
+                    setWordResult(null);
+                }
+            case 1:
+                try {
+                    setWordResult(new BinAsyncTask(MainActivity.this).execute(selectedItem, "1").get());
+                }
+                catch (Exception f) {
+                    setWordResult(null);
+                }
+            default:
+                // Do Nothing
+
+        }
+
         BinHelper binHelper = new BinHelper(MainActivity.this);
         try {
             setWordResult(binHelper.sendThread(selectedItem, 1));
