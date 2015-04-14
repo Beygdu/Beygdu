@@ -476,6 +476,7 @@ public class MainActivity extends NavDrawer implements CustomDialog.DialogListen
         if(desc.equals("SingleHit")) {
             WordResult word = this.wR;
             createNewActivity(word);
+            return;
         }
         else if(desc.equals("MultiHit")) {
             Bundle bundle = new Bundle();
@@ -488,6 +489,7 @@ public class MainActivity extends NavDrawer implements CustomDialog.DialogListen
             android.app.DialogFragment multiDialog = new CustomDialog();
             multiDialog.setArguments(bundle);
             multiDialog.show(getFragmentManager(), "0");
+            return;
         }
         else {
             String[] correctedWords;
@@ -504,6 +506,7 @@ public class MainActivity extends NavDrawer implements CustomDialog.DialogListen
                     android.app.DialogFragment multiDialog = new CustomDialog();
                     multiDialog.setArguments(bundle);
                     multiDialog.show(getFragmentManager(), "0");
+                    return;
                 }
                 // TODO : REMOVE DEBUG STATEMENT
                 else {
@@ -513,6 +516,7 @@ public class MainActivity extends NavDrawer implements CustomDialog.DialogListen
                     android.app.DialogFragment notiDialog = new NotificationDialog();
                     notiDialog.setArguments(bundle);
                     notiDialog.show(getFragmentManager(), "0");
+                    return;
                 }
             }
             catch (Exception e) {
@@ -522,6 +526,7 @@ public class MainActivity extends NavDrawer implements CustomDialog.DialogListen
                 android.app.DialogFragment notiDialog = new NotificationDialog();
                 notiDialog.setArguments(bundle);
                 notiDialog.show(getFragmentManager(), "0");
+                return;
             }
 
         }
