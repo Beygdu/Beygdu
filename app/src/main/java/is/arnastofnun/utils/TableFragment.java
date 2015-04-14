@@ -356,7 +356,11 @@ public class TableFragment extends Fragment {
     private void createCompareTable(Tables table) {
         TextView tableTitle = new TextView(context);
         tableTitle.setLayoutParams(new TableRow.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-        String label = table.getWordTitle() + " - " + table.getBlockTitle() + " - " + table.getHeader();
+        String label = table.getWordTitle();
+        if (!table.getBlockTitle().equals("")) {
+           label = label + " - " + table.getBlockTitle();
+        }
+        label = label + " - " + table.getHeader();
         tableTitle.setText(label);
         tableTitle.setTextSize(subBlockTitleText);
         tableTitle.setMinHeight(70);
