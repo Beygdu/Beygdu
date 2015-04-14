@@ -1,0 +1,31 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="is.arnastofnun.BeygduTutorial.TutorialActivity">
+
+    <item
+        android:id="@+id/quitButton"
+        android:title="Quit"
+        android:orderInCategory="0"
+        app:showAsAction="always"
+        android:gravity="left"/>
+    <item
+        android:id="@+id/backButton"
+        android:title=""
+        android:icon="@drawable/ic_action_back"
+        android:orderInCategory="2"
+        app:showAsAction="always"/>
+
+    <item
+        android:id="@+id/banner"
+        android:title="Beygdu"
+        app:showAsAction="always"
+        android:orderInCategory="1"/>
+
+    <item
+        android:id="@+id/forwardButton"
+        android:title=""
+        android:icon="@drawable/ic_action_forward"
+        android:orderInCategory="3"
+        app:showAsAction="always"/>
+</menu>

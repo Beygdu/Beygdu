@@ -185,7 +185,6 @@ public class TableFragment extends Fragment {
                 final TextView tableTitle = new TextView(context);
                 tableTitle.setText(tables.getTitle());
                 tableTitle.setTextSize(tableTitleText);
-                tableTitle.setHeight(50);
                 tableTitle.setTextSize(20);
                 tableTitle.setTypeface(LatoLight);
                 tableTitle.setTextColor(getResources().getColor(R.color.white));
@@ -329,7 +328,6 @@ public class TableFragment extends Fragment {
         TableRow tr = new TableRow(context);
         final TextView cell = new TextView(context);
         cell.setLayoutParams(new TableRow.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, 1f));
-        cell.setHeight(50);
         cell.setPadding(20, 5, 0, 0);
         cell.setTextSize(20);
         cell.setBackgroundResource(R.drawable.top_border_orange);
@@ -356,6 +354,7 @@ public class TableFragment extends Fragment {
     private void createCompareTable(Tables table) {
         TextView tableTitle = new TextView(context);
         tableTitle.setLayoutParams(new TableRow.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+
         String label = table.getWordTitle();
         if (!table.getBlockTitle().equals("")) {
            label = label + " - " + table.getBlockTitle();

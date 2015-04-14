@@ -101,6 +101,14 @@
             android:name=".AuthorActivity"
             android:label="@string/title_activity_author" >
         </activity>
+
+        <activity
+            android:name="is.arnastofnun.BeygduTutorial.TutorialActivity"
+            android:label="Hljálp"
+            android:theme="@style/TutorialActivityTheme"
+            android:launchMode="singleTask">
+        </activity>
+
     </application>
 
 </manifest>
