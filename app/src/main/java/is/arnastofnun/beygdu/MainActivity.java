@@ -37,6 +37,7 @@ import com.software.shell.fab.ActionButton;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
+import is.arnastofnun.AsyncTasks.SkrambiAsyncTask;
 import is.arnastofnun.BeygduTutorial.TutorialActivity;
 import is.arnastofnun.DB.DBController;
 import is.arnastofnun.parser.WordResult;
@@ -487,9 +488,32 @@ public class MainActivity extends NavDrawer implements CustomDialog.DialogListen
             multiDialog.show(getFragmentManager(), "0");
         }
         else {
-            SkrambiHelper sHelper = new SkrambiHelper(MainActivity.this);
-            String[] correctedWords = sHelper.getSpellingCorrection(wR.getSearchWord());
-            if( correctedWords == null || correctedWords[0].equals("")) {
+            String[] correctedWords;
+            try {
+                correctedWords = new SkrambiAsyncTask(this).execute(wR.getSearchWord()).get();
+                if( correctedWords[0] != null ) {
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("id", 1);
+                    bundle.putString("title", getString(R.string.SkrambiDialog));
+                    bundle.putString("positiveButtonText", getString(R.string.PositiveButton));
+                    bundle.putString("negativeButtonText", getString(R.string.NegativeButton));
+                    bundle.putStringArray("descriptions", correctedWords);
+                    bundle.putStringArray("descriptionActions", correctedWords);
+                    android.app.DialogFragment multiDialog = new CustomDialog();
+                    multiDialog.setArguments(bundle);
+                    multiDialog.show(getFragmentManager(), "0");
+                }
+                // TODO : REMOVE DEBUG STATEMENT
+                else {
+                    Bundle bundle = new Bundle();
+                    bundle.putBoolean("isError", true);
+                    bundle.putString("message", correctedWords[0]);
+                    android.app.DialogFragment notiDialog = new NotificationDialog();
+                    notiDialog.setArguments(bundle);
+                    notiDialog.show(getFragmentManager(), "0");
+                }
+            }
+            catch (Exception e) {
                 Bundle bundle = new Bundle();
                 bundle.putBoolean("isError", false);
                 bundle.putString("message", "Engar leitarniðurstöður fundust");
@@ -497,18 +521,7 @@ public class MainActivity extends NavDrawer implements CustomDialog.DialogListen
                 notiDialog.setArguments(bundle);
                 notiDialog.show(getFragmentManager(), "0");
             }
-            else {
-                Bundle bundle = new Bundle();
-                bundle.putInt("id", 1);
-                bundle.putString("title", getString(R.string.SkrambiDialog));
-                bundle.putString("positiveButtonText", getString(R.string.PositiveButton));
-                bundle.putString("negativeButtonText", getString(R.string.NegativeButton));
-                bundle.putStringArray("descriptions", correctedWords);
-                bundle.putStringArray("descriptionActions", correctedWords);
-                android.app.DialogFragment multiDialog = new CustomDialog();
-                multiDialog.setArguments(bundle);
-                multiDialog.show(getFragmentManager(), "0");
-            }
+
         }
 
 	}
