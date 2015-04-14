@@ -561,6 +561,19 @@ public class DBController {
     }
 
     /**
+     * Removes all rows from compareTable table
+     */
+    public void removeAllFromCompareTable() {
+        try {
+            open();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        dB.delete(DBHelper.TABLE_COMPARETABLES, null, null);
+        close(null);
+    }
+
+    /**
      * Removes the oldest word in the table
      */
     private void removeOldest(){

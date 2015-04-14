@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -32,6 +33,8 @@ public class CompareActivity extends NavDrawer {
     //Screen width
     private float width;
     private float height;
+
+    private ArrayList<Tables> compareTables;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,14 +68,12 @@ public class CompareActivity extends NavDrawer {
         LatoLight = Typeface.createFromAsset(getAssets(), "fonts/Lato-Light.ttf");
 
         tableLayout = (TableLayout) findViewById(R.id.data_table);
-
-
         drawTables();
     }
 
     private void drawTables() {
         DBController controller = new DBController(this);
-        ArrayList<Tables> compareTables = controller.fetchAllComparableWords();
+        compareTables = controller.fetchAllComparableWords();
 
         if(compareTables.size() >= 2) {
             for (Tables table : compareTables) {
@@ -103,6 +104,14 @@ public class CompareActivity extends NavDrawer {
         }
     }
 
+
+    public void clearBtnOnClick(@SuppressWarnings("unused") View view){
+        DBController controller = new DBController(this);
+        controller.removeAllFromCompareTable();
+        compareTables.clear();
+        tableLayout.removeAllViews();
+        drawTables();
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
