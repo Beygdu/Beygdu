@@ -6,6 +6,7 @@ import android.os.AsyncTask;
 
 import is.arnastofnun.SkrambiWebTool.PostRequestHandler;
 import is.arnastofnun.beygdu.R;
+import is.arnastofnun.utils.NetworkStateListener;
 import is.arnastofnun.utils.SkrambiValidator;
 
 /**
@@ -16,6 +17,7 @@ public class SkrambiAsyncTask extends AsyncTask<String, Void, String[]> {
     ///
     // Task variables
     ///
+    private Context context;
     private String url = "http://skrambi.arnastofnun.is/checkDocument";
 
     public ProgressDialog pDialog;
@@ -24,6 +26,8 @@ public class SkrambiAsyncTask extends AsyncTask<String, Void, String[]> {
     public SkrambiAsyncTask(Context context) {
         pDialog = new ProgressDialog(context);
         pDialogString = context.getResources().getString(R.string.progressdialog);
+
+        this.context = context;
     }
 
     @Override
@@ -37,6 +41,10 @@ public class SkrambiAsyncTask extends AsyncTask<String, Void, String[]> {
 
     @Override
     protected String[] doInBackground(String... args) {
+
+        if(!new NetworkStateListener(this.context).isConnectionActive()) {
+            return null;
+        }
 
         PostRequestHandler pHandler = new PostRequestHandler(this.url, args[0],
                 "text/plain", "en-US", false, true, true);
