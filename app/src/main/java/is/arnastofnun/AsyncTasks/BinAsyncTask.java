@@ -13,7 +13,16 @@ import is.arnastofnun.parser.BinParser;
 import is.arnastofnun.utils.NetworkStateListener;
 
 /**
- * Created by arnarjons on 14.4.2015.
+ * @author Arnar Jonsson
+ * @version 0.1
+ * @since  14.4.2015.
+ * BinAsyncTask, handles results from the bin database callback
+ * called with
+ *          BinAsyncTask(CONTEXT).execute("SEARCHWORD","0/1").get();
+ *          CONTEXT == application context (XActicity.this)
+ *          SEARCHWORD == self explanatory
+ *          0/1 == control flow, 0 for id searches and simple searches
+ *                  1 for advanced searches (rep. as string)
  */
 public class BinAsyncTask extends AsyncTask<String, Void, WordResult> {
 

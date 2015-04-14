@@ -10,7 +10,10 @@ import android.os.Bundle;
 import is.arnastofnun.beygdu.R;
 
 /**
- * Created by arnarjons on 13.4.2015.
+ * @author Arnar Jonsson
+ * @version 0.1
+ * @since  13.4.2015.
+ * A simple popup Alert dialog
  */
 public class NotificationDialog extends DialogFragment {
 

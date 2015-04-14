@@ -9,7 +9,10 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 
 /**
- * Created by arnarjons on 19.3.2015.
+ * @author Arnar Jonsson
+ * @version 0.2
+ * @since  19.3.2015.
+ * A Simple AlertDialog
  */
 public class CustomDialog extends DialogFragment {
 

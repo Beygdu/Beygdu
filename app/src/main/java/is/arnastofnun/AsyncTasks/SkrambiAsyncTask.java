@@ -10,7 +10,15 @@ import is.arnastofnun.utils.NetworkStateListener;
 import is.arnastofnun.utils.SkrambiValidator;
 
 /**
- * Created by arnarjons on 14.4.2015.
+ * @author Arnar Jonsson
+ * @version 0.1
+ * @since  14.4.2015.
+ * SkrambiAsyncTask
+ * Handles callback from the Skrambi web server
+ * Called with
+ *          SkrambiAsyncTask(CONTEXT).execute("SEARCHWORD").get;
+ *          CONTEXT == application context (XActivity.this)
+ *          SEARCHWORD == self explanatory
  */
 public class SkrambiAsyncTask extends AsyncTask<String, Void, String[]> {
 

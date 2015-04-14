@@ -122,6 +122,9 @@ public class SkrambiValidator {
     // [{"charStart": X, "charEnd": Y, "targetWord": "EXAMPLE", "suggestions": ["EXAMPLE1", "EXAMPLE2", ... "EXAMPLEN"], "errorClass": "CLASS"}]
     ///
 
+    /**
+     * Encodes all strings on array args to handle the icelandic alphabet
+     */
     private String[] forceEncoding(String[] args) {
         String[] decodingArray = new String[args.length];
         for(int i = 0; i < args.length; i++) {
@@ -138,6 +141,11 @@ public class SkrambiValidator {
         return decodingArray;
     }
 
+    /**
+     * Removes wrapping of each result in the array
+     * Front wrapper is "\""
+     * Back wrapper is "\","
+     */
     private String[] prepareResults(String[] rawResults) {
         String[] correctStrings = new String[rawResults.length];
         int count = 0;
@@ -150,6 +158,9 @@ public class SkrambiValidator {
         return correctStrings;
     }
 
+    /**
+     * Tries to clean the input string
+     */
     private boolean manageOutput() {
         String rawOutPut = this.input;
         try {
@@ -194,6 +205,10 @@ public class SkrambiValidator {
         return true;
     }
 
+    /**
+     * Front wrapper is "[{"
+     * Back wrapper is "]}"
+     */
     private boolean checkInputWrapping() {
         if(this.input.contains("[{") && this.input.contains("]}")) {
             if(this.input.indexOf("[{") == 0) {
@@ -208,6 +223,7 @@ public class SkrambiValidator {
     }
 
     public String asString() {
+        // TODO : Create method for debugging if necessary (Current status : not)
         return null;
     }
 

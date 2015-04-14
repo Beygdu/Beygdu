@@ -14,6 +14,7 @@ import is.arnastofnun.parser.WordResult;
  * Created by Arnar Jónsson on 13.3.2015.
  * Class BinHelper
  * @version 0.2
+ * @deprecated since 14.04.2015
  */
 public class BinHelper {
 
