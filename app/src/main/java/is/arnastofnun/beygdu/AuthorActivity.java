@@ -86,21 +86,6 @@ public class AuthorActivity extends NavDrawer {
         snaerTitle.setTextSize(18);
 
 
-        // Select Desc
-        /*TextView arnarDesc = (TextView)findViewById(R.id.arnarDesc);
-        arnarDesc.setTypeface(LatoLight);
-        arnarDesc.setTextSize(16);
-        TextView danielDesc = (TextView)findViewById(R.id.danielDesc);
-        danielDesc.setTypeface(LatoLight);
-        danielDesc.setTextSize(16);
-        TextView jonDesc = (TextView)findViewById(R.id.jonDesc);
-        jonDesc.setTypeface(LatoLight);
-        jonDesc.setTextSize(16);
-        TextView snaerDesc = (TextView)findViewById(R.id.snaerDesc);
-        snaerDesc.setTypeface(LatoLight);
-        snaerDesc.setTextSize(16);*/
-
-
     }
 
 
