@@ -17,7 +17,7 @@ public class BinParser {
     String url = "";
     String searchWord;
 
-    private HTMLParser parser;
+    private BParser parser;
 
     private WordResult wR = new WordResult();
 
@@ -26,7 +26,7 @@ public class BinParser {
 
         constructSearchStringByString(searchWord, flag);
 
-        this.parser = new HTMLParser(this.url);
+        this.parser = new BParser(this.url);
         this.wR.setSearchWord(searchWord);
 
         //constructWordResult();
@@ -49,7 +49,7 @@ public class BinParser {
 
         constructSearchStringByString(searchWord, flag);
 
-        this.parser = new HTMLParser(this.url, elements);
+        this.parser = new BParser(this.url, elements);
         this.wR.setSearchWord(searchWord);
 
         constructWordResult(elements);
@@ -60,7 +60,7 @@ public class BinParser {
 
         constructSearchStringById(id);
 
-        this.parser = new HTMLParser(this.url);
+        this.parser = new BParser(this.url);
 
         //constructWordResult();
 
@@ -84,7 +84,7 @@ public class BinParser {
 
         constructSearchStringById(id);
 
-        this.parser = new HTMLParser(this.url, elements);
+        this.parser = new BParser(this.url, elements);
 
         constructWordResult(elements);
 
@@ -147,17 +147,7 @@ public class BinParser {
      */
     private void constructWordResult(String[] elements) {
 
-        // Identify result type
-        if( this.parser.containsClass("VO_beygingarmynd") ) {
-            this.wR.setDescription("SingleHit");
-        }
-        else if( this.parser.containsClass("alert") ) {
-            this.wR.setDescription("Miss");
-        }
-        else {
-            this.wR.setDescription("MultiHit");
-        }
-
-        this.wR.constructWordResult(this.parser, elements);
+        BBeautifier bBeautifier = new BBeautifier(parser, searchWord);
+        wR = bBeautifier.getWordResult();
     }
 }
