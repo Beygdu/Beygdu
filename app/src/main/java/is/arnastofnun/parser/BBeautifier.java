@@ -217,8 +217,165 @@ public class BBeautifier {
 
     }
 
-    private String[] beautifyInput(Bstring str, String blockTitle, String subBlockTitle, String tableTitle) {
-        return null;
+    private Bstring destroyPointer(Bstring str) {
+        return str.remFirst(" ").remFirst(" ");
+    }
+
+    private String[] manageMultiResult(Bstring str) {
+
+        String[] split = str.get().split("");
+        for( int i = 1; i < split.length-1; i++ ) {
+            if( !split[i-1].equals("/") && split[i].equals(" ") && !split[i+1].equals("/") ) {
+                split[i] = "!!";
+            }
+        }
+
+        String reconString = "";
+
+        for( String s : split ) {
+            reconString += s;
+        }
+
+        return reconString.split("!!");
+    }
+
+    private String[] manageVerbSpecialCases(Bstring str) {
+
+        String[] exceptionSets = { "ég", "þú", "hann", "hún", "það", "við", "þið", "þeir", "þær", "þau" };
+        String[] dump = str.get().split(" ");
+
+        String resultString = "";
+
+        for( String s : dump ) {
+            for( String e : exceptionSets ) {
+                resultString += s + " ";
+            }
+        }
+
+        resultString = resultString.substring(0, resultString.length()-1);
+
+        if( resultString.contains("/") ) {
+            return manageMultiResult(new Bstring(resultString));
+        }
+        else {
+            return resultString.split(" ");
+        }
+    }
+
+    private String[] beautifyInput(Bstring str, String wRTitle, String blockTitle, String subBlockTitle, String tableTitle) {
+
+        str = destroyPointer(str);
+
+        if( str.cont(patterns[0]) || str.cont(patterns[1]) || str.cont(patterns[2]) || str.cont(patterns[3]) ) {
+            str.remFirst(".");
+        }
+        else if( str.cont(patterns[4]) || str.cont(patterns[5]) || str.cont(patterns[6]) ) {
+            return manageVerbSpecialCases(str);
+        }
+        else if( str.cont(patterns[7]) || str.cont(patterns[8]) || str.cont(patterns[9]) ) {
+            return manageVerbSpecialCases(str);
+        }
+        else if( str.cont(patterns[10]) ) {
+            str.remFirst(" ");
+        }
+        else if( str.cont(patterns[11]) || str.cont(patterns[12]) ) {
+            str.remFirst(".");
+        }
+
+        if( str.cont("/") ) {
+            return manageMultiResult(str);
+        }
+        else {
+            return str.get().split(" ");
+        }
+
+    }
+
+    private void constructExceptionBlock(ArrayList<Bstring> rawData, String[] elements, WordResult wR) {
+
+        ArrayList<String> firstRawTable = new ArrayList<String>();
+        ArrayList<String> secondRawTable = new ArrayList<String>();
+
+        String[] exceptionSet = { "Nf", "Þf", "Þgf", "Ef" };
+
+        for( Bstring bs : rawData ) {
+
+            if( bs.cont(".") ) {
+
+                String[] tempList = { "" };
+                bs = destroyPointer(bs);
+
+                for( int i = 0; i < exceptionSet.length; i++ ) {
+
+                    if( bs.cont(exceptionSet[i]) ) {
+                        tempList = bs.get().split(exceptionSet[i]);
+                        break;
+                    }
+
+                }
+
+                if( tempList != null && !tempList[0].equals("") && tempList.length > 1 ) {
+                    firstRawTable.add(tempList[1]);
+                    secondRawTable.add(tempList[2]);
+                }
+
+            }
+
+        }
+
+        ArrayList<String> firstTableContent = new ArrayList<String>();
+        ArrayList<String> secondTableContent = new ArrayList<String>();
+
+        for( String s : firstRawTable ) {
+            String[] tempList;
+            if( s.contains("/")) {
+                tempList = manageMultiResult(new Bstring(s));
+            }
+            else {
+                tempList = s.split(" ");
+            }
+
+            for( String r : tempList ) {
+                firstTableContent.add(r);
+            }
+        }
+
+        for( String s : secondRawTable ) {
+            String[] tempList;
+            if( s.contains("/")) {
+                tempList = manageMultiResult(new Bstring(s));
+            }
+            else {
+                tempList = s.split(" ");
+            }
+
+            for( String r : tempList ) {
+                secondTableContent.add(r);
+            }
+        }
+
+        Tables firstTable = new Tables("Eintala", new String[] { "", "Karlkyn", "Kvenkyn", "Hvorugkyn" }, new String[] { "", "Nf.", "Þf.", "Þgf.", "Ef." }, firstTableContent);
+        Tables secondTable = new Tables("Fleirtala", new String[] { "", "Karlkyn", "Kvenkyn", "Hvorugkyn" }, new String[] { "", "Nf.", "Þf.", "Þgf.", "Ef." }, secondTableContent);
+
+        ArrayList<Tables> tables = new ArrayList<Tables>();
+        tables.add(firstTable);
+        tables.add(secondTable);
+
+        SubBlock subBlock = new SubBlock("", tables);
+
+        ArrayList<SubBlock> sB = new ArrayList<SubBlock>();
+        sB.add(subBlock);
+
+        Block newBlock = new Block("", sB);
+
+        ArrayList<Block> blocks = new ArrayList<Block>();
+
+        blocks.add(newBlock);
+
+        wR.setBlocks(blocks);
+
+        wResult = wR;
+
     }
 
     private Tables constructTable(ArrayList<Bstring> table, String[] elements, String wRTitle, String blockTitle, String subBlockTitle) {
@@ -231,7 +388,7 @@ public class BBeautifier {
         ArrayList<String> results = new ArrayList<String>();
 
         for( Bstring str : table ) {
-            String[] tempList = beautifyInput(str, blockTitle, subBlockTitle, tableTitle);
+            String[] tempList = beautifyInput(str, wRTitle, blockTitle, subBlockTitle, tableTitle);
 
             for( String cleanStr : tempList ) {
                 results.add(cleanStr);
@@ -371,7 +528,7 @@ public class BBeautifier {
     private void constructSingleResults(WordResult wR) {
         try {
 
-            String[] hardCE = new String[] { "alert", "Sagnorð", "Atviksorð" };
+            String[] hardCE = new String[] { "alert", "Sagnorð", "Atviksorð", "Fornafn", "Greinir" };
 
             Document doc = parser.getDocument();
             String[] elements = parser.getElements();
@@ -404,6 +561,11 @@ public class BBeautifier {
                         }
                     }
                 }
+            }
+
+            if( wR.getTitle().contains(hardCE[3]) || wR.getTitle().contains(hardCE[4] )) {
+                constructExceptionBlock(rawData, elements, wR);
+                return;
             }
 
             constructBlocks(rawData, elements, wR);
