@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import is.arnastofnun.utils.Bstring;
+
 /**
  * @author Arnar Jonsson
  * @since 27.1.2015
@@ -45,6 +47,8 @@ public class WordResult implements Serializable {
      * SubBlocks of similar category.
      */
     private ArrayList<Block> result = new ArrayList<Block>();
+
+    private ArrayList<Bstring> debug = new ArrayList<Bstring>();
 
     /**
      * WordResult - An object that stores and beautifies result from BinParsers (HTMLParser).
@@ -138,7 +142,13 @@ public class WordResult implements Serializable {
 
     }
 
+    public void setDebugList(ArrayList<Bstring> list) {
+        this.debug = list;
+    }
 
+    public ArrayList<Bstring> getDebugList() {
+        return this.debug;
+    }
 
 
 }
