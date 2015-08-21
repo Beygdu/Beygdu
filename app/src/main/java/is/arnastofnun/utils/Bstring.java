@@ -24,7 +24,7 @@ public class Bstring {
         }
         catch (Exception e) {
             data = null;
-            Log.w("Bstring constructor", "Failed to cast object to Bstring");
+            //Log.w("Bstring constructor", "Failed to cast object to Bstring");
         }
 
     }
@@ -48,7 +48,7 @@ public class Bstring {
             data += (String) o;
         }
         catch (Exception e) {
-            Log.w("Bstring add", "Failed to add object to Bstring");
+            //Log.w("Bstring add", "Failed to add object to Bstring");
         }
 
         return this;
@@ -65,7 +65,7 @@ public class Bstring {
             data = data.substring(1, data.length());
         }
         catch (Exception e) {
-            Log.w("Bstring remFirst", "Failed to remove first entity of Bstring");
+            //Log.w("Bstring remFirst", "Failed to remove first entity of Bstring");
         }
 
         return this;
@@ -80,10 +80,10 @@ public class Bstring {
 
         try {
             int index = data.indexOf((String) o);
-            data = data.substring(index, data.length());
+            data = data.substring(index+1, data.length());
         }
         catch (Exception e) {
-            Log.w("Bstring remFirst", "Failed to remove everything up to (and including) the selected entity");
+            //Log.w("Bstring remFirst", "Failed to remove everything up to (and including) the selected entity");
         }
 
         return this;
@@ -99,7 +99,7 @@ public class Bstring {
             data = data.substring(0, data.length()-1);
         }
         catch (Exception e) {
-            Log.w("Bstring remLast", "Failed to remove last entity of Bstring");
+            //Log.w("Bstring remLast", "Failed to remove last entity of Bstring");
         }
 
         return this;
@@ -117,7 +117,7 @@ public class Bstring {
             data = data.substring(0, index);
         }
         catch (Exception e) {
-            Log.w("Bstring remLast", "Failed to remove everything after (and including) the selected entity");
+            //Log.w("Bstring remLast", "Failed to remove everything after (and including) the selected entity");
         }
 
         return this;
@@ -134,7 +134,7 @@ public class Bstring {
             return data.contains((String) o);
         }
         catch (Exception e) {
-            Log.w("Bstring cont", "Object o not recognized");
+            //Log.w("Bstring cont", "Object o not recognized");
             return false;
         }
     }
@@ -156,7 +156,7 @@ public class Bstring {
             return rsplit;
         }
         catch (Exception e) {
-            Log.w("Bstring split", "Failed to split the Bstring into an array");
+            //Log.w("Bstring split", "Failed to split the Bstring into an array");
             return null;
         }
     }
@@ -177,7 +177,7 @@ public class Bstring {
                 return data.equals(temp.get());
             }
             catch (Exception f) {
-                Log.w("Bstring equ", "Failed to recognize object o");
+                //Log.w("Bstring equ", "Failed to recognize object o");
                 return false;
             }
 
@@ -198,7 +198,7 @@ public class Bstring {
             }
         }
         catch (Exception e) {
-            Log.w("Bstring arrayToBstring", "Failed to recognize object array");
+            //Log.w("Bstring arrayToBstring", "Failed to recognize object array");
             return null;
         }
 
@@ -210,12 +210,12 @@ public class Bstring {
      * @param b Bstring
      * @return length of the Bstring, -1 if it does not contain anything
      */
-    public static int len(Bstring b) {
+    public int len() {
         try {
-            return b.get().length();
+            return data.length();
         }
         catch (Exception e) {
-            Log.w("Bstring len", "The Bstring does not contain anything");
+            //Log.w("Bstring len", "The Bstring does not contain anything");
             return -1;
         }
     }
