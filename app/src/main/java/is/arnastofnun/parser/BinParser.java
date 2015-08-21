@@ -127,7 +127,7 @@ public class BinParser {
      */
     private void constructWordResult(String[] elements) {
 
-        BBeautifier bBeautifier = new BBeautifier(parser, searchWord);
-        wR = bBeautifier.getWordResult();
+        DataPrep dp = new DataPrep(parser, searchWord);
+        wR = dp.getWordResult();
     }
 }
