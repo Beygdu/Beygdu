@@ -21,17 +21,6 @@ public class BinParser {
 
     private WordResult wR = new WordResult();
 
-    // Depricated
-    public BinParser(String searchWord, int flag) {
-
-        constructSearchStringByString(searchWord, flag);
-
-        this.parser = new BParser(this.url);
-        this.wR.setSearchWord(searchWord);
-
-        //constructWordResult();
-
-    }
 
     /**
      * BinParser - Handler for HTMLParser for the Beygdu application.
@@ -56,15 +45,6 @@ public class BinParser {
 
     }
 
-    public BinParser(int id) {
-
-        constructSearchStringById(id);
-
-        this.parser = new BParser(this.url);
-
-        //constructWordResult();
-
-    }
 
     /**
      * BinParser - Handler for HTMLParser for the Beygdu application.
