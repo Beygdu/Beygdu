@@ -84,8 +84,13 @@ public class BParser {
 
             selectedElements = new ArrayList<Element>();
             Element body = doc.body();
+
             for( Element element : body.getAllElements() ) {
-                selectedElements.add(element);
+
+                if( isPreferedElement( element ) ) {
+                    selectedElements.add(element);
+                }
+
             }
 
         }
@@ -117,13 +122,25 @@ public class BParser {
         return assertKey;
     }
 
+    private boolean isPreferedElement( Element element ) {
+        if( elements == null ) return false;
+
+        for( String tag : elements ) {
+            if( element.nodeName().equals( tag )) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     private void createDocument() {
         try {
             doc = Jsoup.connect(this.url.get()).get();
             assertKey = true;
         }
         catch (Exception e) {
-            Log.w("BParser createDocument", e.toString());
+            System.out.println(e);
+            //Log.w("BParser createDocument", e.toString());
             assertKey = false;
         }
     }
