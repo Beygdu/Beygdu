@@ -28,12 +28,12 @@ public class SkrambiAsyncTask extends AsyncTask<String, Void, String[]> {
     private Context context;
     private String url = "http://skrambi.arnastofnun.is/checkDocument";
 
-    public ProgressDialog pDialog;
-    private String pDialogString;
+    //public ProgressDialog pDialog;
+    //private String pDialogString;
 
     public SkrambiAsyncTask(Context context) {
-        pDialog = new ProgressDialog(context);
-        pDialogString = context.getResources().getString(R.string.progressdialog);
+       // pDialog = new ProgressDialog(context);
+       // pDialogString = context.getResources().getString(R.string.progressdialog);
 
         this.context = context;
     }
@@ -42,9 +42,9 @@ public class SkrambiAsyncTask extends AsyncTask<String, Void, String[]> {
     protected void onPreExecute() {
         super.onPreExecute();
 
-        this.pDialog.setMessage(this.pDialogString);
-        this.pDialog.setCancelable(false);
-        this.pDialog.show();
+        //this.pDialog.setMessage(this.pDialogString);
+        //this.pDialog.setCancelable(false);
+        //this.pDialog.show();
     }
 
     @Override
@@ -71,7 +71,7 @@ public class SkrambiAsyncTask extends AsyncTask<String, Void, String[]> {
 
     @Override
     protected void onPostExecute(String[] arg) {
-        this.pDialog.dismiss();
+        //this.pDialog.dismiss();
     }
 
 }

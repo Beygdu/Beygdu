@@ -38,12 +38,12 @@ public class BinAsyncTask extends AsyncTask<String, Void, WordResult> {
     ///
     private int id = -1;
     private Context context;
-    public ProgressDialog pDialog;
-    private String pDialogString;
+    //public ProgressDialog pDialog;
+    //private String pDialogString;
 
     public BinAsyncTask(Context context) {
-        this.pDialog = new ProgressDialog(context);
-        this.pDialogString = context.getResources().getString(R.string.progressdialog);
+        //this.pDialog = new ProgressDialog(context);
+        //this.pDialogString = context.getResources().getString(R.string.progressdialog);
 
         this.context = context;
     }
@@ -52,9 +52,9 @@ public class BinAsyncTask extends AsyncTask<String, Void, WordResult> {
     protected void onPreExecute() {
         super.onPreExecute();
 
-        this.pDialog.setMessage(this.pDialogString);
-        this.pDialog.setCancelable(false);
-        this.pDialog.show();
+        //this.pDialog.setMessage(this.pDialogString);
+        //this.pDialog.setCancelable(false);
+        //this.pDialog.show();
     }
 
     @Override
@@ -95,7 +95,7 @@ public class BinAsyncTask extends AsyncTask<String, Void, WordResult> {
 
     @Override
     protected void onPostExecute(WordResult arg) {
-        this.pDialog.dismiss();
+        //this.pDialog.dismiss();
     }
 
     ///
