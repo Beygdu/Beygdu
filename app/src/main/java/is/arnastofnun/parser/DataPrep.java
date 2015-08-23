@@ -366,7 +366,7 @@ public class DataPrep {
         String[] columnNames = getColumnNames(pageTitle, blockTitle, subBlockTitle, tableTitle);
         String[] rowNames = getRowNames(pageTitle, blockTitle, subBlockTitle, tableTitle);
 
-        return new Tables(tableTitle, columnNames, rowNames, results);
+        return new Tables(tableTitle, rowNames, columnNames, results);
 
     }
 
@@ -645,7 +645,7 @@ public class DataPrep {
         String[] columnNames = getColumnNames(wR.getTitle(), null, null, null);
         String[] rowNames = getRowNames(wR.getTitle(), null, null, null);
 
-        Tables table = new Tables("", columnNames, rowNames, content);
+        Tables table = new Tables("", rowNames, columnNames, content);
         ArrayList<Tables> tbls = new ArrayList<Tables>();
         tbls.add(table);
 
@@ -780,12 +780,19 @@ public class DataPrep {
 
     }
 
+    private void manageAlertNode(WordResult wordResult) {
+        //TODO : fix
+        wordResult.setWarning("");
+    }
+
     private void constructSingleResults(WordResult wR) {
 
         ArrayList<Element> selectedElements = this.parser.getSelectedElements();
 
         String pageTitle = selectedElements.get(0).text();
         wR.setTitle(pageTitle);
+
+        manageAlertNode(wR);
 
         // Nafnord
         if( pageTitle.contains("Nafnorð") || pageTitle.contains("nafnorð") ) {
