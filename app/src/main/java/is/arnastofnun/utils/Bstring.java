@@ -2,6 +2,8 @@ package is.arnastofnun.utils;
 
 import android.util.Log;
 
+import java.io.Serializable;
+
 /**
  * Class Bstring
  * A special string that helps error handling in the construction of the WordResult class
@@ -9,7 +11,7 @@ import android.util.Log;
  *
  * @author Arnarjons
  */
-public class Bstring {
+public class Bstring implements Serializable {
 
     private String data;
 
